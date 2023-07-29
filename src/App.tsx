@@ -1,24 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './components/pages/Home';
+import Layout from './components/common/Layout';
+import "./assets/css/App.scss"
+import { AiFillHome, AiFillSetting } from 'react-icons/ai'
+import { IPageHyperlink } from './Types'
+import Settings from './components/pages/Settings';
 
 function App() {
+
+  const pages: IPageHyperlink[] = [
+    { url: "/", name: "Home", icon: <AiFillHome /> },
+    { url: "/settings", name: "Settings", icon: <AiFillSetting /> },
+  ];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="App">
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout pages={pages} />}>
+            <Route path='/' element={<Home />} />
+            <Route path='/settings' element={<Settings />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
