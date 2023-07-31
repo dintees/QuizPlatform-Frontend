@@ -3,7 +3,7 @@ import { IPageHyperlink } from '../../Types'
 import SidebarTile from './SidebarTile'
 import { MdQuiz } from "react-icons/md"
 
-interface Props { 
+interface Props {
     pages: IPageHyperlink[]
 }
 
@@ -14,7 +14,7 @@ function Sidebar(props: Props) {
                 <MdQuiz /> QuizPlatform
             </div>
             <div id='menu'>
-            {props.pages.map((i) =>
+                {props.pages.map((i) =>
                     <SidebarTile key={i.url} icon={i.icon} name={i.name} href={i.url} />
                 )}
             </div>

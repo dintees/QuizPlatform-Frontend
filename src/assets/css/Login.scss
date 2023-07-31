@@ -1,0 +1,60 @@
+@use "variables";
+
+form.login-form {
+    background: #fff;
+    text-align: center;
+    width: 400px;
+    margin: 10px auto;
+    border-radius: 15px;
+    padding: 40px 20px;
+  
+    input {
+      display: block;
+      margin: 20px auto;
+      width: 90%;
+      background: #f1f3f4;
+      border-radius: 5px;
+      border: none;
+      max-width: 450px;
+      height: 50px;
+      font-size: 1.05em;
+      padding: 0 5%;
+      border-radius: 6px;
+      transition: 0.15s ease-in-out;
+  
+      &:hover,
+      &:focus {
+        box-shadow: 0px 5px 10px 0px rgba(#000C2F, 0.3);
+        outline: none;
+      }
+  
+      &:focus {
+        border-bottom: 2px solid variables.$color-primary
+      }
+    }
+  
+    button {
+      width: 50%;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-radius: 5px;
+      padding: 15px 10px;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #fff;
+      background: variables.$color-primary;
+      border: none;
+      font-size: 1.15em;
+      transition: 0.15s ease-in-out;
+  
+      &:hover {
+        box-shadow: 0px 5px 10px 0px rgba(#000C2F, 0.3);
+        outline: none;
+      }
+    }
+  
+    .title-image {
+      color: variables.$color-primary;
+      font-size: 6em;
+    }
+  }

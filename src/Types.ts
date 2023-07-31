@@ -4,6 +4,17 @@ export interface IPageHyperlink {
     icon: JSX.Element
 };
 
+export interface ILogin {
+    email: string,
+    password: string
+};
+
+export interface iRegister {
+    email: string,
+    password: string,
+    passwordConfirmation: string
+};
+
 export enum QuestionTypeName {
     SingleChoice,
     MultipleChoice,

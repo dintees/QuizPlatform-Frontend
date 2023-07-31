@@ -16,7 +16,6 @@ function Home() {
         }
 
         fetchData()
-
     }, [])
 
     return (

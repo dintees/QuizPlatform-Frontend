@@ -1,26 +1,37 @@
+@use "variables";
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
+  background-color: variables.$background-color;
   height: 100%;
 }
 
-#App {
-  display: flex;
-  height: 100%;
-
-  #content-container {
-    flex-grow: 1;
-
-    #content {
-      padding: 1.4rem;
-    }
-  }
+.content-title {
+  font-weight: bold;
+  font-size: 1.8rem;
+  margin-bottom: 1.4rem;
 }
 
 button {
   padding: 10px;
 }
+
+.a-link {
+  color: variables.$color-primary;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.mt-3 { margin-top: 1.6rem; }
+.color-primary { color: variables.$color-primary; }

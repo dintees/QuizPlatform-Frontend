@@ -7,6 +7,7 @@ nav {
     box-shadow: 1px 1px 5px #aaa;
     justify-content: space-between;
     flex-direction: row-reverse;
+    background: #fff;
 
     #panel {
         margin-right: 1.5rem;
@@ -64,6 +65,20 @@ nav {
             &:hover {
                 background: variables.$color-primary-hover;
             }
+        }
+    }
+}
+
+#App {
+    display: flex;
+    height: 100%;
+
+    #content-container {
+        flex-grow: 1;
+
+        #content {
+            padding: 1.4rem;
+            height: auto;
         }
     }
 }
