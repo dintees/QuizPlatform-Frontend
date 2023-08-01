@@ -1,24 +1,39 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { ILogin } from '../../Types';
 import { AiOutlineUser } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
-import Loader from '../common/Loader';
+import { postData } from '../../AxiosHelper';
+import { LoaderContext } from '../../App';
+
 
 function Login() {
+
+    const { setLoading } = useContext(LoaderContext);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+
+    const handleLogin = async () => {
+        setLoading(true)
+        const loggedData = await postData("User/login", login, false)
+        setLoading(false)
+        if (loggedData && loggedData.status === 200) {
+            console.log("Zalogowano");
+            setErrorMessage("Logged in :)");
+        } else {
+            setErrorMessage("Bad username or password.");
+        }
+    }
 
     const [login, setLogin] = useState<ILogin>({ email: "", password: "" });
     const navigate = useNavigate();
 
     return (
         <>
-            {/* <Loader loading={true} /> */}
             <div className="content-title">Login</div>
-
             <div className='container-5'>
                 <form autoComplete='off' className='login-form' onSubmit={e => {
                     e.preventDefault();
-                    console.log(login);
+                    handleLogin();
                 }}>
                     <div className="title-image"><AiOutlineUser /></div>
                     <input placeholder="email" value={login.email} onChange={(e) => {
@@ -36,10 +51,10 @@ function Login() {
                         })
                     }} />
                     <button type="submit">Login</button>
-                    <div className='mt-3 a-link' onClick={e => navigate("/register")}>Register</div>
+                    <div className="mt-3 text-bold color-danger">{errorMessage}</div>
+                    <div className='mt-3 a-link' onClick={e => navigate("/register")}>No account? Register!</div>
                 </form>
             </div>
-
         </>
     )
 }

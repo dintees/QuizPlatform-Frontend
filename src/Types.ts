@@ -1,7 +1,14 @@
+import React from "react"
+
 export interface IPageHyperlink {
     url: string,
     name: string,
     icon: JSX.Element
+};
+
+export interface ILoaderContext {
+    loading: boolean,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export interface ILogin {
@@ -10,6 +17,7 @@ export interface ILogin {
 };
 
 export interface iRegister {
+    username: string,
     email: string,
     password: string,
     passwordConfirmation: string

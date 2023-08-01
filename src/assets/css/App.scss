@@ -33,5 +33,9 @@ button {
   }
 }
 
-.mt-3 { margin-top: 1.6rem; }
+.mt-1 { margin-top: 1rem; }
+.mt-2 { margin-top: 1.2rem; }
+.mt-3 { margin-top: 1.4rem; }
 .color-primary { color: variables.$color-primary; }
+.color-danger { color: variables.$color-danger; }
+.text-bold { font-weight: bold; }

@@ -1,13 +1,34 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { iRegister } from '../../Types';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
+import { LoaderContext } from '../../App';
+import { postData } from '../../AxiosHelper';
 
 function Register() {
 
-    const [register, setRegister] = useState<iRegister>({ email: "", password: "", passwordConfirmation: "" });
+    const [register, setRegister] = useState<iRegister>({ username: "", email: "", password: "", passwordConfirmation: "" });
+    const [errorMessage, setErrorMessage] = useState<string>();
     const navigate = useNavigate();
+
+    const { setLoading } = useContext(LoaderContext);
+
+    const handleRegister = async () => {
+        setLoading(true)
+
+        const registrationData = await postData("User/register", register, false)
+
+        if (registrationData?.status === 200) {
+            console.log("Zarejestrowano");
+            setErrorMessage("Registered :)");
+        } else if (registrationData?.status === 400) {
+            console.warn(registrationData);
+
+            setErrorMessage(registrationData.data)
+        }
+        setLoading(false)
+    }
 
     return (
         <>
@@ -16,9 +37,16 @@ function Register() {
             <div className='container-5'>
                 <form autoComplete='off' className='login-form' onSubmit={e => {
                     e.preventDefault();
-                    console.log(register);
+                    handleRegister();
                 }}>
                     <div className="title-image"><AiOutlineUserAdd /></div>
+                    <input placeholder="username" value={register.username} onChange={(e) => {
+                        setRegister((prev: iRegister) => {
+                            return {
+                                ...prev, username: e.target.value,
+                            };
+                        })
+                    }} />
                     <input placeholder="email" value={register.email} onChange={(e) => {
                         setRegister((prev: iRegister) => {
                             return {
@@ -26,6 +54,7 @@ function Register() {
                             };
                         })
                     }} />
+
                     <input type="password" placeholder='password' value={register.password} onChange={(e) => {
                         setRegister((prev: iRegister) => {
                             return {
@@ -41,7 +70,8 @@ function Register() {
                         })
                     }} />
                     <button type="submit">Register</button>
-                    <div className='mt-3 a-link' onClick={e => navigate("/login")}>Login</div>
+                    <div className="mt-3 text-bold color-danger">{errorMessage}</div>
+                    <div className='mt-3 a-link' onClick={e => navigate("/login")}>Already have an account? Log in!</div>
                 </form>
             </div>
 
