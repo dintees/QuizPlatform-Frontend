@@ -14,11 +14,17 @@ nav {
     }
 }
 
+.sidebar-collapsed {
+    transform: translateX(-100%);
+}
+
 #sidebar {
     background-color: variables.$color-primary;
     position: fixed;
     height: 100%;
-    overflow: auto;
+    transition: all 0.3s ease-in-out;
+
+    // overflow: auto;
 
     #logo {
         display: flex;
@@ -31,6 +37,20 @@ nav {
         color: #eee;
         padding: 20px;
         margin-bottom: 2rem;
+
+        &>div:nth-child(2) {
+            position: relative;
+            left: 0;
+            color: #fff;
+            transition: .3s all ease-in-out;
+        }
+
+        &>div:nth-child(2).logo-collapsed {
+            position: relative;
+            left: 100px;
+            color: #555;
+            transform: scaleX(-1);
+        }
     }
 
     #menu {
@@ -75,9 +95,15 @@ nav {
     display: flex;
     height: 100%;
 
+    .sidebar-open {
+        margin-left: 200px !important;
+    }
+
     #content-container {
         flex-grow: 1;
-        margin-left: 200px;
+        margin-left: 0;
+        transition: .3s margin-left ease-in-out;
+
 
         #content {
             padding: 1.4rem;

@@ -20,7 +20,8 @@ export interface iRegister {
     username: string,
     email: string,
     password: string,
-    passwordConfirmation: string
+    passwordConfirmation: string,
+    roleId: number
 };
 
 export enum QuestionTypeName {

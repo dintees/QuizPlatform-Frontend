@@ -8,7 +8,7 @@ import { postData } from '../../AxiosHelper';
 
 function Register() {
 
-    const [register, setRegister] = useState<iRegister>({ username: "", email: "", password: "", passwordConfirmation: "" });
+    const [register, setRegister] = useState<iRegister>({ username: "", email: "", password: "", passwordConfirmation: "", roleId: 2 });
     const [errorMessage, setErrorMessage] = useState<string>();
     const navigate = useNavigate();
 
@@ -20,11 +20,8 @@ function Register() {
         const registrationData = await postData("User/register", register, false)
 
         if (registrationData?.status === 200) {
-            console.log("Zarejestrowano");
             setErrorMessage("Registered :)");
         } else if (registrationData?.status === 400) {
-            console.warn(registrationData);
-
             setErrorMessage(registrationData.data)
         }
         setLoading(false)

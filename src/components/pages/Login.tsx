@@ -16,11 +16,10 @@ function Login() {
         setLoading(true)
         const loggedData = await postData("User/login", login, false)
         setLoading(false)
-        if (loggedData && loggedData.status === 200) {
-            console.log("Zalogowano");
+        if (loggedData?.status === 200) {
             setErrorMessage("Logged in :)");
-        } else {
-            setErrorMessage("Bad username or password.");
+        } else if (loggedData?.status === 401) {
+            setErrorMessage(loggedData.data);
         }
     }
 
