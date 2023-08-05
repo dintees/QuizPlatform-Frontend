@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { IPageHyperlink } from '../../Types'
 import SidebarTile from './SidebarTile'
 import { MdQuiz } from "react-icons/md"
@@ -11,7 +11,6 @@ interface Props {
 }
 
 function Sidebar(props: Props) {
-
 
     return (
         <div id="sidebar" className={props.isOpened ? "" : "sidebar-collapsed"}>

@@ -1,18 +1,18 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { iRegister } from '../../Types';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
-import { LoaderContext } from '../../App';
 import { postData } from '../../AxiosHelper';
+import Loader from '../common/Loader';
 
 function Register() {
 
     const [register, setRegister] = useState<iRegister>({ username: "", email: "", password: "", passwordConfirmation: "", roleId: 2 });
     const [errorMessage, setErrorMessage] = useState<string>();
-    const navigate = useNavigate();
+    const [isLoading, setLoading] = useState<boolean>(false);
 
-    const { setLoading } = useContext(LoaderContext);
+    const navigate = useNavigate();
 
     const handleRegister = async () => {
         setLoading(true)
@@ -29,8 +29,8 @@ function Register() {
 
     return (
         <>
+            <Loader loading={isLoading} />
             <div className="content-title">Register</div>
-
             <div className='container-5'>
                 <form autoComplete='off' className='login-form' onSubmit={e => {
                     e.preventDefault();

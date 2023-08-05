@@ -6,9 +6,14 @@ export interface IPageHyperlink {
     icon: JSX.Element
 };
 
-export interface ILoaderContext {
-    loading: boolean,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+export interface IAuthContext {
+    auth: IAuthInformation,
+    setAuth: React.Dispatch<React.SetStateAction<IAuthInformation>>
+};
+
+export interface IAuthInformation {
+    token: string,
+    pages: IPageHyperlink[]
 };
 
 export interface ILogin {

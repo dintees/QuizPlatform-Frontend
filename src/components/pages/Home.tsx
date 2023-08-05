@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getData } from '../../AxiosHelper'
-import { Question, QuestionTypeName } from '../../Types'
+import { Question } from '../../Types'
 
 function Home() {
 

@@ -1,33 +1,41 @@
-import React, { useContext, useState } from 'react'
-import { ILogin } from '../../Types';
+import React, { useState, useContext } from 'react'
+import { IAuthInformation, ILogin } from '../../Types';
 import { AiOutlineUser } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../../AxiosHelper';
-import { LoaderContext } from '../../App';
+import Loader from '../common/Loader';
+import { AuthContext } from '../../App';
 
 
 function Login() {
-
-    const { setLoading } = useContext(LoaderContext);
+    const [isLoading, setLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [login, setLogin] = useState<ILogin>({ email: "", password: "" });
+    const navigate = useNavigate();
+
+    const { setAuth } = useContext(AuthContext);
 
     const handleLogin = async () => {
         setLoading(true)
         const loggedData = await postData("User/login", login, false)
-        setLoading(false)
         if (loggedData?.status === 200) {
-            setErrorMessage("Logged in :)");
+            setAuth((prev: IAuthInformation) => {
+                const data = loggedData.data;
+                localStorage.setItem("token", data)
+                return { ...prev, pages: [], token: data }
+            })
+            navigate("/")
         } else if (loggedData?.status === 401) {
             setErrorMessage(loggedData.data);
         }
+        setLoading(false)
     }
 
-    const [login, setLogin] = useState<ILogin>({ email: "", password: "" });
-    const navigate = useNavigate();
 
     return (
         <>
+            <Loader loading={isLoading} />
             <div className="content-title">Login</div>
             <div className='container-5'>
                 <form autoComplete='off' className='login-form' onSubmit={e => {
