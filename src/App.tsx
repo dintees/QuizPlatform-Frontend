@@ -3,30 +3,34 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Layout from './components/common/Layout';
 import "./assets/css/App.scss"
-import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai'
-import { CgLogOut } from 'react-icons/cg'
-import { IAuthContext, IAuthInformation, IPageHyperlink } from './Types'
+import { IAuthContext, IAuthInformation, Roles } from './Types'
 import Settings from './components/pages/Settings';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/pages/Logout';
+import getMenuItems from './utils/getMenuItems';
 
 export const AuthContext = createContext<IAuthContext>({
-  auth: { token: "", pages: [] },
+  auth: {
+    id: 0,
+    email: "",
+    username: '',
+    token: "",
+    role: Roles.NotAuthorized,
+    pages: []
+  },
   setAuth: () => { }
 })
 
 function App() {
 
-  let pages: IPageHyperlink[] = [
-    { url: "/", name: "Home", icon: <AiFillHome /> },
-    { url: "/settings", name: "Settings", icon: <AiFillSetting /> },
-    { url: "/login", name: "Login", icon: <AiOutlineUser /> },
-    { url: "/register", name: "Register", icon: <AiOutlineUserAdd /> },
-  ];
-
   const [auth, setAuth] = useState<IAuthInformation>({
-    token: "", pages
+    id: 0,
+    email: "",
+    username: "",
+    token: "",
+    role: Roles.NotAuthorized,
+    pages: getMenuItems()
   });
 
   useEffect(() => {
@@ -34,9 +38,7 @@ function App() {
     if (token)
       setAuth((prev: IAuthInformation) => {
         return {
-          ...prev, pages: [{ url: "/", name: "Home", icon: <AiFillHome /> }, {
-            url: "/logout", name: "Logout", icon: <CgLogOut />
-          }], token
+          ...prev, pages: getMenuItems(Roles.User), token // TODO
         }
       })
   }, []);

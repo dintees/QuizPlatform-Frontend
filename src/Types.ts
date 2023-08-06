@@ -12,6 +12,10 @@ export interface IAuthContext {
 };
 
 export interface IAuthInformation {
+    id: number,
+    username: string,
+    role: Roles,
+    email: string,
     token: string,
     pages: IPageHyperlink[]
 };
@@ -21,7 +25,7 @@ export interface ILogin {
     password: string
 };
 
-export interface iRegister {
+export interface IRegister {
     username: string,
     email: string,
     password: string,
@@ -41,4 +45,10 @@ export interface Question {
     question: string | null;
     questionType: QuestionTypeName;
     answers: string[] | null;
+};
+
+export enum Roles {
+    NotAuthorized,
+    Admin,
+    User
 };

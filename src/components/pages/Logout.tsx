@@ -2,8 +2,8 @@ import React, { useEffect, useContext } from 'react'
 import Loader from '../common/Loader'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../App';
-import { IAuthInformation } from '../../Types';
-import { AiOutlineUser } from 'react-icons/ai';
+import { IAuthInformation, Roles } from '../../Types';
+import getMenuItems from '../../utils/getMenuItems';
 
 function Logout() {
 
@@ -13,7 +13,7 @@ function Logout() {
     useEffect(() => {
         localStorage.removeItem("token");
         setAuth((prev: IAuthInformation) => {
-            return { ...prev, token: "", pages: [{ url: "/login", name: "Login", icon: <AiOutlineUser /> }] }
+            return { id: 0, username: "", email: "", role: Roles.NotAuthorized, token: "", pages: getMenuItems() }
         })
 
         navigate("/");

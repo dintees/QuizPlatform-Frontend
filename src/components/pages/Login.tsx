@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react'
-import { IAuthInformation, ILogin } from '../../Types';
+import { IAuthInformation, ILogin, Roles } from '../../Types';
 import { AiOutlineUser } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../../AxiosHelper';
 import Loader from '../common/Loader';
 import { AuthContext } from '../../App';
+import getMenuItems from '../../utils/getMenuItems';
 
 
 function Login() {
@@ -22,13 +23,16 @@ function Login() {
         if (loggedData?.status === 200) {
             setAuth((prev: IAuthInformation) => {
                 const data = loggedData.data;
-                localStorage.setItem("token", data)
-                return { ...prev, pages: [], token: data }
+                const role = Roles[data.role as keyof typeof Roles];
+
+                localStorage.setItem("token", data.token)
+                return { id: data.id, username: data.username, email: data.email, role: role, pages: getMenuItems(role), token: data.token }
             })
             navigate("/")
-        } else if (loggedData?.status === 401) {
+        } else if (loggedData?.status === 401)
             setErrorMessage(loggedData.data);
-        }
+        else
+            setErrorMessage("Problem with server connection.");
         setLoading(false)
     }
 
