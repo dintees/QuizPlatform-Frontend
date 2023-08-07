@@ -13,6 +13,7 @@ export interface IAuthContext {
 
 export interface IAuthInformation {
     id: number,
+    isAuthenticated: boolean,
     username: string,
     role: Roles,
     email: string,

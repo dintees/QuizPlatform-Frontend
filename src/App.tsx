@@ -9,10 +9,12 @@ import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/pages/Logout';
 import getMenuItems from './utils/getMenuItems';
+import jwtDecode from 'jwt-decode';
 
 export const AuthContext = createContext<IAuthContext>({
   auth: {
     id: 0,
+    isAuthenticated: false,
     email: "",
     username: '',
     token: "",
@@ -26,6 +28,7 @@ function App() {
 
   const [auth, setAuth] = useState<IAuthInformation>({
     id: 0,
+    isAuthenticated: false,
     email: "",
     username: "",
     token: "",
@@ -35,12 +38,21 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token)
-      setAuth((prev: IAuthInformation) => {
-        return {
-          ...prev, pages: getMenuItems(Roles.User), token // TODO
-        }
+
+    if (token) {
+      const jwt: any = jwtDecode(token);
+
+      const exp = new Date(jwt["exp"] * 1000);
+      if (exp < new Date()) {
+        localStorage.removeItem("token")
+        return;
+      }
+
+      setAuth((prev: IAuthInformation): IAuthInformation => {
+        const role = Roles[jwt["RoleName"] as keyof typeof Roles]
+        return { ...prev, isAuthenticated: true, username: jwt["Username"], email: jwt["Email"], pages: getMenuItems(role) }
       })
+    }
   }, []);
 
 

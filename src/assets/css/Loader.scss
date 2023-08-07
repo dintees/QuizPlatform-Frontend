@@ -24,7 +24,8 @@
     }
 
     .loader {
-        color: #b9b9b9;
+        // color: #b9b9b9;
+        color: variables.$color-danger;
         font-size: .7rem;
         position: relative;
         animation-delay: -0.16s;

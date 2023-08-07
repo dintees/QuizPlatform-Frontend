@@ -30,7 +30,7 @@ function Register() {
                 const role = Roles[data.role as keyof typeof Roles];
 
                 localStorage.setItem("token", data.token)
-                return { id: data.id, username: data.username, email: data.email, role: role, pages: getMenuItems(role), token: data.token }
+                return { id: data.id, isAuthenticated: true, username: data.username, email: data.email, role: role, pages: getMenuItems(role), token: data.token }
             })
             navigate("/")
         } else if (registrationData?.status === 400)

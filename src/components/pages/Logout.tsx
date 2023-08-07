@@ -13,7 +13,7 @@ function Logout() {
     useEffect(() => {
         localStorage.removeItem("token");
         setAuth((prev: IAuthInformation) => {
-            return { id: 0, username: "", email: "", role: Roles.NotAuthorized, token: "", pages: getMenuItems() }
+            return { id: 0, isAuthenticated: false, username: "", email: "", role: Roles.NotAuthorized, token: "", pages: getMenuItems() }
         })
 
         navigate("/");

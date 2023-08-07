@@ -22,7 +22,9 @@ function Home() {
     return (
         <>
             <div className='content-title'>Home</div>
-            <h4>Logged as: {auth.username} ({auth.email})</h4>
+            {auth.isAuthenticated ?
+                <h4>Logged as: {auth.username} ({auth.email})</h4>
+                : <h4>Not authenticated</h4>}
 
             {question ?
                 <>ID: {question.id} = {question.question} - {question.answers}</> :
