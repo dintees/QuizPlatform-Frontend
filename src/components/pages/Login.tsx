@@ -1,12 +1,12 @@
-import React, { useState, useContext } from 'react'
-import { IAuthInformation, ILogin, Roles } from '../../Types';
+import React, { useState, useContext, useEffect } from 'react'
+import { IAuthInformation, ILogin } from '../../Types';
 import { AiOutlineUser } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
-import { postData } from '../../AxiosHelper';
 import Loader from '../common/Loader';
+import { getToken } from '../../utils/authUtils';
+import { signInAsync } from '../../utils/loginUtils';
 import { AuthContext } from '../../App';
-import getMenuItems from '../../utils/getMenuItems';
 
 
 function Login() {
@@ -19,22 +19,18 @@ function Login() {
 
     const handleLogin = async () => {
         setLoading(true)
-        const loggedData = await postData("User/login", login, false)
-        if (loggedData?.status === 200) {
-            setAuth((prev: IAuthInformation) => {
-                const data = loggedData.data;
-                const role = Roles[data.role as keyof typeof Roles];
-
-                localStorage.setItem("token", data.token)
-                return { id: data.id, isAuthenticated: true, username: data.username, email: data.email, role: role, pages: getMenuItems(role), token: data.token }
-            })
-            navigate("/")
-        } else if (loggedData?.status === 401)
-            setErrorMessage(loggedData.data);
-        else
-            setErrorMessage("Problem with server connection.");
+        const loginData = await signInAsync(login);
+        if (loginData.isAuthenticated) {
+            setAuth(loginData as IAuthInformation);
+            navigate('/')
+        } else
+            setErrorMessage(loginData.errorMessage);
         setLoading(false)
     }
+
+    useEffect(() => {
+        if (getToken() !== null) navigate('/')
+    }, [navigate])
 
 
     return (

@@ -15,7 +15,7 @@ export interface IAuthInformation {
     id: number,
     isAuthenticated: boolean,
     username: string,
-    role: Roles,
+    role: Role,
     email: string,
     token: string,
     pages: IPageHyperlink[]
@@ -48,7 +48,7 @@ export interface Question {
     answers: string[] | null;
 };
 
-export enum Roles {
+export enum Role {
     NotAuthorized,
     Admin,
     User

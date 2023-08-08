@@ -1,19 +1,19 @@
-import { IPageHyperlink, Roles } from "../Types";
+import { IPageHyperlink, Role } from "../Types";
 import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai'
 import { CgLogOut } from 'react-icons/cg'
 
-const getMenuItems = (role: Roles = Roles.NotAuthorized) => {
+const getMenuItems = (role: Role = Role.NotAuthorized) => {
     let pages: IPageHyperlink[] = [];
 
     switch (role) {
-        case Roles.Admin:
+        case Role.Admin:
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/settings", name: "Admin", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]
             break;
-        case Roles.User:
+        case Role.User:
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/settings", name: "Settings", icon: <AiFillSetting /> },

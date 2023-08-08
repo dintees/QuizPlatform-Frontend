@@ -3,13 +3,15 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Layout from './components/common/Layout';
 import "./assets/css/App.scss"
-import { IAuthContext, IAuthInformation, Roles } from './Types'
+import { IAuthContext, IAuthInformation, Role } from './Types'
 import Settings from './components/pages/Settings';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/pages/Logout';
 import getMenuItems from './utils/getMenuItems';
-import jwtDecode from 'jwt-decode';
+import ProtectedComponent from './components/common/ProtectedComponent';
+import { getDataFromToken } from './utils/authUtils';
+import NotFound from './components/pages/NotFound';
 
 export const AuthContext = createContext<IAuthContext>({
   auth: {
@@ -18,7 +20,7 @@ export const AuthContext = createContext<IAuthContext>({
     email: "",
     username: '',
     token: "",
-    role: Roles.NotAuthorized,
+    role: Role.NotAuthorized,
     pages: []
   },
   setAuth: () => { }
@@ -32,25 +34,16 @@ function App() {
     email: "",
     username: "",
     token: "",
-    role: Roles.NotAuthorized,
+    role: Role.NotAuthorized,
     pages: getMenuItems()
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const data = getDataFromToken();
 
-    if (token) {
-      const jwt: any = jwtDecode(token);
-
-      const exp = new Date(jwt["exp"] * 1000);
-      if (exp < new Date()) {
-        localStorage.removeItem("token")
-        return;
-      }
-
+    if (data) {
       setAuth((prev: IAuthInformation): IAuthInformation => {
-        const role = Roles[jwt["RoleName"] as keyof typeof Roles]
-        return { ...prev, isAuthenticated: true, username: jwt["Username"], email: jwt["Email"], pages: getMenuItems(role) }
+        return { ...prev, isAuthenticated: true, email: data.email, username: data.username, role: data.role, pages: getMenuItems(data.role) }
       })
     }
   }, []);
@@ -63,10 +56,13 @@ function App() {
           <Routes>
             <Route element={<Layout pages={auth.pages} />}>
               <Route path='/' element={<Home />} />
-              <Route path='/settings' element={<Settings />} />
+              <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
-              <Route path='/logout' element={<Logout />} />
+
+              <Route path='/logout' element={<ProtectedComponent component={<Logout />} />} />
+
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>

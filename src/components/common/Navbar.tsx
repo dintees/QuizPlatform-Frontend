@@ -5,7 +5,7 @@ function Navbar() {
     return (
         <nav>
             <div id="panel">
-                <button>Sign in</button>
+                <button className="btn animated">Sign in</button>
             </div>
         </nav>
     )

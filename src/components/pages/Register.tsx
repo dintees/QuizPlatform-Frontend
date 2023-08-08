@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { IAuthInformation, IRegister, Roles } from '../../Types';
+import React, { useContext, useEffect, useState } from 'react'
+import { IAuthInformation, IRegister, Role } from '../../Types';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { postData } from '../../AxiosHelper';
 import Loader from '../common/Loader';
 import { AuthContext } from '../../App';
 import getMenuItems from '../../utils/getMenuItems';
+import { getToken } from '../../utils/authUtils';
 
 function Register() {
 
@@ -27,7 +28,7 @@ function Register() {
 
             setAuth((prev: IAuthInformation) => {
                 const data = registrationData.data;
-                const role = Roles[data.role as keyof typeof Roles];
+                const role = Role[data.role as keyof typeof Role];
 
                 localStorage.setItem("token", data.token)
                 return { id: data.id, isAuthenticated: true, username: data.username, email: data.email, role: role, pages: getMenuItems(role), token: data.token }
@@ -37,6 +38,10 @@ function Register() {
             setErrorMessage(registrationData.data)
         setLoading(false)
     }
+
+    useEffect(() => {
+        if (getToken() !== null) navigate('/')
+    }, [navigate])
 
     return (
         <>

@@ -30,8 +30,8 @@ function Home() {
                 <>ID: {question.id} = {question.question} - {question.answers}</> :
                 <></>}
 
+            <button className="mt-2 block btn animated">Save</button>
         </>
-
     )
 }
 

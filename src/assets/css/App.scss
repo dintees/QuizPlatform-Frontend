@@ -19,9 +19,9 @@ body,
   margin-bottom: 1.4rem;
 }
 
-button {
-  padding: 10px;
-}
+// button {
+//   padding: 10px;
+// }
 
 .a-link {
   color: variables.$color-primary;
@@ -33,6 +33,24 @@ button {
   }
 }
 
+.btn {
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+  background-color: #3c8398;
+  color: #ffffff;
+  outline: none;
+  border: none;
+}
+
+.btn:hover {
+  background-color: #1f4753;
+}
+
+.animated {
+  transition: all .1s ease;
+}
+
+.block { display: block; }
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 1.2rem; }
 .mt-3 { margin-top: 1.4rem; }

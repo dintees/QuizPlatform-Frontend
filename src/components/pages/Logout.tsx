@@ -2,8 +2,9 @@ import React, { useEffect, useContext } from 'react'
 import Loader from '../common/Loader'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../App';
-import { IAuthInformation, Roles } from '../../Types';
+import { IAuthInformation, Role } from '../../Types';
 import getMenuItems from '../../utils/getMenuItems';
+import { signOut } from '../../utils/loginUtils';
 
 function Logout() {
 
@@ -11,11 +12,10 @@ function Logout() {
     const { setAuth } = useContext(AuthContext);
 
     useEffect(() => {
-        localStorage.removeItem("token");
+        signOut();
         setAuth((prev: IAuthInformation) => {
-            return { id: 0, isAuthenticated: false, username: "", email: "", role: Roles.NotAuthorized, token: "", pages: getMenuItems() }
+            return { id: 0, isAuthenticated: false, username: "", email: "", role: Role.NotAuthorized, token: "", pages: getMenuItems() }
         })
-
         navigate("/");
     }, [navigate, setAuth])
 
