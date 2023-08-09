@@ -1,4 +1,4 @@
-import React from "react"
+import { QuestionTypeName, Role } from "./Enums"
 
 export interface IPageHyperlink {
     url: string,
@@ -34,22 +34,9 @@ export interface IRegister {
     roleId: number
 };
 
-export enum QuestionTypeName {
-    SingleChoice,
-    MultipleChoice,
-    TrueFalse,
-    ShortAnswer
-};
-
 export interface Question {
     id: number;
     question: string | null;
     questionType: QuestionTypeName;
     answers: string[] | null;
-};
-
-export enum Role {
-    NotAuthorized,
-    Admin,
-    User
 };

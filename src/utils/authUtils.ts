@@ -1,5 +1,5 @@
 import jwtDecode, { JwtPayload } from "jwt-decode"
-import { Role } from "../Types"
+import { Role } from "../Enums";
 
 interface IJwtPayload extends JwtPayload {
     username: string,

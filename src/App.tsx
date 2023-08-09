@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Layout from './components/common/Layout';
 import "./assets/css/App.scss"
-import { IAuthContext, IAuthInformation, Role } from './Types'
+import { IAuthContext, IAuthInformation } from './Types'
 import Settings from './components/pages/Settings';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
@@ -12,6 +12,8 @@ import getMenuItems from './utils/getMenuItems';
 import ProtectedComponent from './components/common/ProtectedComponent';
 import { getDataFromToken } from './utils/authUtils';
 import NotFound from './components/pages/NotFound';
+import { Role } from './Enums';
+import MySets from './components/pages/MySets';
 
 export const AuthContext = createContext<IAuthContext>({
   auth: {
@@ -56,7 +58,10 @@ function App() {
           <Routes>
             <Route element={<Layout pages={auth.pages} />}>
               <Route path='/' element={<Home />} />
+              <Route path='/mysets' element={<ProtectedComponent component={<MySets />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
+
+
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
 

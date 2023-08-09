@@ -21,8 +21,13 @@ export const postData = async (endpoint: string | undefined, body: any, authoris
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             } : {}
         })
+        console.log(("!!!"));
+        console.log(response);
+        
         return { status: response.status, data: response.data }
     } catch (error) {
+        console.log(error);
+        
         if (error instanceof AxiosError) {
             return { status: error.response?.status, data: error.response?.data }
         }

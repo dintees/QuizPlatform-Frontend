@@ -2,9 +2,10 @@ import React, { useEffect, useContext } from 'react'
 import Loader from '../common/Loader'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../App';
-import { IAuthInformation, Role } from '../../Types';
+import { IAuthInformation } from '../../Types';
 import getMenuItems from '../../utils/getMenuItems';
 import { signOut } from '../../utils/loginUtils';
+import { Role } from '../../Enums';
 
 function Logout() {
 

@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { IAuthInformation, IRegister, Role } from '../../Types';
+import { IAuthInformation, IRegister } from '../../Types';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
-import { postData } from '../../AxiosHelper';
 import Loader from '../common/Loader';
 import { AuthContext } from '../../App';
-import getMenuItems from '../../utils/getMenuItems';
 import { getToken } from '../../utils/authUtils';
+import { registerAsync } from '../../utils/loginUtils';
 
 function Register() {
 
@@ -20,22 +19,12 @@ function Register() {
 
     const handleRegister = async () => {
         setLoading(true)
-
-        const registrationData = await postData("User/register", register, false)
-
-        if (registrationData?.status === 200) {
-            console.log(registrationData);
-
-            setAuth((prev: IAuthInformation) => {
-                const data = registrationData.data;
-                const role = Role[data.role as keyof typeof Role];
-
-                localStorage.setItem("token", data.token)
-                return { id: data.id, isAuthenticated: true, username: data.username, email: data.email, role: role, pages: getMenuItems(role), token: data.token }
-            })
-            navigate("/")
-        } else if (registrationData?.status === 400)
-            setErrorMessage(registrationData.data)
+        const registrationData = await registerAsync(register);
+        if (registrationData.isAuthenticated) {
+            setAuth(registrationData as IAuthInformation);
+            navigate('/')
+        } else
+            setErrorMessage(registrationData.errorMessage);
         setLoading(false)
     }
 

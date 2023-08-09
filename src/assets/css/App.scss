@@ -19,10 +19,6 @@ body,
   margin-bottom: 1.4rem;
 }
 
-// button {
-//   padding: 10px;
-// }
-
 .a-link {
   color: variables.$color-primary;
   cursor: pointer;
@@ -35,20 +31,29 @@ body,
 
 .btn {
   cursor: pointer;
-  padding: 0.5rem 0.8rem;
-  background-color: #3c8398;
-  color: #ffffff;
+  padding: 0.6rem 0.9rem;
+  background-color: variables.$color-secondary-btn;
   outline: none;
   border: none;
 }
 
 .btn:hover {
-  background-color: #1f4753;
+  background-color: variables.$color-secondary-btn-hover;
+}
+
+.btn-primary {
+  color: #eee;
+  background-color: variables.$color-primary-btn;
+}
+
+.btn-primary:hover {
+  background-color: variables.$color-primary-btn-hover;
 }
 
 .animated {
-  transition: all .1s ease;
+  transition: all .2s ease-in-out;
 }
+
 
 .block { display: block; }
 .mt-1 { margin-top: 1rem; }
