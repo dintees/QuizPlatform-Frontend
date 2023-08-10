@@ -1,7 +1,6 @@
 import { postData } from "../AxiosHelper";
-import { Role } from "../Enums";
 import { ILogin, IRegister } from "../Types";
-import { getToken, modifyToken, removeToken } from "./authUtils"
+import { getDataFromToken, getToken, modifyToken, removeToken } from "./authUtils"
 import getMenuItems from "./getMenuItems";
 
 
@@ -12,11 +11,13 @@ export const signOut = () => {
 export const signInAsync = async (login: ILogin) => {
     const loggedData = await postData("User/login", login, false)
     if (loggedData?.status === 200) {
-        const data = loggedData.data;
-        const role = Role[data.role as keyof typeof Role];
+        const token = loggedData?.data;
 
-        modifyToken(data.token);
-        return { id: data.id, isAuthenticated: true, username: data.username, email: data.email, role: role, pages: getMenuItems(role), token: data.token }
+        modifyToken(token);
+        const data = getDataFromToken();
+        if (data !== null)
+            return { id: 0, isAuthenticated: true, username: data.username, email: data.email, role: data.role, pages: getMenuItems(data.role), token: token }
+        return { isAuthenticated: false, errorMessage: loggedData.data };
     } else if (loggedData?.status === 401)
         return { isAuthenticated: false, errorMessage: loggedData.data };
     else
@@ -28,11 +29,13 @@ export const registerAsync = async (register: IRegister) => {
     console.log(registrationData);
 
     if (registrationData?.status === 200) {
-        const data = registrationData.data;
-        const role = Role[data.role as keyof typeof Role];
+        const token = registrationData?.data;
 
-        modifyToken(data.token);
-        return { id: data.id, isAuthenticated: true, username: data.username, email: data.email, role: role, pages: getMenuItems(role), token: data.token }
+        modifyToken(token);
+        const data = getDataFromToken();
+        if (data !== null)
+            return { id: 0, isAuthenticated: true, username: data.username, email: data.email, role: data.role, pages: getMenuItems(data.role), token: token }
+        return { isAuthenticated: false, errorMessage: registrationData.data };
     } else if (registrationData?.status === 400)
         return { isAuthenticated: false, errorMessage: registrationData.data };
     else
@@ -40,5 +43,5 @@ export const registerAsync = async (register: IRegister) => {
 }
 
 export const isAuthenticated = (): boolean => {
-     return (getToken() !== null)
+    return (getToken() !== null)
 }

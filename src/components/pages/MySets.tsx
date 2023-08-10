@@ -8,8 +8,12 @@ function MySets() {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getData("Set", true);
+            console.log(data);
 
-            setUserId(parseInt(data!.data));
+
+            if (data && data.status === 200) {
+                setUserId(parseInt(data!.data.length));
+            }
         }
 
         fetchData();
@@ -19,7 +23,7 @@ function MySets() {
         <>
             <div className='content-title'>My sets</div>
 
-            {userId}
+            My sets count: {userId}
         </>
     )
 }
