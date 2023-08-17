@@ -40,3 +40,11 @@ export interface Question {
     questionType: QuestionTypeName;
     answers: string[] | null;
 };
+
+
+
+
+export interface UserSetDto {
+    id: number;
+    title: string;
+}

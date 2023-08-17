@@ -35,30 +35,74 @@ body,
   background-color: variables.$color-secondary-btn;
   outline: none;
   border: none;
-}
 
-.btn:hover {
-  background-color: variables.$color-secondary-btn-hover;
+  &:hover {
+    background-color: variables.$color-secondary-btn-hover;
+  }
 }
 
 .btn-primary {
   color: #eee;
   background-color: variables.$color-primary-btn;
-}
 
-.btn-primary:hover {
-  background-color: variables.$color-primary-btn-hover;
+  &:hover {
+    background-color: variables.$color-primary-btn-hover;
+  }
 }
 
 .animated {
   transition: all .2s ease-in-out;
 }
 
+.table {
+  border-collapse: collapse;
+  width: 100%;
 
-.block { display: block; }
-.mt-1 { margin-top: 1rem; }
-.mt-2 { margin-top: 1.2rem; }
-.mt-3 { margin-top: 1.4rem; }
-.color-primary { color: variables.$color-primary; }
-.color-danger { color: variables.$color-danger; }
-.text-bold { font-weight: bold; }
+  tr:nth-child(2n+1) {
+    background: rgba(178, 178, 178, 0.1)
+  }
+
+  tr:hover {
+    background-color: rgba(151, 151, 151, 0.1);
+  }
+
+  th {
+    background-color: rgba(178, 178, 178, 0.1);
+  }
+
+  td,
+  th {
+    border: 1px solid #ccc;
+    padding: 0.4rem;
+  }
+}
+
+
+
+.block {
+  display: block;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-2 {
+  margin-top: 1.2rem;
+}
+
+.mt-3 {
+  margin-top: 1.4rem;
+}
+
+.color-primary {
+  color: variables.$color-primary;
+}
+
+.color-danger {
+  color: variables.$color-danger;
+}
+
+.text-bold {
+  font-weight: bold;
+}
