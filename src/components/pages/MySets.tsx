@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { getData } from '../../AxiosHelper'
 import { UserSetDto } from '../../Types';
 import Table from '../common/Table';
+import Button from '../common/Button';
+import { useNavigate } from 'react-router-dom';
 
 function MySets() {
 
     const [userId, setUserId] = useState<number>(0);
     const [userSet, setUserSet] = useState<UserSetDto[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,22 +30,11 @@ function MySets() {
         <>
             <div className='content-title'>My sets</div>
 
-            My sets count: {userId}
+            <Button value='Add new set' type='success' style={{ fontSize: "1.2rem" }} onClick={() => navigate("/newSet")} />
 
-            <Table data={userSet} columns={[{key: "id", header: "Id"}, { key: "title", header: "Title" }]} />
+            <div className="mt-1">My sets count: {userId}</div>
 
-            {/* <table>
-                <tr>
-                    <th>Lp</th>
-                    <th>Title</th>
-                </tr>
-                {userSet.map((i: UserSetDto, v: number) => {
-                    return <tr key={i.id}>
-                        <td>{v + 1}</td>
-                        <td>{i.title}</td>
-                    </tr>
-                })}
-            </table> */}
+            <Table data={userSet} columns={[{ key: "id", header: "Id" }, { key: "title", header: "Title" }]} />
         </>
     )
 }
