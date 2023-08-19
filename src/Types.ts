@@ -41,6 +41,13 @@ export interface Question {
     answers: string[] | null;
 };
 
+export interface IFormField {
+    name: string,
+    type: React.HTMLInputTypeAttribute,
+    placeholder?: string,
+    value?: string
+}
+
 
 // ====== DTOs ======
 

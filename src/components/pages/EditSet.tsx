@@ -5,8 +5,8 @@ function EditSet() {
         <>
             <div className="content-title">Edit set</div>
 
+            The same as create new set... Maybe to merge in the future...
 
-            
         </>
     )
 }

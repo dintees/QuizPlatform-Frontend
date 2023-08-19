@@ -1,23 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { getData } from '../../AxiosHelper'
-import { Question } from '../../Types'
+import React, { useContext } from 'react'
 import { AuthContext } from '../../App'
 
 function Home() {
 
-    const [question, setQuestion] = useState<Question | undefined>(undefined)
-
     const { auth } = useContext(AuthContext);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const question = await getData("Question/26", false)
-            if (question?.status === 200) {
-                setQuestion(question?.data)
-            }
-        }
-        fetchData()
-    }, [])
 
     return (
         <>
@@ -25,10 +11,6 @@ function Home() {
             {auth.isAuthenticated ?
                 <h4>Logged as: {auth.username} ({auth.email})</h4>
                 : <h4>Not authenticated</h4>}
-
-            {question ?
-                <>ID: {question.id} = {question.question} - {question.answers}</> :
-                <></>}
 
             <button className="mt-2 block btn animated">Save</button>
         </>

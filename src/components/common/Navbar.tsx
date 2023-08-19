@@ -9,7 +9,6 @@ function Navbar() {
         <nav>
             <div id="panel">
                 { isAuthenticated() ?
-
                     <button onClick={() => navigate("/logout")} className="btn btn-primary animated">Logout</button>
                     :
                     <button onClick={() => navigate("/login")} className="btn btn-primary animated">Sign in</button>
