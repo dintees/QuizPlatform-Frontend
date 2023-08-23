@@ -2,15 +2,19 @@ import React from 'react'
 
 interface Props {
     value: string,
-    setValue: React.Dispatch<React.SetStateAction<string>>,
+    setValue?: React.Dispatch<React.SetStateAction<string>>,
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     placeholder?: string,
-    style?: React.CSSProperties
+    style?: React.CSSProperties,
 }
 
 function TextField(props: Props) {
 
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        props.setValue(e.target.value)
+        if (props.setValue !== undefined)
+            props.setValue(e.target.value)
+        else if (props.onChange !== undefined)
+            return props.onChange(e)
     }
 
     return (

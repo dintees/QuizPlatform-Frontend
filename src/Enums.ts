@@ -4,7 +4,7 @@ export enum Role {
     User
 };
 
-export enum QuestionTypeName {
+export enum QuestionType {
     SingleChoice,
     MultipleChoice,
     TrueFalse,

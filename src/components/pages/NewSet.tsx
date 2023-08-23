@@ -2,14 +2,22 @@ import React, { useState } from 'react'
 import Button from '../common/Button'
 import { postData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
-import Form from '../common/Form'
-import { IFormField } from '../../Types'
+import { IQuestionFormField } from '../../Types'
+import QuestionForm from '../common/QuestionForm'
+import { QuestionType } from '../../Enums'
 
 function NewSet() {
 
     const [title, setTitle] = useState<string>("New set");
     const [description, setDescription] = useState<string>("");
-    const [formFields, setFormFields] = useState<IFormField[]>([]);
+
+    const qq: IQuestionFormField = {
+        type: QuestionType.ShortAnswer,
+        question: "Czy Ala ma kota?",
+        answers: [{ answer: "tak", correct: true }]
+    }
+
+    const [questions, setQuestions] = useState<IQuestionFormField[]>([qq]);
 
 
     const handleAddSet = () => {
@@ -18,7 +26,7 @@ function NewSet() {
         console.log("Title: " + title);
         console.log("Description: " + description);
         console.log("Content");
-        console.log(formFields);
+        console.log(questions);
 
 
         const fetchData = async () => {
@@ -31,7 +39,15 @@ function NewSet() {
     }
 
     const handleAddNewQuestion = () => {
-        setFormFields((prev: IFormField[]) => [...prev, { name: `aa-${prev.length}}`, type: "text", value: "New question" }])
+        setQuestions((prev: IQuestionFormField[]) => [...prev, { type: QuestionType.ShortAnswer, question: "", answers: [{ answer: "", correct: true }] }])
+    }
+
+    const handleChangeQuestion = (index: number, value: string) => {
+        setQuestions((prev: IQuestionFormField[]) => {
+            const newState = [...prev]
+            newState[index].question = value;
+            return newState;
+        })
     }
 
 
@@ -42,7 +58,7 @@ function NewSet() {
             <TextField placeholder='Title' value={title} setValue={setTitle} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} />
 
-            <Form formFields={formFields} setFormFields={setFormFields} />
+            <QuestionForm questions={questions} setQuestions={setQuestions} handleChangeQuestion={handleChangeQuestion} />
 
             <Button value="Add new question" type='primary' onClick={handleAddNewQuestion} />
 

@@ -1,4 +1,4 @@
-import { QuestionTypeName, Role } from "./Enums"
+import { QuestionType, Role } from "./Enums"
 
 export interface IPageHyperlink {
     url: string,
@@ -37,7 +37,7 @@ export interface IRegister {
 export interface Question {
     id: number;
     question: string | null;
-    questionType: QuestionTypeName;
+    questionType: QuestionType;
     answers: string[] | null;
 };
 
@@ -47,6 +47,19 @@ export interface IFormField {
     placeholder?: string,
     value?: string
 }
+
+export interface IQuestionFormField {
+    id?: number,
+    type: QuestionType,
+    question: string,
+    answers: IAnswerFormField[]
+};
+
+export interface IAnswerFormField {
+    id?: number,
+    answer: string,
+    correct: boolean
+};
 
 
 // ====== DTOs ======
