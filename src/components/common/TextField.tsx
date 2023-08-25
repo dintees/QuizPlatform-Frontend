@@ -18,7 +18,7 @@ function TextField(props: Props) {
     }
 
     return (
-        <input className='textfield' type="text"
+        <input className='text-field' type="text"
             value={props.value !== undefined ? props.value : ""}
             placeholder={props.placeholder !== undefined ? props.placeholder : ""}
             style={props.style !== undefined ? props.style : {}}

@@ -13,11 +13,15 @@ function Logout() {
     const { setAuth } = useContext(AuthContext);
 
     useEffect(() => {
-        signOut();
-        setAuth((prev: IAuthInformation) => {
-            return { id: 0, isAuthenticated: false, username: "", email: "", role: Role.NotAuthorized, token: "", pages: getMenuItems() }
-        })
-        navigate("/");
+        const logOut = async () => {
+            signOut();
+            await setAuth((prev: IAuthInformation) => {
+                return { id: 0, isAuthenticated: false, username: "", email: "", role: Role.NotAuthorized, token: "", pages: getMenuItems() }
+            })
+            navigate("/");
+        }
+        
+        logOut();
     }, [navigate, setAuth])
 
     return (

@@ -10,8 +10,6 @@
 
     .question-edit-tile {
         display: flex;
-        // justify-content: space-between;
-
         margin-top: 2rem;
         margin-bottom: 2rem;
 
@@ -21,8 +19,12 @@
             flex: 1;
             flex-direction: column;
 
-            input {
+            .text-field {
                 margin-bottom: 0.7rem;
+            }
+
+            .radio-field {
+                margin-right: 1.5rem;
             }
         }
 
@@ -31,8 +33,6 @@
             padding: 0 1rem;
             font-size: 1.4rem;
             color: variables.$color-primary;
-            // justify-content: center;
-            // flex-shrink: 1;
         }
     }
 }

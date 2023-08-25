@@ -10,11 +10,12 @@ function NewSet() {
 
     const [title, setTitle] = useState<string>("New set");
     const [description, setDescription] = useState<string>("");
+    const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType>(QuestionType.ShortAnswer);
 
     const qq: IQuestionFormField = {
-        type: QuestionType.ShortAnswer,
+        type: QuestionType.MultipleChoice,
         question: "Czy Ala ma kota?",
-        answers: [{ answer: "tak", correct: true }]
+        answers: [{ answer: "tak", correct: true }, { answer: "nie", correct: false }, { answer: "nie wiem", correct: true }]
     }
 
     const [questions, setQuestions] = useState<IQuestionFormField[]>([qq]);
@@ -39,7 +40,7 @@ function NewSet() {
     }
 
     const handleAddNewQuestion = () => {
-        setQuestions((prev: IQuestionFormField[]) => [...prev, { type: QuestionType.ShortAnswer, question: "", answers: [{ answer: "", correct: true }] }])
+        setQuestions((prev: IQuestionFormField[]) => [...prev, { type: selectedQuestionType, question: "", answers: [{ answer: "", correct: true }] }])
     }
 
     const handleChangeQuestion = (index: number, value: string) => {
@@ -48,6 +49,11 @@ function NewSet() {
             newState[index].question = value;
             return newState;
         })
+    }
+
+    const handleQuestionTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedQuestionType(QuestionType[value as keyof typeof QuestionType])
     }
 
 
@@ -59,6 +65,12 @@ function NewSet() {
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} />
 
             <QuestionForm questions={questions} setQuestions={setQuestions} handleChangeQuestion={handleChangeQuestion} />
+
+            <select onChange={handleQuestionTypeChange}>
+                {Object.keys(QuestionType).filter((v) => isNaN(Number(v))).map((type: string) =>
+                    <option key={type}>{type}</option>
+                )}
+            </select>
 
             <Button value="Add new question" type='primary' onClick={handleAddNewQuestion} />
 
