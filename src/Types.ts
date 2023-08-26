@@ -50,7 +50,7 @@ export interface IFormField {
 
 export interface IQuestionFormField {
     id?: number,
-    type: QuestionType,
+    questionType: QuestionType,
     question: string,
     answers: IAnswerFormField[]
 };

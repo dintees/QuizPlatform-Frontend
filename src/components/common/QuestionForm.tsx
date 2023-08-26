@@ -1,11 +1,8 @@
 import React from 'react'
 import { IAnswerFormField, IQuestionFormField } from '../../Types'
-import TextField from './TextField'
 import { QuestionType } from '../../Enums'
-import { AiOutlineForm, AiOutlineCheckCircle, AiOutlineBorder, AiOutlineCheckSquare } from "react-icons/ai"
 import "../../assets/css/QuestionForm.scss"
-import RadioField from './RadioField'
-import CheckboxField from './CheckboxField'
+import QuestionEditor from './QuestionEditor'
 
 interface Props {
     questions: IQuestionFormField[],
@@ -37,7 +34,7 @@ function QuestionForm(props: Props) {
             const newQuestions = [...prev];
             const question = newQuestions[questionIndex]
             if (question.answers[answerIndex]) {
-                if (question.type !== QuestionType.MultipleChoice)
+                if (question.questionType !== QuestionType.MultipleChoice)
                     question.answers.forEach((i) => i.correct = false)
                 question.answers[answerIndex].correct = e.target.checked
             }
@@ -45,71 +42,12 @@ function QuestionForm(props: Props) {
         })
     }
 
-    const renderQuestion = (question: IQuestionFormField, index: number) => {
-        switch (question.type) {
-            case QuestionType.ShortAnswer:
-                return (
-                    <>
-                        <div className='question-edit-icon'><AiOutlineForm /></div>
-                        <div className='question-edit-content'>
-                            <TextField value={question.question} onChange={(e) => { handleChangeQuestion(e, index) }} />
-                            <TextField value={question.answers[0].answer} onChange={(e) => { handleChangeAnswers(e, index, 0) }} />
-                        </div>
-                    </>
-                )
-
-            case QuestionType.TrueFalse:
-                return (
-                    <>
-                        <div className='question-edit-icon'><AiOutlineBorder /></div>
-                        <div className='question-edit-content'>
-                            <TextField value={question.question} onChange={(e) => { handleChangeQuestion(e, index) }} />
-
-                            {question.answers.map((answer: IAnswerFormField, answerIndex: number) => {
-                                return <RadioField name={`question-${index}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }}
-                                    onChange={(e) => handleChangeAnswers(e, index, answerIndex)}
-                                />}
-                                    onChange={(e) => handleChangeFieldAnswers(e, index, answerIndex)} />
-                            })}
-                        </div>
-                    </>
-                )
-
-
-            case QuestionType.SingleChoice:
-                return (
-                    <>
-                        <div className='question-edit-icon'><AiOutlineCheckCircle /></div>
-                        <div className='question-edit-content'>
-                            <TextField value={question.question} onChange={(e) => { handleChangeQuestion(e, index) }} />
-
-                            {question.answers.map((answer: IAnswerFormField, answerIndex: number) => {
-                                return <RadioField name={`question-${index}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }}
-                                    onChange={(e) => handleChangeAnswers(e, index, answerIndex)}
-                                />}
-                                    onChange={(e) => handleChangeFieldAnswers(e, index, answerIndex)} />
-                            })}
-                        </div>
-                    </>
-                )
-
-            case QuestionType.MultipleChoice:
-                return (
-                    <>
-                        <div className='question-edit-icon'><AiOutlineCheckSquare /></div>
-                        <div className='question-edit-content'>
-                            <TextField value={question.question} onChange={(e) => { handleChangeQuestion(e, index) }} />
-
-                            {question.answers.map((answer: IAnswerFormField, answerIndex: number) => {
-                                return <CheckboxField name={`question-${index}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }}
-                                    onChange={(e) => handleChangeAnswers(e, index, answerIndex)}
-                                />}
-                                    onChange={(e) => handleChangeFieldAnswers(e, index, answerIndex)} />
-                            })}
-                        </div>
-                    </>
-                )
-        }
+    const handleDeleteQuestion = (index: number) => {
+        return props.setQuestions((prev: IQuestionFormField[]) => {
+            const newQuestions = [...prev];
+            newQuestions.splice(index, 1);
+            return newQuestions;
+        })
     }
 
 
@@ -118,9 +56,17 @@ function QuestionForm(props: Props) {
             <div className="question-edit-box">
                 {props.questions.map((question: IQuestionFormField, index: number) => {
                     return (
-                        <div key={index} className="question-edit-tile">
-                            {renderQuestion(question, index)}
-                        </div>
+                        <QuestionEditor
+                            key={index}
+                            question={question.question}
+                            questionIndex={index}
+                            answers={question.answers}
+                            handleChangeQuestion={handleChangeQuestion}
+                            handleChangeAnswers={handleChangeAnswers}
+                            handleChangeFieldAnswers={handleChangeFieldAnswers}
+                            handleDeleteQuestion={handleDeleteQuestion}
+                            questionType={question.questionType}
+                        />
                     )
                 })}
             </div>

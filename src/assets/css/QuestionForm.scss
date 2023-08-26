@@ -29,10 +29,18 @@
         }
 
         .question-edit-icon {
-            display: inline-flex;
+            // display: inline-flex;
             padding: 0 1rem;
             font-size: 1.4rem;
             color: variables.$color-primary;
+        }
+
+        .question-edit-delete {
+            cursor: pointer;
+            padding: 0 1rem;
+            font-size: 1.4rem;
+            color: variables.$color-danger;
+            font-weight: bold;
         }
     }
 }

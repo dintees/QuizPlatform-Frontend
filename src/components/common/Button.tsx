@@ -2,7 +2,7 @@ import React from 'react'
 
 interface Props {
     type?: string,
-    value: string,
+    value: string | JSX.Element,
     style?: React.CSSProperties,
     onClick?: () => void
 }

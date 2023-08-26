@@ -6,6 +6,7 @@ interface Props {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     placeholder?: string,
     style?: React.CSSProperties,
+    readonly?: boolean
 }
 
 function TextField(props: Props) {
@@ -23,6 +24,7 @@ function TextField(props: Props) {
             placeholder={props.placeholder !== undefined ? props.placeholder : ""}
             style={props.style !== undefined ? props.style : {}}
             onChange={handleChangeValue}
+            disabled={props.readonly}
         />
     )
 }
