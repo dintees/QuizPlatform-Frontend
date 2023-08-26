@@ -1,5 +1,5 @@
 import React from 'react'
-import { IAnswerFormField, IQuestionFormField } from '../../Types'
+import { IQuestionFormField } from '../../Types'
 import { QuestionType } from '../../Enums'
 import "../../assets/css/QuestionForm.scss"
 import QuestionEditor from './QuestionEditor'
@@ -43,11 +43,12 @@ function QuestionForm(props: Props) {
     }
 
     const handleDeleteQuestion = (index: number) => {
-        return props.setQuestions((prev: IQuestionFormField[]) => {
-            const newQuestions = [...prev];
-            newQuestions.splice(index, 1);
-            return newQuestions;
-        })
+        if (props.questions.length > 1)
+            return props.setQuestions((prev: IQuestionFormField[]) => {
+                const newQuestions = [...prev];
+                newQuestions.splice(index, 1);
+                return newQuestions;
+            })
     }
 
 

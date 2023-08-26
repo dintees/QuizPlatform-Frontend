@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import Button from '../common/Button'
 import { postData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
-import { IAnswerFormField, IQuestionFormField } from '../../Types'
+import { IQuestionFormField } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
 import { QuestionType } from '../../Enums'
-import { AiOutlinePlusCircle } from 'react-icons/ai'
 
 function NewSet() {
 
@@ -13,13 +12,13 @@ function NewSet() {
     const [description, setDescription] = useState<string>("");
     const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType>(QuestionType.SingleChoice);
 
-    const qq: IQuestionFormField = {
-        questionType: QuestionType.MultipleChoice,
-        question: "Czy Ala ma kota?",
-        answers: [{ answer: "tak", correct: true }, { answer: "nie", correct: false }, { answer: "nie wiem", correct: true }]
+    const initialQuestion: IQuestionFormField = {
+        questionType: QuestionType.SingleChoice,
+        question: "",
+        answers: [{ answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }]
     }
 
-    const [questions, setQuestions] = useState<IQuestionFormField[]>([qq]);
+    const [questions, setQuestions] = useState<IQuestionFormField[]>([initialQuestion]);
 
 
     const handleAddSet = () => {
@@ -48,8 +47,8 @@ function NewSet() {
                 for (let i = 0; i < 4; ++i) newQuestionObj.answers.push({ answer: "", correct: false })
                 break;
             case QuestionType.TrueFalse:
-               newQuestionObj.answers.push({ answer: "True", correct: true })
-               newQuestionObj.answers.push({ answer: "False", correct: false })
+                newQuestionObj.answers.push({ answer: "True", correct: true })
+                newQuestionObj.answers.push({ answer: "False", correct: false })
                 break;
             case QuestionType.ShortAnswer:
                 newQuestionObj.answers.push({ answer: "", correct: true })

@@ -36,27 +36,32 @@ function QuestionEditor(props: Props) {
                 <TextField value={props.question} onChange={(e) => { props.handleChangeQuestion(e, props.questionIndex) }} />
 
                 {props.answers.map((answer: IAnswerFormField, answerIndex: number) => {
+                    let renderElement: React.ReactNode = null;
                     switch (props.questionType) {
                         case QuestionType.SingleChoice:
-                            return <RadioField name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }}
+                            renderElement = (<RadioField name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }}
                                 onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)}
                             />}
-                                onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />
+                                onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
+                            break;
 
                         case QuestionType.MultipleChoice:
-                            return <CheckboxField name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }}
+                            renderElement = (<CheckboxField name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }}
                                 onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)}
                             />}
-                                onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />
+                                onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
+                            break;
 
                         case QuestionType.TrueFalse:
-                            return <RadioField name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }} readonly={true} />}
-                            onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />
+                            renderElement = (<RadioField name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }} readonly={true} />}
+                                onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
+                            break;
 
                         case QuestionType.ShortAnswer:
-                            return <TextField key={answerIndex} value={props.answers[0].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, 0)} />
+                            renderElement = (<TextField key={answerIndex} value={props.answers[0].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, 0)} />)
+                            break;
                     }
-
+                    return renderElement;
                 })}
             </div>
             <div className='question-edit-delete' onClick={() => props.handleDeleteQuestion(props.questionIndex)}>&times;</div>
