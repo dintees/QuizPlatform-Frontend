@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '../common/Button'
-import { postData } from '../../AxiosHelper'
+import { getData, postData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
 import { IQuestionFormField } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
 import { QuestionType } from '../../Enums'
+import { useParams } from 'react-router-dom'
 
 function NewSet() {
 
     const [title, setTitle] = useState<string>("New set");
     const [description, setDescription] = useState<string>("");
     const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType>(QuestionType.SingleChoice);
-
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const { setId } = useParams();
     const initialQuestion: IQuestionFormField = {
         questionType: QuestionType.SingleChoice,
         question: "",
@@ -19,6 +21,30 @@ function NewSet() {
     }
 
     const [questions, setQuestions] = useState<IQuestionFormField[]>([initialQuestion]);
+
+    useEffect(() => {
+        if (setId) {
+            // load questions from server
+            const fetchData = async () => {
+                const result = await getData(`set/${setId}`, true);
+
+                // TODO: refactor - int from server must return correct answers
+                if (result?.status === 200) {
+                    result.data.questions.map((q: any) => {
+                        q.answers = q.answers.map((a: string) => {
+                            return { answer: a, correct: false }
+                        })
+                        return q;
+                    })
+
+                    setTitle(result.data.title)
+                    setDescription(result.data.description)
+                    setQuestions(result.data.questions);
+                }
+            }
+            fetchData();
+        }
+    }, [setId])
 
 
     const handleAddSet = () => {
@@ -34,6 +60,15 @@ function NewSet() {
             const result = await postData("set/createWithQuestions", { title: title, description: description, questions: questions }, true);
             console.log(result);
 
+            if (result?.status === 200) {
+                if (result.data.success === true) {
+                    // success
+                    setErrorMessage(JSON.stringify(result.data.value))
+                }
+                else {
+                    setErrorMessage(result?.data.errorMessage);
+                }
+            }
         }
 
         fetchData();
@@ -92,6 +127,8 @@ function NewSet() {
             </div>
 
             <Button value='Save' type='success' onClick={handleAddSet} />
+
+            <div className='color-danger'>{errorMessage}</div>
         </>
     )
 }

@@ -60,9 +60,8 @@ function App() {
             <Route element={<Layout pages={auth.pages} />}>
               <Route path='/' element={<Home />} />
               <Route path='/mysets' element={<ProtectedComponent component={<MySets />} />} />
-              <Route path='/newSet' element={<ProtectedComponent component={<NewSet />} />} />
+              <Route path='/newset/:setId?' element={<ProtectedComponent component={<NewSet />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
-
 
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
