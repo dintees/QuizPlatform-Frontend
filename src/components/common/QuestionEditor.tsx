@@ -5,6 +5,7 @@ import TextField from './TextField';
 import { AiOutlineBorder, AiOutlineCheckCircle, AiOutlineCheckSquare, AiOutlineForm } from 'react-icons/ai';
 import CheckboxField from './CheckboxField';
 import RadioField from './RadioField';
+import Button from './Button';
 
 interface Props {
     question: string;
@@ -14,6 +15,7 @@ interface Props {
     handleChangeAnswers: (e: React.ChangeEvent<HTMLInputElement>, questionIndex: number, answerIndex: number) => void;
     handleChangeFieldAnswers: (e: React.ChangeEvent<HTMLInputElement>, questionIndex: number, answerIndex: number) => void;
     handleDeleteQuestion: (index: number) => void;
+    handleAddAnswer: (questionIndex: number) => void;
     questionType: QuestionType;
 }
 
@@ -31,7 +33,7 @@ function QuestionEditor(props: Props) {
 
     return (
         <div key={props.questionIndex} className="question-edit-tile">
-            <div className='question-edit-icon'>{getIcon(props.questionType)}</div>
+            <div className='question-edit-icon'>{getIcon(props.questionType)} {props.questionIndex + 1}.</div>
             <div className='question-edit-content'>
                 <TextField value={props.question} onChange={(e) => { props.handleChangeQuestion(e, props.questionIndex) }} />
 
@@ -58,11 +60,12 @@ function QuestionEditor(props: Props) {
                             break;
 
                         case QuestionType.ShortAnswer:
-                            renderElement = (<TextField key={answerIndex} value={props.answers[0].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, 0)} />)
+                            renderElement = (<TextField key={answerIndex} value={props.answers[answerIndex].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)} />)
                             break;
                     }
                     return renderElement;
                 })}
+                {props.questionType !== QuestionType.TrueFalse && <Button value="+" type='primary' style={{ alignSelf: "flex-start", marginLeft: "2rem" }} onClick={(e) => props.handleAddAnswer(props.questionIndex)} />}
             </div>
             <div className='question-edit-delete' onClick={() => props.handleDeleteQuestion(props.questionIndex)}>&times;</div>
         </div>

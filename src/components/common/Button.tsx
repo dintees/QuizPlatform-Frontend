@@ -4,7 +4,7 @@ interface Props {
     type?: string,
     value: string | JSX.Element,
     style?: React.CSSProperties,
-    onClick?: () => void
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 function Button(props: Props) {

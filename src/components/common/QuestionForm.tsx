@@ -51,6 +51,15 @@ function QuestionForm(props: Props) {
             })
     }
 
+    const handleAddAnswer = (questionIndex: number) => {
+        props.setQuestions((prev: IQuestionFormField[]) => {
+            return prev.map((question, index) => {
+                if (index === questionIndex) return { ...question, answers: [...question.answers, { answer: "", correct: false }] }
+                else return question;
+            })
+        })
+    }
+
 
     return (
         <>
@@ -66,6 +75,7 @@ function QuestionForm(props: Props) {
                             handleChangeAnswers={handleChangeAnswers}
                             handleChangeFieldAnswers={handleChangeFieldAnswers}
                             handleDeleteQuestion={handleDeleteQuestion}
+                            handleAddAnswer={handleAddAnswer}
                             questionType={question.questionType}
                         />
                     )
