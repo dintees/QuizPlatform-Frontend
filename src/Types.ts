@@ -1,3 +1,4 @@
+import { LinkProps } from "react-router-dom"
 import { QuestionType, Role } from "./Enums"
 
 export interface IPageHyperlink {
@@ -60,6 +61,12 @@ export interface IAnswerFormField {
     answer: string,
     correct: boolean
 };
+
+export interface UserSetTable {
+    id: number,
+    title: string,
+    href: JSX.Element
+}
 
 
 // ====== DTOs ======

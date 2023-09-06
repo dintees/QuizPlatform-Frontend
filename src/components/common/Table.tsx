@@ -29,7 +29,7 @@ function Table<T, K extends keyof T>({ data, columns }: TableProps<T, K>): JSX.E
                             {columns.map((column, v2) => {
                                 return (
                                     <td key={`table-cell-${v2}`}>
-                                        {String(row[column.key])}
+                                        <>{row[column.key]}</>
                                     </td>
                                 )
                             })}

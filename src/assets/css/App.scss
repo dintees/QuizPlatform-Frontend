@@ -22,7 +22,8 @@ body,
 .a-link {
   color: variables.$color-primary;
   cursor: pointer;
-  font-weight: bold;
+  text-decoration: none;
+  // font-weight: bold;
 
   &:hover {
     text-decoration: underline;
@@ -103,7 +104,6 @@ body,
 input:focus {
   outline: none;
 }
-
 
 .block {
   display: block;

@@ -5,15 +5,19 @@ import TextField from '../common/TextField'
 import { IQuestionFormField } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
 import { QuestionType } from '../../Enums'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-function NewSet() {
+function Set() {
 
     const [title, setTitle] = useState<string>("New set");
     const [description, setDescription] = useState<string>("");
     const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType>(QuestionType.SingleChoice);
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [editMode, setEditMode] = useState<boolean>(true);
+
+    const navigate = useNavigate();
     const { setId } = useParams();
+
     const initialQuestion: IQuestionFormField = {
         questionType: QuestionType.SingleChoice,
         question: "",
@@ -111,26 +115,33 @@ function NewSet() {
         <>
             <div className="content-title">New set</div>
 
-            <TextField placeholder='Title' value={title} setValue={setTitle} />
-            <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} />
+            <Button value="My sets" type='secondary' onClick={() => navigate("/mysets")} />
+            <Button value="Change mode" type='primary' onClick={() => setEditMode(!editMode)} />
 
-            <QuestionForm questions={questions} setQuestions={setQuestions} handleChangeQuestion={handleChangeQuestion} />
+            <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
+            <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />
 
-            <div className="text-center">
-                <select className='form-control' onChange={handleQuestionTypeChange}>
-                    {Object.keys(QuestionType).filter((v) => isNaN(Number(v))).map((type: string) =>
-                        <option key={type}>{type}</option>
-                    )}
-                </select>
+            <QuestionForm questions={questions} setQuestions={setQuestions} handleChangeQuestion={handleChangeQuestion} editMode={editMode} />
 
-                <Button value='Add' type='primary' onClick={handleAddNewQuestion} />
-            </div>
+            {editMode &&
+                <>
+                    <div className="text-center">
+                        <select className='form-control' onChange={handleQuestionTypeChange}>
+                            {Object.keys(QuestionType).filter((v) => isNaN(Number(v))).map((type: string) =>
+                                <option key={type}>{type}</option>
+                            )}
+                        </select>
 
-            <Button value='Save' type='success' onClick={handleAddSet} />
+                        <Button value='Add' type='primary' onClick={handleAddNewQuestion} />
+                    </div>
 
-            <div className='color-danger'>{errorMessage}</div>
+                    <Button value='Save' type='success' onClick={handleAddSet} />
+
+                    <div className='color-danger'>{errorMessage}</div>
+                </>
+            }
         </>
     )
 }
 
-export default NewSet
+export default Set

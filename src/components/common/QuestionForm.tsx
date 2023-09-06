@@ -7,7 +7,8 @@ import QuestionEditor from './QuestionEditor'
 interface Props {
     questions: IQuestionFormField[],
     setQuestions: React.Dispatch<React.SetStateAction<IQuestionFormField[]>>,
-    handleChangeQuestion: (index: number, value: string) => void
+    handleChangeQuestion: (index: number, value: string) => void,
+    editMode: boolean
 }
 
 
@@ -77,6 +78,7 @@ function QuestionForm(props: Props) {
                             handleDeleteQuestion={handleDeleteQuestion}
                             handleAddAnswer={handleAddAnswer}
                             questionType={question.questionType}
+                            editMode={props.editMode}
                         />
                     )
                 })}

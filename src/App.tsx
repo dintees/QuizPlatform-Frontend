@@ -14,7 +14,7 @@ import { getDataFromToken } from './utils/authUtils';
 import NotFound from './components/pages/NotFound';
 import { Role } from './Enums';
 import MySets from './components/pages/MySets';
-import NewSet from './components/pages/NewSet';
+import Set from './components/pages/Set';
 
 export const AuthContext = createContext<IAuthContext>({
   auth: {
@@ -60,7 +60,7 @@ function App() {
             <Route element={<Layout pages={auth.pages} />}>
               <Route path='/' element={<Home />} />
               <Route path='/mysets' element={<ProtectedComponent component={<MySets />} />} />
-              <Route path='/newset/:setId?' element={<ProtectedComponent component={<NewSet />} />} />
+              <Route path='/set/:setId?' element={<ProtectedComponent component={<Set />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
 
               <Route path='/login' element={<Login />} />
