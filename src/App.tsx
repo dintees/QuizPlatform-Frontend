@@ -60,7 +60,7 @@ function App() {
             <Route element={<Layout pages={auth.pages} />}>
               <Route path='/' element={<Home />} />
               <Route path='/mysets' element={<ProtectedComponent component={<MySets />} />} />
-              <Route path='/set/:setId?' element={<ProtectedComponent component={<Set />} />} />
+              <Route path='/set/:mode/:setId?' element={<ProtectedComponent component={<Set />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
 
               <Route path='/login' element={<Login />} />

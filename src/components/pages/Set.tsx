@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Button from '../common/Button'
-import { getData, postData } from '../../AxiosHelper'
+import { getData, postData, deleteData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
 import { IQuestionFormField } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
@@ -16,7 +16,7 @@ function Set() {
     const [editMode, setEditMode] = useState<boolean>(true);
 
     const navigate = useNavigate();
-    const { setId } = useParams();
+    const { mode, setId } = useParams();
 
     const initialQuestion: IQuestionFormField = {
         questionType: QuestionType.SingleChoice,
@@ -27,6 +27,10 @@ function Set() {
     const [questions, setQuestions] = useState<IQuestionFormField[]>([initialQuestion]);
 
     useEffect(() => {
+        if (mode === 'edit') setEditMode(true)
+        else if (mode === 'view') setEditMode(false)
+        else navigate("/mysets")
+
         if (setId) {
             // load questions from server
             const fetchData = async () => {
@@ -48,18 +52,10 @@ function Set() {
             }
             fetchData();
         }
-    }, [setId])
+    }, [mode, setId, navigate])
 
 
     const handleAddSet = () => {
-
-        console.log("Adding set...");
-        console.log("Title: " + title);
-        console.log("Description: " + description);
-        console.log("Content");
-        console.log(questions);
-
-
         const fetchData = async () => {
             const result = await postData("set/createWithQuestions", { title: title, description: description, questions: questions }, true);
             console.log(result);
@@ -67,6 +63,7 @@ function Set() {
             if (result?.status === 200) {
                 if (result.data.success === true) {
                     // success
+                    console.log("Set has been created");
                     setErrorMessage(JSON.stringify(result.data.value))
                 }
                 else {
@@ -76,6 +73,14 @@ function Set() {
         }
 
         fetchData();
+    }
+
+    const handleDeleteSet = async (setId: number) => {
+        const result = await deleteData(`set/delete/${setId}`, true);
+        console.log(result);
+        if (result?.status === 200) {
+            alert("Deleted");
+        }
     }
 
     const handleAddNewQuestion = () => {
@@ -115,8 +120,8 @@ function Set() {
         <>
             <div className="content-title">New set</div>
 
-            <Button value="My sets" type='secondary' onClick={() => navigate("/mysets")} />
-            <Button value="Change mode" type='primary' onClick={() => setEditMode(!editMode)} />
+            <Button value="Go back" type='secondary' onClick={() => navigate("/mysets")} />
+            {editMode && setId && <Button value='Delete set' onClick={() => handleDeleteSet(parseInt(setId))} type='danger' />}
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />

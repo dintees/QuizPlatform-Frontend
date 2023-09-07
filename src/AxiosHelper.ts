@@ -21,13 +21,28 @@ export const postData = async (endpoint: string | undefined, body: any, authoris
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             } : {}
         })
-        console.log(("!!!"));
-        console.log(response);
-        
         return { status: response.status, data: response.data }
     } catch (error) {
         console.log(error);
-        
+
+        if (error instanceof AxiosError) {
+            return { status: error.response?.status, data: error.response?.data }
+        }
+        console.log(error);
+    }
+}
+
+export const deleteData = async (endpoint: string | undefined, authorisationRequired: boolean = false) => {
+    try {
+        const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, {
+            headers: authorisationRequired ? {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            } : {}
+        })
+        return { status: response.status, data: response.data }
+    } catch (error) {
+        console.log(error);
+
         if (error instanceof AxiosError) {
             return { status: error.response?.status, data: error.response?.data }
         }

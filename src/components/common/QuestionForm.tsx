@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IQuestionFormField } from '../../Types'
 import { QuestionType } from '../../Enums'
 import "../../assets/css/QuestionForm.scss"
 import QuestionEditor from './QuestionEditor'
+import Loader from './Loader'
 
 interface Props {
     questions: IQuestionFormField[],
@@ -13,6 +14,13 @@ interface Props {
 
 
 function QuestionForm(props: Props) {
+
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        setLoading(false);
+    }, [props.questions])
+
     const handleChangeQuestion = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         return props.setQuestions((prev: IQuestionFormField[]) => {
             const newQuestions = [...prev];
@@ -64,6 +72,7 @@ function QuestionForm(props: Props) {
 
     return (
         <>
+        {loading ? <Loader loading={loading} /> :
             <div className="question-edit-box">
                 {props.questions.map((question: IQuestionFormField, index: number) => {
                     return (
@@ -83,6 +92,7 @@ function QuestionForm(props: Props) {
                     )
                 })}
             </div>
+}
         </>
     )
 }

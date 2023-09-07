@@ -67,11 +67,3 @@ export interface UserSetTable {
     title: string,
     href: JSX.Element
 }
-
-
-// ====== DTOs ======
-
-export interface UserSetDto {
-    id: number;
-    title: string;
-}

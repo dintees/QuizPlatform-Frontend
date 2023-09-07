@@ -60,6 +60,15 @@ body,
   }
 }
 
+.btn-danger {
+  background-color: variables.$color-danger;
+  color: #eee;
+
+  &:hover {
+    background-color: variables.$color-danger-hover;
+  }
+}
+
 .form-control {
   border: 1px solid #aaa;
   color: #666;
