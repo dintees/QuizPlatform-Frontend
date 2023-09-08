@@ -6,8 +6,9 @@ import { IQuestionFormField } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
 import { QuestionType } from '../../Enums'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
-function Set() {
+function Test() {
 
     const [title, setTitle] = useState<string>("New set");
     const [description, setDescription] = useState<string>("");
@@ -56,18 +57,19 @@ function Set() {
 
 
     const handleAddSet = () => {
+        const toastId = toast.loading("Saving...");
         const fetchData = async () => {
             const result = await postData("set/createWithQuestions", { title: title, description: description, questions: questions }, true);
             console.log(result);
 
             if (result?.status === 200) {
                 if (result.data.success === true) {
-                    // success
-                    console.log("Set has been created");
-                    setErrorMessage(JSON.stringify(result.data.value))
+                    // test has been created
+                    toast.update(toastId, { type: "success", render: "Successfully saved!", isLoading: false, autoClose: 3000, closeOnClick: true })
                 }
                 else {
                     setErrorMessage(result?.data.errorMessage);
+                    toast.update(toastId, { type: "error", render: result?.data.errorMessage, isLoading: false, autoClose: 3000, closeOnClick: true })
                 }
             }
         }
@@ -118,9 +120,9 @@ function Set() {
 
     return (
         <>
-            <div className="content-title">New set</div>
+            <div className="content-title">Create new test</div>
 
-            <Button value="Go back" type='secondary' onClick={() => navigate("/mysets")} />
+            <Button value="Go back" type='secondary' onClick={() => navigate("/mytests")} />
             {editMode && setId && <Button value='Delete set' onClick={() => handleDeleteSet(parseInt(setId))} type='danger' />}
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
@@ -149,4 +151,4 @@ function Set() {
     )
 }
 
-export default Set
+export default Test

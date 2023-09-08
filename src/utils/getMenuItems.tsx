@@ -11,7 +11,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
         case Role.Admin:
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
-                { url: "/mysets", name: "My Sets", icon: <BsXDiamondFill /> },
+                { url: "/mytests", name: "My Tests", icon: <BsXDiamondFill /> },
                 { url: "/settings", name: "Admin", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]
@@ -19,7 +19,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
         case Role.User:
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
-                { url: "/mysets", name: "My Sets", icon: <BsXDiamondFill /> },
+                { url: "/mytests", name: "My Tests", icon: <BsXDiamondFill /> },
                 { url: "/settings", name: "Settings", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]

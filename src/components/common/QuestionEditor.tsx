@@ -16,6 +16,7 @@ interface Props {
     handleChangeFieldAnswers: (e: React.ChangeEvent<HTMLInputElement>, questionIndex: number, answerIndex: number) => void
     handleDeleteQuestion: (index: number) => void
     handleAddAnswer: (questionIndex: number) => void
+    handleDeleteAnswer: (questionIndex: number, answerIndex: number) => void
     questionType: QuestionType
     editMode: boolean
 }
@@ -37,35 +38,38 @@ function QuestionEditor(props: Props) {
             <div className='question-edit-icon'>{getIcon(props.questionType)} {props.questionIndex + 1}.</div>
             <div className='question-edit-content'>
                 <TextField value={props.question} disabled={!props.editMode} onChange={(e) => { props.handleChangeQuestion(e, props.questionIndex) }} />
+                <div className='question-edit-answers'>
 
-                {props.answers.map((answer: IAnswerFormField, answerIndex: number) => {
-                    let renderElement: React.ReactNode = null;
-                    switch (props.questionType) {
-                        case QuestionType.SingleChoice:
-                            renderElement = (<RadioField readonly={!props.editMode} name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField readonly={!props.editMode} value={answer.answer} style={{ width: 'auto' }}
-                                onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)}
-                            />}
-                                onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
-                            break;
 
-                        case QuestionType.MultipleChoice:
-                            renderElement = (<CheckboxField readonly={!props.editMode} name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField readonly={!props.editMode} value={answer.answer} style={{ width: 'auto' }}
-                                onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)}
-                            />}
-                                onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
-                            break;
+                    {props.answers.map((answer: IAnswerFormField, answerIndex: number) => {
+                        let renderElement: React.ReactNode = null;
+                        switch (props.questionType) {
+                            case QuestionType.SingleChoice:
+                                renderElement = (<RadioField readonly={!props.editMode} name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField readonly={!props.editMode} value={answer.answer}
+                                    onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)}
+                                />}
+                                    onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
+                                break;
 
-                        case QuestionType.TrueFalse:
-                            renderElement = (<RadioField readonly={!props.editMode} name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} style={{ width: 'auto' }} readonly={true} />}
-                                onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
-                            break;
+                            case QuestionType.MultipleChoice:
+                                renderElement = (<CheckboxField readonly={!props.editMode} name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField readonly={!props.editMode} value={answer.answer}
+                                    onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)}
+                                />}
+                                    onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
+                                break;
 
-                        case QuestionType.ShortAnswer:
-                            renderElement = (<TextField readonly={!props.editMode} key={answerIndex} value={props.answers[answerIndex].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)} />)
-                            break;
-                    }
-                    return renderElement;
-                })}
+                            case QuestionType.TrueFalse:
+                                renderElement = (<RadioField readonly={!props.editMode} name={`question-${props.questionIndex}`} key={answerIndex} checked={answer.correct} label={<TextField value={answer.answer} readonly={true} />}
+                                    onChange={(e) => props.handleChangeFieldAnswers(e, props.questionIndex, answerIndex)} />)
+                                break;
+
+                            case QuestionType.ShortAnswer:
+                                renderElement = (<TextField readonly={!props.editMode} key={answerIndex} value={props.answers[answerIndex].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)} />)
+                                break;
+                        }
+                        return <div key={`answer-${answerIndex}`} className='question-edit-answer'>{renderElement}<div className="question-edit-delete" onClick={() => props.handleDeleteAnswer(props.questionIndex, answerIndex)}>&times;</div></div>;
+                    })}
+                </div>
                 {props.editMode && props.questionType !== QuestionType.TrueFalse && <Button value="+" type='primary' style={{ alignSelf: "flex-start", marginLeft: "2rem" }} onClick={(e) => props.handleAddAnswer(props.questionIndex)} />}
             </div>
             {props.editMode && <div className='question-edit-delete' onClick={() => props.handleDeleteQuestion(props.questionIndex)}>&times;</div>}

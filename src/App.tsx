@@ -2,7 +2,6 @@ import React, { useState, createContext, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Layout from './components/common/Layout';
-import "./assets/css/App.scss"
 import { IAuthContext, IAuthInformation } from './Types'
 import Settings from './components/pages/Settings';
 import Login from './components/pages/Login';
@@ -13,8 +12,12 @@ import ProtectedComponent from './components/common/ProtectedComponent';
 import { getDataFromToken } from './utils/authUtils';
 import NotFound from './components/pages/NotFound';
 import { Role } from './Enums';
-import MySets from './components/pages/MySets';
-import Set from './components/pages/Set';
+import MyTests from './components/pages/MyTests';
+import Test from './components/pages/Test';
+import { ToastContainer, Flip } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "./assets/css/App.scss"
+
 
 export const AuthContext = createContext<IAuthContext>({
   auth: {
@@ -55,12 +58,14 @@ function App() {
   return (
     <div id="App">
       <AuthContext.Provider value={{ auth, setAuth }}>
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="colored" transition={Flip} />
+
         <BrowserRouter>
           <Routes>
             <Route element={<Layout pages={auth.pages} />}>
               <Route path='/' element={<Home />} />
-              <Route path='/mysets' element={<ProtectedComponent component={<MySets />} />} />
-              <Route path='/set/:mode/:setId?' element={<ProtectedComponent component={<Set />} />} />
+              <Route path='/mytests' element={<ProtectedComponent component={<MyTests />} />} />
+              <Route path='/test/:mode/:setId?' element={<ProtectedComponent component={<Test />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
 
               <Route path='/login' element={<Login />} />

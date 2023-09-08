@@ -6,7 +6,7 @@ import Button from '../common/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../common/Loader';
 
-function MySets() {
+function MyTests() {
 
     const [userId, setUserId] = useState<number>(0);
     const [userSet, setUserSet] = useState<UserSetTable[]>([]);
@@ -17,13 +17,11 @@ function MySets() {
         const fetchData = async () => {
             setLoading(true)
             const data = await getData("Set", true);
-            console.log(data);
-
 
             if (data && data.status === 200) {
                 // TODO refactor
                 data.data.forEach((i: UserSetTable) => {
-                    i.href = <Link className='a-link' to={`/set/edit/${i.id}`} >Edit</Link>
+                    i.href = <Link className='a-link' to={`/test/edit/${i.id}`} >Edit</Link>
                 });
                 console.log(data.data);
 
@@ -39,9 +37,9 @@ function MySets() {
     return (
         <>
             {loading ? <Loader loading={loading} /> : <>
-                <div className='content-title'>My sets</div>
+                <div className='content-title'>My Tests</div>
 
-                <Button value='Add new set' type='success' style={{ fontSize: "1.2rem" }} onClick={() => navigate("/set/edit")} />
+                <Button value='Add new test' type='success' style={{ fontSize: "1.2rem" }} onClick={() => navigate("/test/edit")} />
 
                 <div className="mt-1">My sets count: {userId}</div>
 
@@ -52,4 +50,4 @@ function MySets() {
     )
 }
 
-export default MySets
+export default MyTests

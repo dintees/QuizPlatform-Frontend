@@ -69,30 +69,49 @@ function QuestionForm(props: Props) {
         })
     }
 
+    const handleDeleteAnswer = (questionIndex: number, answerIndex: number) => {
+        props.setQuestions((prev: IQuestionFormField[]) => {
+            return prev.map((question, i) => {
+                if (i === questionIndex) {
+                    const updatedAnswers = [...question.answers];
+                    updatedAnswers.splice(answerIndex, 1);
+                    console.log(updatedAnswers);
+
+                    return {
+                        ...question,
+                        answers: updatedAnswers,
+                    };
+                }
+                return question;
+            });
+        })
+    }
+
 
     return (
         <>
-        {loading ? <Loader loading={loading} /> :
-            <div className="question-edit-box">
-                {props.questions.map((question: IQuestionFormField, index: number) => {
-                    return (
-                        <QuestionEditor
-                            key={index}
-                            question={question.question}
-                            questionIndex={index}
-                            answers={question.answers}
-                            handleChangeQuestion={handleChangeQuestion}
-                            handleChangeAnswers={handleChangeAnswers}
-                            handleChangeFieldAnswers={handleChangeFieldAnswers}
-                            handleDeleteQuestion={handleDeleteQuestion}
-                            handleAddAnswer={handleAddAnswer}
-                            questionType={question.questionType}
-                            editMode={props.editMode}
-                        />
-                    )
-                })}
-            </div>
-}
+            {loading ? <Loader loading={loading} /> :
+                <div className="question-edit-box">
+                    {props.questions.map((question: IQuestionFormField, index: number) => {
+                        return (
+                            <QuestionEditor
+                                key={index}
+                                question={question.question}
+                                questionIndex={index}
+                                answers={question.answers}
+                                handleChangeQuestion={handleChangeQuestion}
+                                handleChangeAnswers={handleChangeAnswers}
+                                handleChangeFieldAnswers={handleChangeFieldAnswers}
+                                handleDeleteQuestion={handleDeleteQuestion}
+                                handleAddAnswer={handleAddAnswer}
+                                handleDeleteAnswer={handleDeleteAnswer}
+                                questionType={question.questionType}
+                                editMode={props.editMode}
+                            />
+                        )
+                    })}
+                </div>
+            }
         </>
     )
 }

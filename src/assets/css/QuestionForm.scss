@@ -43,5 +43,18 @@
             color: variables.$color-danger;
             font-weight: bold;
         }
+
+        .question-edit-answer {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .question-edit-answers {
+            width: 50%;
+
+            input[type=text] {
+                width: 80%;
+            }
+        }
     }
 }
