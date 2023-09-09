@@ -67,7 +67,12 @@ function QuestionEditor(props: Props) {
                                 renderElement = (<TextField readonly={!props.editMode} key={answerIndex} value={props.answers[answerIndex].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)} />)
                                 break;
                         }
-                        return <div key={`answer-${answerIndex}`} className='question-edit-answer'>{renderElement}<div className="question-edit-delete" onClick={() => props.handleDeleteAnswer(props.questionIndex, answerIndex)}>&times;</div></div>;
+                        return <div
+                            key={`answer-${answerIndex}`} className='question-edit-answer'>{renderElement}
+                            {props.questionType !== QuestionType.TrueFalse &&
+                                <div className="question-edit-delete" onClick={() => props.handleDeleteAnswer(props.questionIndex, answerIndex)}>&times;</div>
+                            }
+                        </div>;
                     })}
                 </div>
                 {props.editMode && props.questionType !== QuestionType.TrueFalse && <Button value="+" type='primary' style={{ alignSelf: "flex-start", marginLeft: "2rem" }} onClick={(e) => props.handleAddAnswer(props.questionIndex)} />}

@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Button from '../common/Button'
-import { getData, postData, deleteData } from '../../AxiosHelper'
+import { getData, postData, deleteData, putData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
-import { IQuestionFormField } from '../../Types'
+import { IQuestionFormField, IResult, ISetDto } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
 import { QuestionType } from '../../Enums'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import Loader from '../common/Loader'
+import { BsFillTrashFill, BsArrowLeftCircleFill } from 'react-icons/bs'
 
 function Test() {
 
     const [title, setTitle] = useState<string>("New set");
     const [description, setDescription] = useState<string>("");
     const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType>(QuestionType.SingleChoice);
-    const [errorMessage, setErrorMessage] = useState<string>("");
     const [editMode, setEditMode] = useState<boolean>(true);
 
     const navigate = useNavigate();
@@ -22,10 +23,11 @@ function Test() {
     const initialQuestion: IQuestionFormField = {
         questionType: QuestionType.SingleChoice,
         question: "",
-        answers: [{ answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }]
+        answers: [{ answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }]
     }
 
     const [questions, setQuestions] = useState<IQuestionFormField[]>([initialQuestion]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (mode === 'edit') setEditMode(true)
@@ -33,18 +35,19 @@ function Test() {
         else navigate("/mysets")
 
         if (setId) {
+            setLoading(true);
             // load questions from server
             const fetchData = async () => {
                 const result = await getData(`set/${setId}`, true);
 
                 // TODO: refactor - int from server must return correct answers
                 if (result?.status === 200) {
-                    result.data.questions.map((q: any) => {
-                        q.answers = q.answers.map((a: string) => {
-                            return { answer: a, correct: false }
-                        })
-                        return q;
-                    })
+                    // result.data.questions.map((q: any) => {
+                    //     q.answers = q.answers.map((a: string) => {
+                    //         return { answer: a, correct: false }
+                    //     })
+                    //     return q;
+                    // })
 
                     setTitle(result.data.title)
                     setDescription(result.data.description)
@@ -53,7 +56,12 @@ function Test() {
             }
             fetchData();
         }
+        // setTimeout(() => setLoading(false), 200);
     }, [mode, setId, navigate])
+
+    useMemo(() => {
+        setLoading(false)
+    }, [title, description, questions])
 
 
     const handleAddSet = () => {
@@ -63,14 +71,37 @@ function Test() {
             console.log(result);
 
             if (result?.status === 200) {
-                if (result.data.success === true) {
+                const data: IResult<ISetDto> = result.data;
+                if (data.success) {
                     // test has been created
                     toast.update(toastId, { type: "success", render: "Successfully saved!", isLoading: false, autoClose: 3000, closeOnClick: true })
+
+                    navigate(`/test/edit/${data.value.id}`)
                 }
-                else {
-                    setErrorMessage(result?.data.errorMessage);
-                    toast.update(toastId, { type: "error", render: result?.data.errorMessage, isLoading: false, autoClose: 3000, closeOnClick: true })
+            }
+            else {
+                toast.update(toastId, { type: "error", render: result?.data.errorMessage, isLoading: false, autoClose: 3000, closeOnClick: true })
+            }
+        }
+
+        fetchData();
+    }
+
+    const handleModifySet = () => {
+        const toastId = toast.loading("Saving...");
+        console.log({ title: title, description: description, questions: questions });
+
+        const fetchData = async () => {
+            const result = await putData(`set/edit/${setId}`, { title: title, description: description, questions: questions }, true);
+            console.log(result);
+
+            if (result?.status === 200) {
+                if (result.data.success === true) {
+                    // test has been created
+                    toast.update(toastId, { type: "success", render: "Successfully modified!", isLoading: false, autoClose: 3000, closeOnClick: true })
                 }
+            } else {
+                toast.update(toastId, { type: "error", render: result?.data.errorMessage, isLoading: false, autoClose: 3000, closeOnClick: true })
             }
         }
 
@@ -79,9 +110,11 @@ function Test() {
 
     const handleDeleteSet = async (setId: number) => {
         const result = await deleteData(`set/delete/${setId}`, true);
-        console.log(result);
         if (result?.status === 200) {
-            alert("Deleted");
+            toast.success("Successfully deleted!");
+            navigate("/mytests")
+        } else {
+            toast.error(result?.data.errorMessage);
         }
     }
 
@@ -90,7 +123,7 @@ function Test() {
         switch (selectedQuestionType) {
             case QuestionType.SingleChoice:
             case QuestionType.MultipleChoice:
-                for (let i = 0; i < 4; ++i) newQuestionObj.answers.push({ answer: "", correct: false })
+                for (let i = 0; i < 3; ++i) newQuestionObj.answers.push({ answer: "", correct: false })
                 break;
             case QuestionType.TrueFalse:
                 newQuestionObj.answers.push({ answer: "True", correct: true })
@@ -120,10 +153,12 @@ function Test() {
 
     return (
         <>
+            <Loader loading={loading} />
+
             <div className="content-title">Create new test</div>
 
-            <Button value="Go back" type='secondary' onClick={() => navigate("/mytests")} />
-            {editMode && setId && <Button value='Delete set' onClick={() => handleDeleteSet(parseInt(setId))} type='danger' />}
+            <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/mytests")} />
+            {editMode && setId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteSet(parseInt(setId))} type='danger' />}
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />
@@ -142,9 +177,11 @@ function Test() {
                         <Button value='Add' type='primary' onClick={handleAddNewQuestion} />
                     </div>
 
-                    <Button value='Save' type='success' onClick={handleAddSet} />
-
-                    <div className='color-danger'>{errorMessage}</div>
+                    {setId ?
+                        <Button value="Modify" type='success' onClick={handleModifySet} />
+                        :
+                        <Button value='Save' type='success' onClick={handleAddSet} />
+                    }
                 </>
             }
         </>

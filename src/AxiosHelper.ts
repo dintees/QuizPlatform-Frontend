@@ -32,6 +32,24 @@ export const postData = async (endpoint: string | undefined, body: any, authoris
     }
 }
 
+export const putData = async (endpoint: string | undefined, body: any, authorisationRequired: boolean = false) => {
+    try {
+        const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, body, {
+            headers: authorisationRequired ? {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            } : {}
+        })
+        return { status: response.status, data: response.data }
+    } catch (error) {
+        console.log(error);
+
+        if (error instanceof AxiosError) {
+            return { status: error.response?.status, data: error.response?.data }
+        }
+        console.log(error);
+    }
+}
+
 export const deleteData = async (endpoint: string | undefined, authorisationRequired: boolean = false) => {
     try {
         const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, {

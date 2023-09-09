@@ -67,3 +67,27 @@ export interface UserSetTable {
     title: string,
     href: JSX.Element
 }
+
+export interface IResult<T> {
+    success: boolean,
+    value: T,
+    errorMessage: string
+}
+
+
+
+// === DTOs ===
+
+export interface ISetDto {
+    id: number;
+    title: string | null;
+    description: string | null;
+    questions: IQuestionDto[] | null;
+}
+
+export interface IQuestionDto {
+    id: number;
+    question: string | null;
+    questionType: QuestionType;
+    answers: IAnswerFormField[] | null;
+}

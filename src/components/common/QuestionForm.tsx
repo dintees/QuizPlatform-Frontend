@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { IQuestionFormField } from '../../Types'
 import { QuestionType } from '../../Enums'
 import "../../assets/css/QuestionForm.scss"
 import QuestionEditor from './QuestionEditor'
-import Loader from './Loader'
 
 interface Props {
     questions: IQuestionFormField[],
@@ -14,12 +13,6 @@ interface Props {
 
 
 function QuestionForm(props: Props) {
-
-    const [loading, setLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        setLoading(false);
-    }, [props.questions])
 
     const handleChangeQuestion = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         return props.setQuestions((prev: IQuestionFormField[]) => {
@@ -89,30 +82,26 @@ function QuestionForm(props: Props) {
 
 
     return (
-        <>
-            {loading ? <Loader loading={loading} /> :
-                <div className="question-edit-box">
-                    {props.questions.map((question: IQuestionFormField, index: number) => {
-                        return (
-                            <QuestionEditor
-                                key={index}
-                                question={question.question}
-                                questionIndex={index}
-                                answers={question.answers}
-                                handleChangeQuestion={handleChangeQuestion}
-                                handleChangeAnswers={handleChangeAnswers}
-                                handleChangeFieldAnswers={handleChangeFieldAnswers}
-                                handleDeleteQuestion={handleDeleteQuestion}
-                                handleAddAnswer={handleAddAnswer}
-                                handleDeleteAnswer={handleDeleteAnswer}
-                                questionType={question.questionType}
-                                editMode={props.editMode}
-                            />
-                        )
-                    })}
-                </div>
-            }
-        </>
+        <div className="question-edit-box">
+            {props.questions.map((question: IQuestionFormField, index: number) => {
+                return (
+                    <QuestionEditor
+                        key={index}
+                        question={question.question}
+                        questionIndex={index}
+                        answers={question.answers}
+                        handleChangeQuestion={handleChangeQuestion}
+                        handleChangeAnswers={handleChangeAnswers}
+                        handleChangeFieldAnswers={handleChangeFieldAnswers}
+                        handleDeleteQuestion={handleDeleteQuestion}
+                        handleAddAnswer={handleAddAnswer}
+                        handleDeleteAnswer={handleDeleteAnswer}
+                        questionType={question.questionType}
+                        editMode={props.editMode}
+                    />
+                )
+            })}
+        </div>
     )
 }
 
