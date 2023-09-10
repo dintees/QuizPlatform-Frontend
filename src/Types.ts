@@ -1,4 +1,3 @@
-import { LinkProps } from "react-router-dom"
 import { QuestionType, Role } from "./Enums"
 
 export interface IPageHyperlink {
@@ -13,9 +12,10 @@ export interface IAuthContext {
 };
 
 export interface IAuthInformation {
-    id: number,
     isAuthenticated: boolean,
     username: string,
+    firstname: string,
+    lastname: string,
     role: Role,
     email: string,
     token: string,
@@ -29,6 +29,8 @@ export interface ILogin {
 
 export interface IRegister {
     username: string,
+    firstname: string,
+    lastname: string,
     email: string,
     password: string,
     passwordConfirmation: string,
@@ -62,12 +64,6 @@ export interface IAnswerFormField {
     correct: boolean
 };
 
-export interface UserSetTable {
-    id: number,
-    title: string,
-    href: JSX.Element
-}
-
 export interface IResult<T> {
     success: boolean,
     value: T,
@@ -90,4 +86,11 @@ export interface IQuestionDto {
     question: string | null;
     questionType: QuestionType;
     answers: IAnswerFormField[] | null;
+}
+
+export interface UserSetDto {
+    id: number;
+    title: string | JSX.Element | null;
+    tsUpdate: string;
+    author: string | null;
 }

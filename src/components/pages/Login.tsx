@@ -32,6 +32,11 @@ function Login() {
         if (getToken() !== null) navigate('/')
     }, [navigate])
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setLogin(prev => ({...prev, [name]: value}))
+    }
+
 
     return (
         <>
@@ -43,20 +48,9 @@ function Login() {
                     handleLogin();
                 }}>
                     <div className="title-image"><AiOutlineUser /></div>
-                    <input placeholder="email" value={login.email} onChange={(e) => {
-                        setLogin((prev: ILogin) => {
-                            return {
-                                ...prev, email: e.target.value,
-                            };
-                        })
-                    }} />
-                    <input type="password" placeholder='password' value={login.password} onChange={(e) => {
-                        setLogin((prev: ILogin) => {
-                            return {
-                                ...prev, password: e.target.value,
-                            };
-                        })
-                    }} />
+                    <input placeholder="email" name="email" value={login.email} onChange={handleInputChange} />
+                    <input type="password" placeholder='password' name="password" value={login.password} onChange={handleInputChange} />
+
                     <button type="submit">Login</button>
                     <div className="mt-3 text-bold color-danger">{errorMessage}</div>
                     <div className='mt-3 a-link' onClick={e => navigate("/register")}>No account? Register!</div>

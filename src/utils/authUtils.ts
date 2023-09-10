@@ -3,6 +3,8 @@ import { Role } from "../Enums";
 
 interface IJwtPayload extends JwtPayload {
     username: string,
+    firstname: string,
+    lastname: string,
     roleName: string,
     role: Role,
     email: string

@@ -16,7 +16,7 @@ function Logout() {
         const logOut = async () => {
             signOut();
             await setAuth((prev: IAuthInformation) => {
-                return { id: 0, isAuthenticated: false, username: "", email: "", role: Role.NotAuthorized, token: "", pages: getMenuItems() }
+                return { isAuthenticated: false, username: "", firstname: "", lastname: "", email: "", role: Role.NotAuthorized, token: "", pages: getMenuItems() }
             })
             navigate("/");
         }

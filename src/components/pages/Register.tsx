@@ -6,31 +6,56 @@ import { useNavigate } from 'react-router-dom';
 import Loader from '../common/Loader';
 import { AuthContext } from '../../App';
 import { getToken } from '../../utils/authUtils';
-import { registerAsync } from '../../utils/loginUtils';
+import { confirmAccount, registerAsync } from '../../utils/loginUtils';
+import { toast } from 'react-toastify';
 
 function Register() {
 
-    const [register, setRegister] = useState<IRegister>({ username: "", email: "", password: "", passwordConfirmation: "", roleId: 2 });
+    const [register, setRegister] = useState<IRegister>({ username: "", firstname: "", lastname: "", email: "", password: "", passwordConfirmation: "", roleId: 2 });
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isLoading, setLoading] = useState<boolean>(false);
+    const [showCodeConfirmationForm, setShowCodeConfirmationForm] = useState<boolean>(false);
+    const [confirmationCode, setConfirmationCode] = useState<string>("");
     const { setAuth } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
     const handleRegister = async () => {
         setLoading(true)
-        const registrationData = await registerAsync(register);
-        if (registrationData.isAuthenticated) {
-            setAuth(registrationData as IAuthInformation);
-            navigate('/')
-        } else
-            setErrorMessage(registrationData.errorMessage);
-        setLoading(false)
+        if (!showCodeConfirmationForm) {
+            // registration
+            const registrationData = await registerAsync(register);
+
+            if (registrationData.success) {
+                setShowCodeConfirmationForm(true)
+                setErrorMessage("")
+            }
+            else
+                setErrorMessage(registrationData.errorMessage)
+
+            setLoading(false)
+        } else {
+            // account confirmation
+            const confirmationData = await confirmAccount(register, confirmationCode);
+
+            if (confirmationData?.isAuthenticated) {
+                setAuth(confirmationData as IAuthInformation);
+                toast.success("Successfully registered!")
+                navigate('/')
+            } else
+                setErrorMessage(confirmationData?.errorMessage);
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
         if (getToken() !== null) navigate('/')
     }, [navigate])
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setRegister(prev => ({ ...prev, [name]: value }))
+    }
 
     return (
         <>
@@ -42,36 +67,31 @@ function Register() {
                     handleRegister();
                 }}>
                     <div className="title-image"><AiOutlineUserAdd /></div>
-                    <input placeholder="username" value={register.username} onChange={(e) => {
-                        setRegister((prev: IRegister) => {
-                            return {
-                                ...prev, username: e.target.value,
-                            };
-                        })
-                    }} />
-                    <input placeholder="email" value={register.email} onChange={(e) => {
-                        setRegister((prev: IRegister) => {
-                            return {
-                                ...prev, email: e.target.value,
-                            };
-                        })
-                    }} />
 
-                    <input type="password" placeholder='password' value={register.password} onChange={(e) => {
-                        setRegister((prev: IRegister) => {
-                            return {
-                                ...prev, password: e.target.value,
-                            };
-                        })
-                    }} />
-                    <input type="password" placeholder='password confirmation' value={register.passwordConfirmation} onChange={(e) => {
-                        setRegister((prev: IRegister) => {
-                            return {
-                                ...prev, passwordConfirmation: e.target.value,
-                            };
-                        })
-                    }} />
-                    <button type="submit">Register</button>
+                    {!showCodeConfirmationForm ?
+                        <>
+
+                            <input placeholder="First name" name='firstname' value={register.firstname} onChange={handleInputChange} />
+
+                            <input placeholder="Last name" name="lastname" value={register.lastname} onChange={handleInputChange} />
+
+                            <input placeholder="User name" name="username" value={register.username} onChange={handleInputChange} />
+
+                            <input placeholder="Email" name="email" value={register.email} onChange={handleInputChange} />
+
+                            <input type="password" placeholder='Password' name='password' value={register.password} onChange={handleInputChange} />
+
+                            <input type="password" placeholder='Password confirmation' name="passwordConfirmation" value={register.passwordConfirmation} onChange={handleInputChange} />
+
+                            <button type="submit">Register</button>
+                        </>
+                        :
+                        <>
+                            <input placeholder="Confirmation code" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
+
+                            <button type="submit">Confirm</button>
+                        </>
+                    }
                     <div className="mt-3 text-bold color-danger">{errorMessage}</div>
                     <div className='mt-3 a-link' onClick={e => navigate("/login")}>Already have an account? Log in!</div>
                 </form>

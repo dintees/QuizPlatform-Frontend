@@ -21,10 +21,11 @@ import "./assets/css/App.scss"
 
 export const AuthContext = createContext<IAuthContext>({
   auth: {
-    id: 0,
     isAuthenticated: false,
     email: "",
     username: '',
+    firstname: '',
+    lastname: '',
     token: "",
     role: Role.NotAuthorized,
     pages: []
@@ -35,10 +36,11 @@ export const AuthContext = createContext<IAuthContext>({
 function App() {
 
   const [auth, setAuth] = useState<IAuthInformation>({
-    id: 0,
     isAuthenticated: false,
     email: "",
     username: "",
+    firstname: "",
+    lastname: "",
     token: "",
     role: Role.NotAuthorized,
     pages: getMenuItems()
@@ -49,7 +51,7 @@ function App() {
 
     if (data) {
       setAuth((prev: IAuthInformation): IAuthInformation => {
-        return { ...prev, isAuthenticated: true, email: data.email, username: data.username, role: data.role, pages: getMenuItems(data.role) }
+        return { ...prev, isAuthenticated: true, email: data.email, username: data.username, firstname: data.firstname, lastname: data.lastname, role: data.role, pages: getMenuItems(data.role) }
       })
     }
   }, []);

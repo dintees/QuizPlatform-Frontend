@@ -16,7 +16,7 @@ export const signInAsync = async (login: ILogin) => {
         modifyToken(token);
         const data = getDataFromToken();
         if (data !== null)
-            return { id: 0, isAuthenticated: true, username: data.username, email: data.email, role: data.role, pages: getMenuItems(data.role), token: token }
+            return { isAuthenticated: true, username: data.username, firstname: data.firstname, lastname: data.lastname, email: data.email, role: data.role, pages: getMenuItems(data.role), token: token }
         return { isAuthenticated: false, errorMessage: loggedData.data };
     } else if (loggedData?.status === 401)
         return { isAuthenticated: false, errorMessage: loggedData.data };
@@ -28,18 +28,38 @@ export const registerAsync = async (register: IRegister) => {
     const registrationData = await postData("User/register", register, false)
     console.log(registrationData);
 
-    if (registrationData?.status === 200) {
-        const token = registrationData?.data;
+    if (registrationData?.status === 200) return { success: true }
+    else if (registrationData?.status === 400) return { success: false, errorMessage: registrationData.data }
+
+    return { success: false, errorMessage: "Problem with server connection" };
+
+    // if (registrationData?.status === 200) {
+    //     const token = registrationData?.data;
+
+    //     modifyToken(token);
+    //     const data = getDataFromToken();
+    //     if (data !== null)
+    //         return { isAuthenticated: true, username: data.username, firstname: data.firstname, lastname: data.lastname, email: data.email, role: data.role, pages: getMenuItems(data.role), token: token }
+    //     return { isAuthenticated: false, errorMessage: registrationData.data };
+    // } else if (registrationData?.status === 400)
+    //     return { isAuthenticated: false, errorMessage: registrationData.data };
+    // else
+    // return { isAuthenticated: false, errorMessage: "Problem with server connection" };
+}
+
+export const confirmAccount = async (register: IRegister, code: string) => {
+    const confirmationData = await postData(`User/confirmAccount/${code}`, register)
+
+    if (confirmationData?.status === 200) {
+        const token = confirmationData?.data;
 
         modifyToken(token);
         const data = getDataFromToken();
         if (data !== null)
-            return { id: 0, isAuthenticated: true, username: data.username, email: data.email, role: data.role, pages: getMenuItems(data.role), token: token }
-        return { isAuthenticated: false, errorMessage: registrationData.data };
-    } else if (registrationData?.status === 400)
-        return { isAuthenticated: false, errorMessage: registrationData.data };
-    else
-        return { isAuthenticated: false, errorMessage: "Problem with server connection" };
+            return { isAuthenticated: true, username: data.username, firstname: data.firstname, lastname: data.lastname, email: data.email, role: data.role, pages: getMenuItems(data.role), token: token }
+        return { isAuthenticated: false, errorMessage: confirmationData.data };
+    }
+    return { isAuthenticated: false, errorMessage: confirmationData?.data };
 }
 
 export const isAuthenticated = (): boolean => {

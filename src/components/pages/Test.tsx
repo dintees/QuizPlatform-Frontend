@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '../common/Button'
 import { getData, postData, deleteData, putData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
@@ -12,10 +12,11 @@ import { BsFillTrashFill, BsArrowLeftCircleFill } from 'react-icons/bs'
 
 function Test() {
 
-    const [title, setTitle] = useState<string>("New set");
+    const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType>(QuestionType.SingleChoice);
     const [editMode, setEditMode] = useState<boolean>(true);
+    const [pageTitle, setPageTitle] = useState<string>("Create new test");
 
     const navigate = useNavigate();
     const { mode, setId } = useParams();
@@ -30,45 +31,37 @@ function Test() {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if (mode === 'edit') setEditMode(true)
-        else if (mode === 'view') setEditMode(false)
+        if (mode === 'edit') { setPageTitle(setId ? "Edit test" : "Create new test"); setEditMode(true)}
+        else if (mode === 'view') { setPageTitle("Test preview"); setEditMode(false) }
         else navigate("/mysets")
 
         if (setId) {
             setLoading(true);
-            // load questions from server
+            // load question by id
             const fetchData = async () => {
                 const result = await getData(`set/${setId}`, true);
 
-                // TODO: refactor - int from server must return correct answers
-                if (result?.status === 200) {
-                    // result.data.questions.map((q: any) => {
-                    //     q.answers = q.answers.map((a: string) => {
-                    //         return { answer: a, correct: false }
-                    //     })
-                    //     return q;
-                    // })
+                console.log(result);
+                
 
+                if (result?.status === 200) {
                     setTitle(result.data.title)
                     setDescription(result.data.description)
-                    setQuestions(result.data.questions);
+                    setQuestions(result.data.questions)
+                } else if (result?.status === 404) {
+                    toast.error("There is no test with the given id")
+                    navigate("/mytests")
                 }
             }
             fetchData();
+            setTimeout(() => setLoading(false), 300);
         }
-        // setTimeout(() => setLoading(false), 200);
     }, [mode, setId, navigate])
-
-    useMemo(() => {
-        setLoading(false)
-    }, [title, description, questions])
-
 
     const handleAddSet = () => {
         const toastId = toast.loading("Saving...");
         const fetchData = async () => {
             const result = await postData("set/createWithQuestions", { title: title, description: description, questions: questions }, true);
-            console.log(result);
 
             if (result?.status === 200) {
                 const data: IResult<ISetDto> = result.data;
@@ -89,11 +82,9 @@ function Test() {
 
     const handleModifySet = () => {
         const toastId = toast.loading("Saving...");
-        console.log({ title: title, description: description, questions: questions });
 
         const fetchData = async () => {
             const result = await putData(`set/edit/${setId}`, { title: title, description: description, questions: questions }, true);
-            console.log(result);
 
             if (result?.status === 200) {
                 if (result.data.success === true) {
@@ -155,7 +146,7 @@ function Test() {
         <>
             <Loader loading={loading} />
 
-            <div className="content-title">Create new test</div>
+            <div className="content-title">{pageTitle}</div>
 
             <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/mytests")} />
             {editMode && setId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteSet(parseInt(setId))} type='danger' />}
