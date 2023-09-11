@@ -2,6 +2,7 @@ import { IPageHyperlink } from "../Types";
 import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai'
 import { MdQuiz } from 'react-icons/md'
 import { CgLogOut } from 'react-icons/cg'
+import { FaUserCircle } from 'react-icons/fa'
 import { Role } from "../Enums";
 
 const getMenuItems = (role: Role = Role.NotAuthorized) => {
@@ -12,6 +13,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
+                { url: "/account", name: "Account", icon: <FaUserCircle />},
                 { url: "/settings", name: "Admin", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]

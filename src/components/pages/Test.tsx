@@ -35,7 +35,7 @@ function Test() {
         else if (mode === 'view') { setPageTitle("Test preview"); setEditMode(false) }
         else navigate("/mysets")
 
-        if (setId) {
+        if (!!setId) {
             setLoading(true);
             // load question by id
             const fetchData = async () => {

@@ -1,5 +1,6 @@
 import React from 'react'
 import { IFormField } from '../../Types'
+import TextField from './TextField'
 
 
 interface Props {
@@ -8,11 +9,11 @@ interface Props {
 }
 
 function Form(props: Props) {
-    
+
     const handleValueChange = (name: string, value: string) => {
         props.setFormFields((prev: IFormField[]) => {
             const newState = prev.map(obj => {
-                if (obj.name === name) return {...obj, value: value }
+                if (obj.name === name) return { ...obj, value: value }
 
                 return obj;
             })
@@ -28,17 +29,18 @@ function Form(props: Props) {
 
     return (
         <>
-            <form onSubmit={handleFormSubmit}>
+            <form onSubmit={handleFormSubmit} className='form'>
                 {props.formFields.map((field: IFormField, index: number) => {
                     return (
-                        <input key={index} type={field.type} value={field.value !== undefined ? field.value : ""} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleValueChange(field.name, e.target.value)} />
+                        <div key={index} className='form-row'>
+                            <div className="form-label">{field.name}</div>
+                            <div className="form-control"><TextField key={index} value={field.value!} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleValueChange(field.name, e.target.value)} /></div>
+                        </div>
                     )
                 })}
 
-                {/* <button type="submit">Submit</button> */}
+                <button type="submit" className='mt-2 btn btn-primary animated'>Save</button>
             </form>
-
-            <div>{props.formFields.length}</div>
         </>
     )
 }

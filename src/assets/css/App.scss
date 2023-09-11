@@ -69,6 +69,28 @@ body,
   }
 }
 
+.form {
+  width: 80%;
+  padding: 1rem;
+  background: variables.$form-background-color;
+
+  &-row {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    align-items: center;
+  }
+
+  // &-label {
+  //   grid-column: 1 / 3;
+  // }
+
+  &-control {
+    border: none !important;
+    // grid-column: 2 / 3;
+  }
+  
+}
+
 .form-control {
   border: 1px solid #aaa;
   color: #666;
