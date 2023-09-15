@@ -5,15 +5,15 @@ import TextField from './TextField'
 
 interface Props {
     formFields: IFormField[]
-    setFormFields: React.Dispatch<React.SetStateAction<IFormField[]>>
+    setFormFields: React.Dispatch<React.SetStateAction<IFormField[]>>,
+    onSubmit?: (e: React.FormEvent) => void
 }
 
 function Form(props: Props) {
-
-    const handleValueChange = (name: string, value: string) => {
+    const handleValueChange = (key: string, value: string) => {
         props.setFormFields((prev: IFormField[]) => {
             const newState = prev.map(obj => {
-                if (obj.name === name) return { ...obj, value: value }
+                if (obj.key === key) return { ...obj, value: value }
 
                 return obj;
             })
@@ -23,8 +23,8 @@ function Form(props: Props) {
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("SUBMITTED!!!");
-        console.log(props.formFields);
+        if (!!props.onSubmit)
+            props.onSubmit(e);
     }
 
     return (
@@ -34,7 +34,7 @@ function Form(props: Props) {
                     return (
                         <div key={index} className='form-row'>
                             <div className="form-label">{field.name}</div>
-                            <div className="form-control"><TextField key={index} value={field.value!} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleValueChange(field.name, e.target.value)} /></div>
+                            <div className="form-control"><TextField key={index} value={field.value!} disabled={field.disabled} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleValueChange(field.key, e.target.value)} /></div>
                         </div>
                     )
                 })}

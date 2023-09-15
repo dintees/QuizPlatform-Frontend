@@ -45,10 +45,12 @@ export interface Question {
 };
 
 export interface IFormField {
+    key: string,
     name: string,
     type: React.HTMLInputTypeAttribute,
     placeholder?: string,
-    value?: string
+    value?: string,
+    disabled?: boolean
 }
 
 export interface IQuestionFormField {
