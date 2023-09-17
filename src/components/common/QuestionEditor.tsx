@@ -39,7 +39,7 @@ function QuestionEditor(props: Props) {
         <div key={props.questionIndex} className="question-edit-tile">
             <div className='question-edit-icon'>{getIcon(props.questionType)} {props.questionIndex + 1}.</div>
             <div className='question-edit-content'>
-                <TextField value={props.question} disabled={!props.editMode} onChange={(e) => { props.handleChangeQuestion(e, props.questionIndex) }} />
+                <TextField value={props.question} disabled={!props.editMode} mathMode={true} onChange={(e) => { props.handleChangeQuestion(e, props.questionIndex) }} />
                 <div className='question-edit-answers'>
 
                     {props.answers.map((answer: IAnswerFormField, answerIndex: number) => {

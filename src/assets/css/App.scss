@@ -88,7 +88,7 @@ body,
     border: none !important;
     // grid-column: 2 / 3;
   }
-  
+
 }
 
 .form-control {
@@ -130,6 +130,16 @@ body,
   padding: 0.5rem 0.7rem;
   border: 1px solid #aaa;
   color: #666;
+
+  &-preview {
+    background-color: #efefef;
+    padding: .3rem .8rem;
+    margin-bottom: .5rem;
+
+    & * {
+      text-align: left;
+    }
+  }
 }
 
 input:focus {
