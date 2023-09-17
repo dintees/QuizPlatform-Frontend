@@ -68,7 +68,6 @@ function QuestionForm(props: Props) {
                 if (i === questionIndex) {
                     const updatedAnswers = [...question.answers];
                     updatedAnswers.splice(answerIndex, 1);
-                    console.log(updatedAnswers);
 
                     return {
                         ...question,
@@ -77,6 +76,17 @@ function QuestionForm(props: Props) {
                 }
                 return question;
             });
+        })
+    }
+
+    const handleCopyQuestion = (questionIndex: number) => {
+        let clonedQuestion = { ...props.questions[questionIndex] }
+        clonedQuestion.answers = clonedQuestion.answers.map((e) => { return { ...e } })
+
+        props.setQuestions((prev: IQuestionFormField[]) => {
+            console.log({ ...prev.slice(0, questionIndex), clonedQuestion, ...prev.slice(questionIndex) });
+
+            return [...prev.slice(0, questionIndex + 1), clonedQuestion, ...prev.slice(questionIndex + 1)];
         })
     }
 
@@ -96,6 +106,7 @@ function QuestionForm(props: Props) {
                         handleDeleteQuestion={handleDeleteQuestion}
                         handleAddAnswer={handleAddAnswer}
                         handleDeleteAnswer={handleDeleteAnswer}
+                        handleCopyQuestion={handleCopyQuestion}
                         questionType={question.questionType}
                         editMode={props.editMode}
                     />

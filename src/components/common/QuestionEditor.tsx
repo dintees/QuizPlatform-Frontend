@@ -2,7 +2,8 @@ import React from 'react'
 import { IAnswerFormField } from '../../Types';
 import { QuestionType } from '../../Enums';
 import TextField from './TextField';
-import { AiOutlineBorder, AiOutlineCheckCircle, AiOutlineCheckSquare, AiOutlineForm } from 'react-icons/ai';
+import { AiOutlineBorder, AiOutlineCheckCircle, AiOutlineCheckSquare, AiOutlineForm, AiFillDelete } from 'react-icons/ai';
+import { FaClone } from 'react-icons/fa';
 import CheckboxField from './CheckboxField';
 import RadioField from './RadioField';
 import Button from './Button';
@@ -17,6 +18,7 @@ interface Props {
     handleDeleteQuestion: (index: number) => void
     handleAddAnswer: (questionIndex: number) => void
     handleDeleteAnswer: (questionIndex: number, answerIndex: number) => void
+    handleCopyQuestion: (questionIndex: number) => void
     questionType: QuestionType
     editMode: boolean
 }
@@ -39,7 +41,6 @@ function QuestionEditor(props: Props) {
             <div className='question-edit-content'>
                 <TextField value={props.question} disabled={!props.editMode} onChange={(e) => { props.handleChangeQuestion(e, props.questionIndex) }} />
                 <div className='question-edit-answers'>
-
 
                     {props.answers.map((answer: IAnswerFormField, answerIndex: number) => {
                         let renderElement: React.ReactNode = null;
@@ -77,7 +78,11 @@ function QuestionEditor(props: Props) {
                 </div>
                 {props.editMode && props.questionType !== QuestionType.TrueFalse && <Button value="+" type='primary' style={{ alignSelf: "flex-start", marginLeft: "2rem" }} onClick={(e) => props.handleAddAnswer(props.questionIndex)} />}
             </div>
-            {props.editMode && <div className='question-edit-delete' onClick={() => props.handleDeleteQuestion(props.questionIndex)}>&times;</div>}
+            {props.editMode &&
+                <div className='question-edit-delete'>
+                    <div onClick={() => props.handleDeleteQuestion(props.questionIndex)}><AiFillDelete /></div>
+                    <div className='color-primary' onClick={() => props.handleCopyQuestion(props.questionIndex)}><FaClone /></div>
+                </div>}
         </div>
     )
 }

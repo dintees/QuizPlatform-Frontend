@@ -37,9 +37,12 @@
         }
 
         .question-edit-delete {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
             cursor: pointer;
-            padding: 0 1rem;
-            font-size: 1.4rem;
+            padding: 0 0.5rem;
+            font-size: 1.3rem;
             color: variables.$color-danger;
             font-weight: bold;
         }
