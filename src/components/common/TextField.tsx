@@ -1,5 +1,5 @@
 import React from 'react'
-import { BlockMath } from 'react-katex'
+import { InlineMath } from 'react-katex'
 
 interface Props {
     value: string,
@@ -15,10 +15,19 @@ interface Props {
 function TextField(props: Props) {
 
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+        renderMathPreview();
+
         if (props.setValue !== undefined)
             props.setValue(e.target.value)
         else if (props.onChange !== undefined)
             return props.onChange(e)
+    }
+
+    const renderMathPreview = () => {
+        const replacedText = props.value.split(/\$(.*?)\$/g).map((part, index) => {
+            return index % 2 === 0 ? part : <InlineMath key={index} math={part} renderError={(e) => <>{e.name}</>} />
+        });
+        return <>{replacedText}</>;
     }
 
     return (
@@ -33,9 +42,11 @@ function TextField(props: Props) {
                         onChange={handleChangeValue}
                         disabled={props.readonly}
                     />
+
+                    {/* math preview */}
                     {props.mathMode &&
                         <div className='text-field-preview'>
-                            <BlockMath math={props.value} renderError={(e) => <>{props.value}</>} />
+                            {renderMathPreview()}
                         </div>
                     }
                 </>

@@ -84,9 +84,16 @@ function QuestionForm(props: Props) {
         clonedQuestion.answers = clonedQuestion.answers.map((e) => { return { ...e } })
 
         props.setQuestions((prev: IQuestionFormField[]) => {
-            console.log({ ...prev.slice(0, questionIndex), clonedQuestion, ...prev.slice(questionIndex) });
-
             return [...prev.slice(0, questionIndex + 1), clonedQuestion, ...prev.slice(questionIndex + 1)];
+        })
+    }
+
+    const handleChangeInputMode = (questionIndex: number) => {
+        props.setQuestions((prev: IQuestionFormField[]) => {
+            return prev.map((question, index) => {
+                if (questionIndex === index) return { ...question, mathMode: !question.mathMode }
+                return question
+            })
         })
     }
 
@@ -107,8 +114,10 @@ function QuestionForm(props: Props) {
                         handleAddAnswer={handleAddAnswer}
                         handleDeleteAnswer={handleDeleteAnswer}
                         handleCopyQuestion={handleCopyQuestion}
+                        handleChangeInputMode={handleChangeInputMode}
                         questionType={question.questionType}
                         editMode={props.editMode}
+                        mathMode={question.mathMode!}
                     />
                 )
             })}

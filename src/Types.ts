@@ -57,7 +57,8 @@ export interface IQuestionFormField {
     id?: number,
     questionType: QuestionType,
     question: string,
-    answers: IAnswerFormField[]
+    answers: IAnswerFormField[],
+    mathMode?: boolean
 };
 
 export interface IAnswerFormField {
