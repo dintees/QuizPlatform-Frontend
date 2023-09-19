@@ -9,6 +9,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Loader from '../common/Loader'
 import { BsFillTrashFill, BsArrowLeftCircleFill } from 'react-icons/bs'
+import { FaClone } from 'react-icons/fa'
+import { duplicateTest, deleteTest } from '../../utils/testUtils'
 
 function Test() {
 
@@ -31,7 +33,7 @@ function Test() {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if (mode === 'edit') { setPageTitle(setId ? "Edit test" : "Create new test"); setEditMode(true)}
+        if (mode === 'edit') { setPageTitle(setId ? "Edit test" : "Create new test"); setEditMode(true) }
         else if (mode === 'view') { setPageTitle("Test preview"); setEditMode(false) }
         else navigate("/mysets")
 
@@ -42,7 +44,7 @@ function Test() {
                 const result = await getData(`set/${setId}`, true);
 
                 console.log(result);
-                
+
 
                 if (result?.status === 200) {
                     setTitle(result.data.title)
@@ -51,10 +53,13 @@ function Test() {
                 } else if (result?.status === 404) {
                     toast.error("There is no test with the given id")
                     navigate("/mytests")
+                } else {
+                    toast.error("Unable to connect to the server.")
+                    setQuestions([])
                 }
+                setTimeout(() => setLoading(false), 300);
             }
             fetchData();
-            setTimeout(() => setLoading(false), 300);
         }
     }, [mode, setId, navigate])
 
@@ -99,14 +104,10 @@ function Test() {
         fetchData();
     }
 
-    const handleDeleteSet = async (setId: number) => {
-        const result = await deleteData(`set/delete/${setId}`, true);
-        if (result?.status === 200) {
-            toast.success("Successfully deleted!");
-            navigate("/mytests")
-        } else {
-            toast.error(result?.data.errorMessage);
-        }
+    const handleDeleteSet = async (testId: number) => {
+        const isDeleted = await deleteTest(testId);
+        if (isDeleted)
+            navigate("/mytests");
     }
 
     const handleAddNewQuestion = () => {
@@ -141,6 +142,12 @@ function Test() {
         setSelectedQuestionType(QuestionType[value as keyof typeof QuestionType])
     }
 
+    const handleDuplicateTest = async (testId: number) => {
+        const result = await duplicateTest(testId);
+        if (result !== -1)
+            navigate(`/test/edit/${result}`)
+    }
+
 
     return (
         <>
@@ -149,6 +156,7 @@ function Test() {
             <div className="content-title">{pageTitle}</div>
 
             <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/mytests")} />
+            {editMode && setId && <Button value={<FaClone />} onClick={() => handleDuplicateTest(parseInt(setId))} type='secondary' />}
             {editMode && setId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteSet(parseInt(setId))} type='danger' />}
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />

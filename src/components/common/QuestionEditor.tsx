@@ -87,7 +87,6 @@ function QuestionEditor(props: Props) {
                     <div className='color-primary' onClick={() => props.handleChangeInputMode(props.questionIndex)}>{props.mathMode ? <BiMath /> : <BiText />}</div>
                 </div>
             }
-            {props.mathMode ? "T" : "N"}
         </div>
     )
 }

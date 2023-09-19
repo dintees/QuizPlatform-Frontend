@@ -132,7 +132,7 @@ body,
   color: #666;
 
   &-preview {
-    background-color: #efefef;
+    background-color: #f5f5f5;
     padding: .8rem;
     margin-bottom: .5rem;
 
@@ -200,4 +200,17 @@ input:focus {
 
 .text-center {
   text-align: center;
+}
+
+.d-flex {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-start {
+  justify-content: flex-start;
+}
+
+.c-pointer {
+  cursor: pointer;
 }

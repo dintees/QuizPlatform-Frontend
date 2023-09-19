@@ -96,4 +96,5 @@ export interface UserSetDto {
     title: string | JSX.Element | null;
     tsUpdate: string;
     author: string | null;
+    actions: JSX.Element;
 }
