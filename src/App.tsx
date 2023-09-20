@@ -68,7 +68,7 @@ function App() {
             <Route element={<Layout pages={auth.pages} />}>
               <Route path='/' element={<Home />} />
               <Route path='/mytests' element={<ProtectedComponent component={<MyTests />} />} />
-              <Route path='/test/:mode/:setId?' element={<ProtectedComponent component={<Test />} />} />
+              <Route path='/test/:mode/:testId?' element={<ProtectedComponent component={<Test />} />} />
               <Route path='/account' element={<ProtectedComponent component={<Account />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
 

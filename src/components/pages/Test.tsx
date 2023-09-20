@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Button from '../common/Button'
-import { getData, postData, deleteData, putData } from '../../AxiosHelper'
+import { getData, postData, putData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
 import { IQuestionFormField, IResult, ISetDto } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import Loader from '../common/Loader'
 import { BsFillTrashFill, BsArrowLeftCircleFill } from 'react-icons/bs'
 import { FaClone } from 'react-icons/fa'
-import { duplicateTest, deleteTest } from '../../utils/testUtils'
+import { duplicateTest, deleteTest, getNewQuestionObject } from '../../utils/testUtils'
 
 function Test() {
 
@@ -21,7 +21,7 @@ function Test() {
     const [pageTitle, setPageTitle] = useState<string>("Create new test");
 
     const navigate = useNavigate();
-    const { mode, setId } = useParams();
+    const { mode, testId } = useParams();
 
     const initialQuestion: IQuestionFormField = {
         questionType: QuestionType.SingleChoice,
@@ -33,18 +33,15 @@ function Test() {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if (mode === 'edit') { setPageTitle(setId ? "Edit test" : "Create new test"); setEditMode(true) }
+        if (mode === 'edit') { setPageTitle(testId ? "Edit test" : "Create new test"); setEditMode(true) }
         else if (mode === 'view') { setPageTitle("Test preview"); setEditMode(false) }
-        else navigate("/mysets")
+        else navigate("/mytests")
 
-        if (!!setId) {
+        if (!!testId) {
             setLoading(true);
             // load question by id
             const fetchData = async () => {
-                const result = await getData(`set/${setId}`, true);
-
-                console.log(result);
-
+                const result = await getData(`test/${testId}`, true);
 
                 if (result?.status === 200) {
                     setTitle(result.data.title)
@@ -54,19 +51,19 @@ function Test() {
                     toast.error("There is no test with the given id")
                     navigate("/mytests")
                 } else {
-                    toast.error("Unable to connect to the server.")
+                    toast.error("Unable to connect to the server")
                     setQuestions([])
                 }
                 setTimeout(() => setLoading(false), 300);
             }
             fetchData();
         }
-    }, [mode, setId, navigate])
+    }, [mode, testId, navigate])
 
-    const handleAddSet = () => {
+    const handleAddTest = () => {
         const toastId = toast.loading("Saving...");
         const fetchData = async () => {
-            const result = await postData("set/createWithQuestions", { title: title, description: description, questions: questions }, true);
+            const result = await postData("test/createWithQuestions", { title: title, description: description, questions: questions }, true);
 
             if (result?.status === 200) {
                 const data: IResult<ISetDto> = result.data;
@@ -89,7 +86,7 @@ function Test() {
         const toastId = toast.loading("Saving...");
 
         const fetchData = async () => {
-            const result = await putData(`set/edit/${setId}`, { title: title, description: description, questions: questions }, true);
+            const result = await putData(`test/edit/${testId}`, { title: title, description: description, questions: questions }, true);
 
             if (result?.status === 200) {
                 if (result.data.success === true) {
@@ -110,32 +107,7 @@ function Test() {
             navigate("/mytests");
     }
 
-    const handleAddNewQuestion = () => {
-        let newQuestionObj: IQuestionFormField = { questionType: selectedQuestionType, question: "", answers: [] }
-        switch (selectedQuestionType) {
-            case QuestionType.SingleChoice:
-            case QuestionType.MultipleChoice:
-                for (let i = 0; i < 3; ++i) newQuestionObj.answers.push({ answer: "", correct: false })
-                break;
-            case QuestionType.TrueFalse:
-                newQuestionObj.answers.push({ answer: "True", correct: true })
-                newQuestionObj.answers.push({ answer: "False", correct: false })
-                break;
-            case QuestionType.ShortAnswer:
-                newQuestionObj.answers.push({ answer: "", correct: true })
-                break;
-
-        }
-        setQuestions((prev: IQuestionFormField[]) => [...prev, newQuestionObj])
-    }
-
-    const handleChangeQuestion = (index: number, value: string) => {
-        setQuestions((prev: IQuestionFormField[]) => {
-            const newState = [...prev]
-            newState[index].question = value;
-            return newState;
-        })
-    }
+    const handleAddNewQuestion = () => setQuestions((prev: IQuestionFormField[]) => [...prev, getNewQuestionObject(selectedQuestionType)])
 
     const handleQuestionTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
@@ -148,6 +120,11 @@ function Test() {
             navigate(`/test/edit/${result}`)
     }
 
+    const handleSolveButtonClick = () => {
+        // TODO solve view
+        console.log("Solve!");
+    }
+
 
     return (
         <>
@@ -156,13 +133,15 @@ function Test() {
             <div className="content-title">{pageTitle}</div>
 
             <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/mytests")} />
-            {editMode && setId && <Button value={<FaClone />} onClick={() => handleDuplicateTest(parseInt(setId))} type='secondary' />}
-            {editMode && setId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteSet(parseInt(setId))} type='danger' />}
+            {editMode && testId && <Button value={<FaClone />} onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />}
+            {editMode && testId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteSet(parseInt(testId))} type='danger' />}
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />
 
-            <QuestionForm questions={questions} setQuestions={setQuestions} handleChangeQuestion={handleChangeQuestion} editMode={editMode} />
+            <Button value="Solve" onClick={handleSolveButtonClick} type='primary' />
+
+            <QuestionForm questions={questions} setQuestions={setQuestions} editMode={editMode} />
 
             {editMode &&
                 <>
@@ -176,10 +155,10 @@ function Test() {
                         <Button value='Add' type='primary' onClick={handleAddNewQuestion} />
                     </div>
 
-                    {setId ?
+                    {testId ?
                         <Button value="Modify" type='success' onClick={handleModifySet} />
                         :
-                        <Button value='Save' type='success' onClick={handleAddSet} />
+                        <Button value='Save' type='success' onClick={handleAddTest} />
                     }
                 </>
             }

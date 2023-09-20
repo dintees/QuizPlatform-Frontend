@@ -58,6 +58,7 @@ export interface IQuestionFormField {
     questionType: QuestionType,
     question: string,
     answers: IAnswerFormField[],
+    isDeleted?: boolean,
     mathMode?: boolean
 };
 

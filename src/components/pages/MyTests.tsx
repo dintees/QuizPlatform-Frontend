@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getData, postData } from '../../AxiosHelper'
+import { getData } from '../../AxiosHelper'
 import { UserSetDto } from '../../Types';
 import Table from '../common/Table';
 import Button from '../common/Button';
@@ -35,7 +35,7 @@ function MyTests() {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            const data = await getData("set", true);
+            const data = await getData("test", true);
 
             if (data && data.status === 200) {
                 data.data.forEach((i: UserSetDto) => {
