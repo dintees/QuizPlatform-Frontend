@@ -18,6 +18,7 @@ import { ToastContainer, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./assets/css/App.scss"
 import Account from './components/pages/Account';
+import SolveTest from './components/pages/SolveTest';
 
 
 export const AuthContext = createContext<IAuthContext>({
@@ -69,6 +70,7 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/mytests' element={<ProtectedComponent component={<MyTests />} />} />
               <Route path='/test/:mode/:testId?' element={<ProtectedComponent component={<Test />} />} />
+              <Route path='/solveTest/:testId' element={<ProtectedComponent component={<SolveTest />} />} />
               <Route path='/account' element={<ProtectedComponent component={<Account />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
 

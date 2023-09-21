@@ -122,7 +122,35 @@ function Test() {
 
     const handleSolveButtonClick = () => {
         // TODO solve view
-        console.log("Solve!");
+        console.log("Solve test!");
+        const testSettings = {
+            testId: testId,
+            shuffleQuestions: true,
+            shuffleAnswers: true
+        }
+
+        const fetchData = async () => {
+            const result = await postData("test/createTestSession", testSettings, true);
+            console.log(result);
+            switch(result?.status) {
+                case 200:
+                    toast.success("Jest okej ;-)")
+                    console.log(result.data);
+                    navigate("/solveTest/123")
+                break;
+                case 400:
+                    toast.error(result.data)
+                break;
+                case 403:
+                    toast.error("Unauthorized")
+                    break;
+                default:
+                    toast.error("Unexpected error")
+                break;
+            }
+        }
+
+        fetchData();
     }
 
 

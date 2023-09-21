@@ -1,6 +1,5 @@
 import React from 'react'
 import { IQuestionFormField } from '../../Types'
-import { QuestionType } from '../../Enums'
 import "../../assets/css/QuestionForm.scss"
 import QuestionEditor from './QuestionEditor'
 import { modifyAnswer, modifyQuestion, changeInputMode, changeCorrectAnswer, deleteQuestion, addEmptyAnswer, deleteAnswer } from '../../utils/testUtils'
