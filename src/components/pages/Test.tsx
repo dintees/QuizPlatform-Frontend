@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Button from '../common/Button'
 import { getData, postData, putData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
-import { IQuestionFormField, IResult, ISetDto } from '../../Types'
+import { IQuestionFormField, IResult, ISetDto, ISolvingTestOptions } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
 import { QuestionType } from '../../Enums'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -11,17 +11,20 @@ import Loader from '../common/Loader'
 import { BsFillTrashFill, BsArrowLeftCircleFill } from 'react-icons/bs'
 import { FaClone } from 'react-icons/fa'
 import { duplicateTest, deleteTest, getNewQuestionObject } from '../../utils/testUtils'
+import CheckboxField from '../common/CheckboxField'
 
 function Test() {
+
+    const { mode, testId } = useParams();
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType>(QuestionType.SingleChoice);
     const [editMode, setEditMode] = useState<boolean>(true);
+    const [solvingTestOptions, setSolvingTestOptions] = useState<ISolvingTestOptions>({ shuffleQuestions: false, shuffleAnswers: false, testId: !!testId ? parseInt(testId) : 0 });
     const [pageTitle, setPageTitle] = useState<string>("Create new test");
 
     const navigate = useNavigate();
-    const { mode, testId } = useParams();
 
     const initialQuestion: IQuestionFormField = {
         questionType: QuestionType.SingleChoice,
@@ -121,35 +124,26 @@ function Test() {
     }
 
     const handleSolveButtonClick = () => {
-        // TODO solve view
-        console.log("Solve test!");
-        const testSettings = {
-            testId: testId,
-            shuffleQuestions: true,
-            shuffleAnswers: true
-        }
-
         const fetchData = async () => {
-            const result = await postData("test/createTestSession", testSettings, true);
+            const result = await postData("testSession/create", solvingTestOptions, true);
             console.log(result);
-            switch(result?.status) {
+            switch (result?.status) {
                 case 200:
                     toast.success("Jest okej ;-)")
                     console.log(result.data);
-                    navigate("/solveTest/123")
-                break;
+                    navigate(`/solveTest/${result.data}`)
+                    break;
                 case 400:
                     toast.error(result.data)
-                break;
+                    break;
                 case 403:
                     toast.error("Unauthorized")
                     break;
                 default:
                     toast.error("Unexpected error")
-                break;
+                    break;
             }
         }
-
         fetchData();
     }
 
@@ -166,6 +160,14 @@ function Test() {
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />
+
+            {/* solving section */}
+            <CheckboxField key='shuffleQuestions' name='solvingOption' label="Shuffle questions" checked={solvingTestOptions.shuffleQuestions} onChange={(e) => {
+                setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleQuestions: e.target.checked } })
+            }} />
+            <CheckboxField key='shuffleAnswers' name='solvingOption' label="Shuffle answers" checked={solvingTestOptions.shuffleAnswers} onChange={(e) => {
+                setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleAnswers: e.target.checked } })
+            }} />
 
             <Button value="Solve" onClick={handleSolveButtonClick} type='primary' />
 

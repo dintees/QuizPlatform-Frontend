@@ -68,6 +68,12 @@ export interface IAnswerFormField {
     correct: boolean
 };
 
+export interface ISolvingTestOptions {
+    testId: number,
+    shuffleQuestions: boolean,
+    shuffleAnswers: boolean
+};
+
 export interface IResult<T> {
     success: boolean,
     value: T,
@@ -92,10 +98,18 @@ export interface IQuestionDto {
     answers: IAnswerFormField[] | null;
 }
 
-export interface UserSetDto {
+export interface IUserSetDto {
     id: number;
     title: string | JSX.Element | null;
     tsUpdate: string;
     author: string | null;
+    actions: JSX.Element;
+}
+
+export interface IUserTestSessionDto {
+    id: number;
+    tsInsert: string;
+    tsUpdate: string;
+    testName: string | JSX.Element | null;
     actions: JSX.Element;
 }

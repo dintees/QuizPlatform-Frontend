@@ -33,7 +33,12 @@ function TextField(props: Props) {
     return (
         <>
             {props.disabled ?
-                <span>{props.value}</span> :
+                <span>
+                    {props.mathMode ?
+                        <span className='mb-1'>
+                            {renderMathPreview()}
+                        </span>
+                        : <>{props.value}</>}</span> :
                 <>
                     <input className='text-field' type="text"
                         value={props.value !== undefined ? props.value : ""}

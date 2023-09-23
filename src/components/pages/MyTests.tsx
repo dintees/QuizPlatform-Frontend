@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getData } from '../../AxiosHelper'
-import { UserSetDto } from '../../Types';
+import { IUserSetDto } from '../../Types';
 import Table from '../common/Table';
 import Button from '../common/Button';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,7 +14,7 @@ import { duplicateTest, deleteTest } from '../../utils/testUtils';
 function MyTests() {
 
     const [userId, setUserId] = useState<number>(0);
-    const [userSet, setUserSet] = useState<UserSetDto[]>([]);
+    const [userSet, setUserSet] = useState<IUserSetDto[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
 
@@ -27,8 +27,8 @@ function MyTests() {
     const handleDeleteSet = async (testId: number) => {
         const isDeleted = await deleteTest(testId);
         if (isDeleted)
-            setUserSet((prev: UserSetDto[]) => {
-                return prev.filter((e: UserSetDto) => e.id !== testId)
+            setUserSet((prev: IUserSetDto[]) => {
+                return prev.filter((e: IUserSetDto) => e.id !== testId)
             })
     }
 
@@ -38,7 +38,7 @@ function MyTests() {
             const data = await getData("test", true);
 
             if (data && data.status === 200) {
-                data.data.forEach((i: UserSetDto) => {
+                data.data.forEach((i: IUserSetDto) => {
                     i.tsUpdate = formatDate(i.tsUpdate)
                     i.title = <Link className='a-link' to={`/test/edit/${i.id}`}>{i.title}</Link>
                     // TODO refactor div = 100% width

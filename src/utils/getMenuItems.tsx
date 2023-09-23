@@ -1,5 +1,5 @@
 import { IPageHyperlink } from "../Types";
-import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai'
+import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd, AiFillPlayCircle } from 'react-icons/ai'
 import { MdQuiz } from 'react-icons/md'
 import { CgLogOut } from 'react-icons/cg'
 import { FaUserCircle } from 'react-icons/fa'
@@ -13,6 +13,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
+                { url: "/activetestsessions", name: "Test sessions", icon: <AiFillPlayCircle />},
                 { url: "/account", name: "Account", icon: <FaUserCircle />},
                 { url: "/settings", name: "Admin", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
@@ -22,6 +23,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
+                { url: "/activetestsessions", name: "Test sessions", icon: <AiFillPlayCircle />},
                 { url: "/settings", name: "Settings", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]

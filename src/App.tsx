@@ -19,6 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./assets/css/App.scss"
 import Account from './components/pages/Account';
 import SolveTest from './components/pages/SolveTest';
+import ActiveTestSessions from './components/pages/ActiveTestSessions';
 
 
 export const AuthContext = createContext<IAuthContext>({
@@ -71,6 +72,7 @@ function App() {
               <Route path='/mytests' element={<ProtectedComponent component={<MyTests />} />} />
               <Route path='/test/:mode/:testId?' element={<ProtectedComponent component={<Test />} />} />
               <Route path='/solveTest/:testId' element={<ProtectedComponent component={<SolveTest />} />} />
+              <Route path='/activetestsessions' element={<ProtectedComponent component={<ActiveTestSessions />} />} />
               <Route path='/account' element={<ProtectedComponent component={<Account />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
 
