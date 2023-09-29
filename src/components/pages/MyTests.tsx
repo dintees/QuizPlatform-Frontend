@@ -56,6 +56,7 @@ function MyTests() {
             setLoading(false)
         }
         fetchData();
+        // eslint-disable-next-line
     }, [])
 
     return (
