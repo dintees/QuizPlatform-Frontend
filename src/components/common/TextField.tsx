@@ -13,7 +13,6 @@ interface Props {
 }
 
 function TextField(props: Props) {
-
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         renderMathPreview();
 

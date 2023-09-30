@@ -71,7 +71,8 @@ export interface IAnswerFormField {
 export interface ISolvingTestOptions {
     testId: number,
     shuffleQuestions: boolean,
-    shuffleAnswers: boolean
+    shuffleAnswers: boolean,
+    oneQuestionMode: boolean
 };
 
 export interface IResult<T> {
@@ -111,5 +112,6 @@ export interface IUserTestSessionDto {
     tsInsert: string;
     tsUpdate: string;
     testName: string | JSX.Element | null;
+    isFinished: boolean | string;
     actions: JSX.Element;
 }

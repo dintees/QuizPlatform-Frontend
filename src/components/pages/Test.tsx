@@ -21,7 +21,7 @@ function Test() {
     const [description, setDescription] = useState<string>("");
     const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType>(QuestionType.SingleChoice);
     const [editMode, setEditMode] = useState<boolean>(true);
-    const [solvingTestOptions, setSolvingTestOptions] = useState<ISolvingTestOptions>({ shuffleQuestions: false, shuffleAnswers: false, testId: !!testId ? parseInt(testId) : 0 });
+    const [solvingTestOptions, setSolvingTestOptions] = useState<ISolvingTestOptions>({ shuffleQuestions: false, shuffleAnswers: false, oneQuestionMode: false, testId: !!testId ? parseInt(testId) : 0 });
     const [pageTitle, setPageTitle] = useState<string>("Create new test");
 
     const navigate = useNavigate();
@@ -85,7 +85,7 @@ function Test() {
         fetchData();
     }
 
-    const handleModifySet = () => {
+    const handleModifyTest = () => {
         const toastId = toast.loading("Saving...");
 
         const fetchData = async () => {
@@ -94,6 +94,7 @@ function Test() {
             if (result?.status === 200) {
                 if (result.data.success === true) {
                     // test has been created
+                    setQuestions(result.data.value.questions)
                     toast.update(toastId, { type: "success", render: "Successfully modified!", isLoading: false, autoClose: 3000, closeOnClick: true })
                 }
             } else {
@@ -104,7 +105,7 @@ function Test() {
         fetchData();
     }
 
-    const handleDeleteSet = async (testId: number) => {
+    const handleDeleteTest = async (testId: number) => {
         const isDeleted = await deleteTest(testId);
         if (isDeleted)
             navigate("/mytests");
@@ -126,15 +127,13 @@ function Test() {
     const handleSolveButtonClick = () => {
         const fetchData = async () => {
             const result = await postData("testSession/create", solvingTestOptions, true);
-            console.log(result);
             switch (result?.status) {
                 case 200:
-                    toast.success("Jest okej ;-)")
-                    console.log(result.data);
+                    // toast.success("Successfully created test")
                     navigate(`/solveTest/${result.data}`)
                     break;
                 case 400:
-                    toast.error(result.data)
+                    toast.error(result.data ?? "Unexpected error")
                     break;
                 case 403:
                     toast.error("Unauthorized")
@@ -156,7 +155,7 @@ function Test() {
 
             <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/mytests")} />
             {editMode && testId && <Button value={<FaClone />} onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />}
-            {editMode && testId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteSet(parseInt(testId))} type='danger' />}
+            {editMode && testId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteTest(parseInt(testId))} type='danger' />}
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />
@@ -169,7 +168,11 @@ function Test() {
                 setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleAnswers: e.target.checked } })
             }} />
 
-            <Button value="Solve" onClick={handleSolveButtonClick} type='primary' />
+            <CheckboxField key='oneQuestionMode' name='solvingOption' label="One question mode" checked={solvingTestOptions.oneQuestionMode} onChange={(e) => {
+                setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, oneQuestionMode: e.target.checked } })
+            }} />
+
+            <Button value="Start!" onClick={handleSolveButtonClick} type='primary' />
 
             <QuestionForm questions={questions} setQuestions={setQuestions} editMode={editMode} />
 
@@ -186,7 +189,7 @@ function Test() {
                     </div>
 
                     {testId ?
-                        <Button value="Modify" type='success' onClick={handleModifySet} />
+                        <Button value="Modify" type='success' onClick={handleModifyTest} />
                         :
                         <Button value='Save' type='success' onClick={handleAddTest} />
                     }

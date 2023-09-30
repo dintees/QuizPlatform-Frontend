@@ -13,7 +13,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
-                { url: "/activetestsessions", name: "Test sessions", icon: <AiFillPlayCircle />},
+                { url: "/history", name: "History", icon: <AiFillPlayCircle />},
                 { url: "/account", name: "Account", icon: <FaUserCircle />},
                 { url: "/settings", name: "Admin", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
@@ -23,7 +23,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
-                { url: "/activetestsessions", name: "Test sessions", icon: <AiFillPlayCircle />},
+                { url: "/history", name: "History", icon: <AiFillPlayCircle />},
                 { url: "/settings", name: "Settings", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]

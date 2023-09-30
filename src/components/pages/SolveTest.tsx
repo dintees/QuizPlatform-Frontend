@@ -6,65 +6,76 @@ import { IQuestionFormField } from '../../Types';
 import { toast } from 'react-toastify';
 import Button from '../common/Button';
 import { QuestionType } from '../../Enums';
+import { BsArrowLeftCircleFill } from 'react-icons/bs'
+import Loader from '../common/Loader';
 
 function SolveTest() {
-    const [questions, setQuestions] = useState<IQuestionFormField[]>([]);
     const { testId } = useParams();
+
+    const [questions, setQuestions] = useState<IQuestionFormField[]>([]);
+    const [title, setTitle] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true)
             const result = await getData(`testSession/get/${testId}`, true);
-            console.log(result);
+
             switch (result?.status) {
                 case 200:
+                    setTitle(result.data.title)
+                    setDescription(result.data.description)
                     setQuestions(result.data.questions)
                     break;
                 case 404:
-                    toast.error(result.data)
+                    toast.error(result.data ?? "Unexpected error")
                     navigate("/")
                     break;
                 default:
-                    toast.error("An error occured.")
+                    toast.error("Unexpedted error")
                     break;
             }
+            setLoading(false)
         }
 
         fetchData();
     }, [navigate, testId])
 
-    const handleSaveData = async () => {
-        // TODO refactor
-        console.log("Save data");
-        console.log(questions);
-
+    const handleSaveData = async (finish: boolean = false) => {
         const mappingTable = questions.map((question) => {
             if (question.questionType === QuestionType.ShortAnswer)
                 return { questionId: question.id, shortAnswerValue: question.answers[0].answer }
             return { questionId: question.id, answerIds: question.answers.filter((answer) => answer.correct).map(e => e.id) }
         })
 
-        console.log(mappingTable);
-
-        const result = await postData(`testSession/saveAnswers/${testId}`, mappingTable, true)
-        console.log(result);
-
-    }
-
-    const handleSendData = () => {
-        console.log("Send data");
+        const result = await postData(`testSession/saveAnswers/${testId}/${finish}`, mappingTable, true)
+        switch (result?.status) {
+            case 200:
+                toast.success(`Successfully ${finish ? "finished" : "saved"} the test`)
+                break;
+            default:
+                toast.error(result?.data ?? "Unexpected error")
+                break;
+        }
     }
 
     return (
         <>
-            <div className='content-title'>Solving test</div>
+            <Loader loading={loading} />
+            <div className='content-title'>Solve test</div>
 
-            <h3>TestId: {testId}</h3>
+            <h3>{title}</h3>
+            <h6>{description}</h6>
+
+            <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/history")} />
 
             <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} />
 
-            <Button type='primary' value="Save" onClick={handleSaveData} />
-            <Button type='primary' value="Send" onClick={handleSendData} />
+            <Button type='primary' value="Save" onClick={() => handleSaveData()} />
+            <Button type='primary' value="Save and finish" onClick={() => handleSaveData(true)} />
 
         </>
     )
