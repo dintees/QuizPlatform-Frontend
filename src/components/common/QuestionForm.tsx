@@ -31,11 +31,14 @@ function QuestionForm(props: Props) {
 
     const handleCopyQuestion = (questionIndex: number) => {
         let clonedQuestion = { ...props.questions[questionIndex] }
+        clonedQuestion.id = 0;
         clonedQuestion.answers = clonedQuestion.answers.map((e) => { return { ...e } })
 
         props.setQuestions((prev: IQuestionFormField[]) => {
             return [...prev.slice(0, questionIndex + 1), clonedQuestion, ...prev.slice(questionIndex + 1)];
         })
+        console.log(props.questions);
+        
     }
 
     const handleChangeInputMode = (questionIndex: number) => props.setQuestions(changeInputMode(props.questions, questionIndex))

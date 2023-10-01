@@ -67,7 +67,7 @@ function QuestionEditor(props: Props) {
                                 break;
 
                             case QuestionType.ShortAnswer:
-                                renderElement = (<TextField key={answerIndex} mathMode={props.mathMode} value={props.answers[answerIndex].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)} />)
+                                renderElement = (<div className='form-control'><TextField key={answerIndex} value={props.answers[answerIndex].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)} /></div>)
                                 break;
                         }
                         return <div

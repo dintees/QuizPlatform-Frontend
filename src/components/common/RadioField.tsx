@@ -11,7 +11,7 @@ interface Props {
 function RadioField(props: Props) {
     return (
         <>
-            <div>
+            <div className='form-control'>
                 <input className="radio-field" type="radio" checked={props.checked} onChange={props.onChange} disabled={props.readonly} />
                 {props.label}
             </div>

@@ -113,5 +113,4 @@ export interface IUserTestSessionDto {
     tsUpdate: string;
     testName: string | JSX.Element | null;
     isFinished: boolean | string;
-    actions: JSX.Element;
 }

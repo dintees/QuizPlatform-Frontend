@@ -14,7 +14,6 @@ import { duplicateTest, deleteTest, getNewQuestionObject } from '../../utils/tes
 import CheckboxField from '../common/CheckboxField'
 
 function Test() {
-
     const { mode, testId } = useParams();
 
     const [title, setTitle] = useState<string>("");
@@ -90,6 +89,7 @@ function Test() {
 
         const fetchData = async () => {
             const result = await putData(`test/edit/${testId}`, { title: title, description: description, questions: questions }, true);
+            console.log(result)
 
             if (result?.status === 200) {
                 if (result.data.success === true) {

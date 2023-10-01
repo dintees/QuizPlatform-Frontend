@@ -23,19 +23,24 @@ function SolveTest() {
         const fetchData = async () => {
             setLoading(true)
             const result = await getData(`testSession/get/${testId}`, true);
-
+            console.log(result);
+            
             switch (result?.status) {
                 case 200:
                     setTitle(result.data.title)
                     setDescription(result.data.description)
                     setQuestions(result.data.questions)
                     break;
+                case 401:
+                    toast.error("You do not have permission to solve this test")
+                    navigate("/")
+                break;
                 case 404:
                     toast.error(result.data ?? "Unexpected error")
                     navigate("/")
                     break;
                 default:
-                    toast.error("Unexpedted error")
+                    toast.error("Problem with server connection")
                     break;
             }
             setLoading(false)

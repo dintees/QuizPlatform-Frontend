@@ -20,6 +20,7 @@ import "./assets/css/App.scss"
 import Account from './components/pages/Account';
 import SolveTest from './components/pages/SolveTest';
 import TestHistory from './components/pages/TestHistory';
+import ForgotPassword from './components/pages/ForgotPassword';
 
 
 export const AuthContext = createContext<IAuthContext>({
@@ -78,6 +79,7 @@ function App() {
 
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
+              <Route path='/forgotpassword' element={<ForgotPassword />} />
 
               <Route path='/logout' element={<ProtectedComponent component={<Logout />} />} />
 

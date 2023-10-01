@@ -15,24 +15,23 @@ function TestHistory() {
         const fetchData = async () => {
             setLoading(true)
             const result = await getData("testSession", true)
-            console.log(result?.data);
 
             switch (result?.status) {
                 case 200:
                     result.data.forEach((i: IUserTestSessionDto) => {
                         i.tsInsert = formatDate(i.tsInsert)
                         i.tsUpdate = formatDate(i.tsUpdate)
-                        i.isFinished = i.isFinished ? "YES" : "NO"
+                        i.isFinished = i.isFinished ? "Completed" : "During solving"
                         i.testName = <Link className='a-link' to={`/solvetest/${i.id}`}>{i.testName}</Link>
-                        i.actions = <div className='d-flex flex-start'>/todo
+                        // i.actions = <div className='d-flex flex-start'>/todo
                             {/* <div className='c-pointer' style={{marginRight: ".5rem"}} onClick={() => handleDuplicateTest(i.id)}><FaClone /></div>
                             <div className='color-danger c-pointer' onClick={() => handleDeleteSet(i.id)}><BsFillTrashFill /></div> */}
-                        </div>
+                        // </div>
                     })
                     setTestSessions(result.data);
                     break;
                 default:
-                    toast.error("Something went wrong.");
+                    toast.error("Problem with server conenction.");
                     break;
             }
             setLoading(false);
@@ -49,10 +48,9 @@ function TestHistory() {
 
             <Table data={testSessions} columns={[
                 { key: "testName", header: "Test" },
-                { key: "tsInsert", header: "Created" },
-                { key: "tsUpdate", header: "Last modified" },
-                { key: "isFinished", header: "Is completed" },
-                { key: "actions", header: "Actions" }
+                { key: "tsInsert", header: "Start time" },
+                { key: "tsUpdate", header: "Modification time" },
+                { key: "isFinished", header: "Status" },
             ]} />
         </>
     )
