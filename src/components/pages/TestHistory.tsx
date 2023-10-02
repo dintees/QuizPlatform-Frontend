@@ -23,10 +23,6 @@ function TestHistory() {
                         i.tsUpdate = formatDate(i.tsUpdate)
                         i.isFinished = i.isFinished ? "Completed" : "During solving"
                         i.testName = <Link className='a-link' to={`/solvetest/${i.id}`}>{i.testName}</Link>
-                        // i.actions = <div className='d-flex flex-start'>/todo
-                            {/* <div className='c-pointer' style={{marginRight: ".5rem"}} onClick={() => handleDuplicateTest(i.id)}><FaClone /></div>
-                            <div className='color-danger c-pointer' onClick={() => handleDeleteSet(i.id)}><BsFillTrashFill /></div> */}
-                        // </div>
                     })
                     setTestSessions(result.data);
                     break;
