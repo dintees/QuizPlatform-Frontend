@@ -43,7 +43,7 @@ function TestHistory() {
             <div className="content-title">History</div>
 
             <Table data={testSessions} columns={[
-                { key: "testName", header: "Test" },
+                { key: "testName", header: "Title" },
                 { key: "tsInsert", header: "Start time" },
                 { key: "tsUpdate", header: "Modification time" },
                 { key: "isFinished", header: "Status" },

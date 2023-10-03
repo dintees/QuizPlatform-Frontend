@@ -37,6 +37,12 @@ export interface IRegister {
     roleId: number
 };
 
+export interface IChangePassword {
+    oldPassword: string,
+    newPassword: string,
+    newPasswordConfirmation: string
+};
+
 export interface Question {
     id: number;
     question: string | null;

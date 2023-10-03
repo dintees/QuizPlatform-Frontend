@@ -34,7 +34,7 @@ function Form(props: Props) {
                     return (
                         <div key={index} className='form-row'>
                             <div className="form-label">{field.name}</div>
-                            <div className="form-control"><TextField key={index} value={field.value!} disabled={field.disabled} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleValueChange(field.key, e.target.value)} /></div>
+                            <div className="form-control"><TextField key={index} type={field.type} value={field.value!} disabled={field.disabled} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleValueChange(field.key, e.target.value)} /></div>
                         </div>
                     )
                 })}

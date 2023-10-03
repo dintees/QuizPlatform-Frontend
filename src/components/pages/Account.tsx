@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import Form from '../common/Form'
-import { IFormField } from '../../Types'
+import { IChangePassword, IFormField } from '../../Types'
 import { getData, putData } from '../../AxiosHelper'
 import { toast } from 'react-toastify';
 
 function Account() {
 
-    const [formFields, setFormFields] = useState<IFormField[]>([])
+    const [accountFormFields, setAccountFormFields] = useState<IFormField[]>([])
+    const [passwordFormFields, setPasswordFormFields] = useState<IFormField[]>([
+        { name: "Old password", key: "oldPassword", value: "", type: "password" },
+        { name: "New password", key: "newPassword", value: "", type: "password" },
+        { name: "Conform password", key: "newPasswordConfirmation", value: "", type: "password" }
+    ])
     useEffect(() => {
 
         const fetchData = async () => {
@@ -14,7 +19,7 @@ function Account() {
 
             switch (result?.status) {
                 case 200:
-                    setFormFields([
+                    setAccountFormFields([
                         { name: "First name", key: "firstname", value: result.data.firstname, type: "text" },
                         { name: "Last name", key: "lastname", value: result.data.lastname, type: "text" },
                         { name: "Username", key: "username", value: result.data.username, type: "text", disabled: true },
@@ -36,7 +41,7 @@ function Account() {
 
     const handleAccountFormSubmit = async (e: React.FormEvent) => {
         const userData: Record<string, string> = {};
-        formFields.forEach(field => {
+        accountFormFields.forEach(field => {
             if (field.key === 'firstname' || field.key === 'lastname') {
                 userData[field.key] = field.value!;
             }
@@ -59,7 +64,9 @@ function Account() {
         <>
             <div className="content-title">Account settings</div>
 
-            <Form formFields={formFields} setFormFields={setFormFields} onSubmit={handleAccountFormSubmit} />
+            <Form formFields={accountFormFields} setFormFields={setAccountFormFields} onSubmit={handleAccountFormSubmit} />
+
+            <Form formFields={passwordFormFields} setFormFields={setPasswordFormFields} onSubmit={() => console.log(passwordFormFields)} />
         </>
     )
 }

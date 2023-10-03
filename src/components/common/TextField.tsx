@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { HTMLInputTypeAttribute } from 'react'
 import { InlineMath } from 'react-katex'
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
     readonly?: boolean,
     disabled?: boolean,
     mathMode?: boolean,
+    type?: HTMLInputTypeAttribute,
     setValue?: React.Dispatch<React.SetStateAction<string>>,
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -39,7 +40,7 @@ function TextField(props: Props) {
                         </span>
                         : <>{props.value}</>}</span> :
                 <>
-                    <input className='text-field' type="text"
+                    <input className='text-field' type={props.type ? props.type : "text"}
                         value={props.value !== undefined ? props.value : ""}
                         placeholder={props.placeholder !== undefined ? props.placeholder : ""}
                         style={props.style !== undefined ? props.style : {}}

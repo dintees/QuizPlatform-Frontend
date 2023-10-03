@@ -44,6 +44,8 @@ function Test() {
             // load question by id
             const fetchData = async () => {
                 const result = await getData(`test/${testId}`, true);
+                console.log(result);
+                
 
                 if (result?.status === 200) {
                     setTitle(result.data.title)
