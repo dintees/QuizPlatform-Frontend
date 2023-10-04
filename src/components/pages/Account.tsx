@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Form from '../common/Form'
-import { IChangePassword, IFormField } from '../../Types'
+import { IFormField } from '../../Types'
 import { getData, putData } from '../../AxiosHelper'
 import { toast } from 'react-toastify';
 

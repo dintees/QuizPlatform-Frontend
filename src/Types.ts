@@ -22,6 +22,13 @@ export interface IAuthInformation {
     pages: IPageHyperlink[]
 };
 
+export interface ITestSessionOptions {
+    title: string,
+    description: string,
+    oneQuestionMode: boolean,
+    isCompleted: boolean
+};
+
 export interface ILogin {
     email: string,
     password: string
@@ -35,12 +42,6 @@ export interface IRegister {
     password: string,
     passwordConfirmation: string,
     roleId: number
-};
-
-export interface IChangePassword {
-    oldPassword: string,
-    newPassword: string,
-    newPasswordConfirmation: string
 };
 
 export interface Question {
@@ -118,5 +119,5 @@ export interface IUserTestSessionDto {
     tsInsert: string;
     tsUpdate: string;
     testName: string | JSX.Element | null;
-    isFinished: boolean | string;
+    isCompleted: boolean | string;
 }

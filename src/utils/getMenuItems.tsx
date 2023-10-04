@@ -3,6 +3,7 @@ import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd, AiFillPlayC
 import { MdQuiz } from 'react-icons/md'
 import { CgLogOut } from 'react-icons/cg'
 import { FaUserCircle } from 'react-icons/fa'
+import { PiCardsFill } from 'react-icons/pi'
 import { Role } from "../Enums";
 
 const getMenuItems = (role: Role = Role.NotAuthorized) => {
@@ -13,6 +14,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
+                { url: "/myflashcards", name: "Flashcards", icon: <PiCardsFill /> },
                 { url: "/history", name: "History", icon: <AiFillPlayCircle />},
                 { url: "/account", name: "Account", icon: <FaUserCircle />},
                 { url: "/settings", name: "Admin", icon: <AiFillSetting /> },
@@ -23,6 +25,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
+                { url: "/myflashcards", name: "Flashcards", icon: <PiCardsFill /> },
                 { url: "/history", name: "History", icon: <AiFillPlayCircle />},
                 { url: "/settings", name: "Settings", icon: <AiFillSetting /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }

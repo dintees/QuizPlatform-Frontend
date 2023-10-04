@@ -21,7 +21,7 @@ function TestHistory() {
                     result.data.forEach((i: IUserTestSessionDto) => {
                         i.tsInsert = formatDate(i.tsInsert)
                         i.tsUpdate = formatDate(i.tsUpdate)
-                        i.isFinished = i.isFinished ? "Completed" : "During solving"
+                        i.isCompleted = i.isCompleted ? "Completed" : "During solving"
                         i.testName = <Link className='a-link' to={`/solvetest/${i.id}`}>{i.testName}</Link>
                     })
                     setTestSessions(result.data);
@@ -46,7 +46,7 @@ function TestHistory() {
                 { key: "testName", header: "Title" },
                 { key: "tsInsert", header: "Start time" },
                 { key: "tsUpdate", header: "Modification time" },
-                { key: "isFinished", header: "Status" },
+                { key: "isCompleted", header: "Status" },
             ]} />
         </>
     )

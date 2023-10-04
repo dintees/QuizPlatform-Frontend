@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getData, postData } from '../../AxiosHelper';
 import QuestionForm from '../common/QuestionForm';
-import { IQuestionFormField } from '../../Types';
+import { IQuestionFormField, ITestSessionOptions } from '../../Types';
 import { toast } from 'react-toastify';
 import Button from '../common/Button';
 import { QuestionType } from '../../Enums';
@@ -13,8 +13,7 @@ function SolveTest() {
     const { testId } = useParams();
 
     const [questions, setQuestions] = useState<IQuestionFormField[]>([]);
-    const [title, setTitle] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
+    const [testSessionOptions, setTestSessionOptions] = useState<ITestSessionOptions>();
     const [loading, setLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
@@ -24,17 +23,16 @@ function SolveTest() {
             setLoading(true)
             const result = await getData(`testSession/get/${testId}`, true);
             console.log(result);
-            
+
             switch (result?.status) {
                 case 200:
-                    setTitle(result.data.title)
-                    setDescription(result.data.description)
+                    setTestSessionOptions(result.data)
                     setQuestions(result.data.questions)
                     break;
                 case 401:
                     toast.error("You do not have permission to solve this test")
                     navigate("/")
-                break;
+                    break;
                 case 404:
                     toast.error(result.data ?? "Unexpected error")
                     navigate("/")
@@ -72,16 +70,19 @@ function SolveTest() {
             <Loader loading={loading} />
             <div className='content-title'>Solve test</div>
 
-            <h3>{title}</h3>
-            <h6>{description}</h6>
+            <h3>{testSessionOptions?.title}</h3>
+            <h6>{testSessionOptions?.description}</h6>
 
             <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/history")} />
 
-            <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} />
-
-            <Button type='primary' value="Save" onClick={() => handleSaveData()} />
-            <Button type='primary' value="Save and finish" onClick={() => handleSaveData(true)} />
-
+            {testSessionOptions?.isCompleted ? <h1>Completed!</h1>
+                :
+                <>
+                    <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} oneQuestionMode={testSessionOptions?.oneQuestionMode} />
+                    <Button type='primary' value="Save" onClick={() => handleSaveData()} />
+                    <Button type='primary' value="Save and finish" onClick={() => handleSaveData(true)} />
+                </>
+            }
         </>
     )
 }

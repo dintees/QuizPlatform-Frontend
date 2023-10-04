@@ -8,7 +8,7 @@ import { QuestionType } from '../../Enums'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Loader from '../common/Loader'
-import { BsFillTrashFill, BsArrowLeftCircleFill } from 'react-icons/bs'
+import { BsFillTrashFill, BsArrowLeftCircleFill, BsFillUnlockFill, BsFillLockFill } from 'react-icons/bs'
 import { FaClone } from 'react-icons/fa'
 import { duplicateTest, deleteTest, getNewQuestionObject } from '../../utils/testUtils'
 import CheckboxField from '../common/CheckboxField'
@@ -22,6 +22,7 @@ function Test() {
     const [editMode, setEditMode] = useState<boolean>(true);
     const [solvingTestOptions, setSolvingTestOptions] = useState<ISolvingTestOptions>({ shuffleQuestions: false, shuffleAnswers: false, oneQuestionMode: false, testId: !!testId ? parseInt(testId) : 0 });
     const [pageTitle, setPageTitle] = useState<string>("Create new test");
+    const [isPublic, setIsPublic] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -45,12 +46,13 @@ function Test() {
             const fetchData = async () => {
                 const result = await getData(`test/${testId}`, true);
                 console.log(result);
-                
+
 
                 if (result?.status === 200) {
                     setTitle(result.data.title)
                     setDescription(result.data.description)
                     setQuestions(result.data.questions)
+                    setIsPublic(result.data.isPublic)
                 } else if (result?.status === 404) {
                     toast.error("There is no test with the given id")
                     navigate("/mytests")
@@ -90,7 +92,7 @@ function Test() {
         const toastId = toast.loading("Saving...");
 
         const fetchData = async () => {
-            const result = await putData(`test/edit/${testId}`, { title: title, description: description, questions: questions }, true);
+            const result = await putData(`test/edit/${testId}`, { title: title, description: description, questions: questions, isPublic: isPublic }, true);
             console.log(result)
 
             if (result?.status === 200) {
@@ -157,10 +159,12 @@ function Test() {
 
             <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/mytests")} />
             {editMode && testId && <Button value={<FaClone />} onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />}
+            {editMode && testId && <Button value={isPublic ? <BsFillUnlockFill /> : <BsFillLockFill />} onClick={() => setIsPublic(e => !e)} type='secondary' />}
             {editMode && testId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteTest(parseInt(testId))} type='danger' />}
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />
+
 
             {/* solving section */}
             <CheckboxField key='shuffleQuestions' name='solvingOption' label="Shuffle questions" checked={solvingTestOptions.shuffleQuestions} onChange={(e) => {

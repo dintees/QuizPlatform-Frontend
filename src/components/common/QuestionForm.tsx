@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IQuestionFormField } from '../../Types'
 import "../../assets/css/QuestionForm.scss"
 import QuestionEditor from './QuestionEditor'
 import { modifyAnswer, modifyQuestion, changeInputMode, changeCorrectAnswer, deleteQuestion, addEmptyAnswer, deleteAnswer } from '../../utils/testUtils'
+import Button from './Button'
 
 interface Props {
     questions: IQuestionFormField[],
     setQuestions: React.Dispatch<React.SetStateAction<IQuestionFormField[]>>,
-    editMode: boolean
+    editMode: boolean,
+    oneQuestionMode?: boolean
 }
 
 
 function QuestionForm(props: Props) {
+
+    const [index, setIndex] = useState<number>(0);
 
     const handleChangeQuestion = (e: React.ChangeEvent<HTMLInputElement>, index: number) => props.setQuestions((questions: IQuestionFormField[]) => modifyQuestion(questions, index, e.target.value))
 
@@ -38,23 +42,23 @@ function QuestionForm(props: Props) {
             return [...prev.slice(0, questionIndex + 1), clonedQuestion, ...prev.slice(questionIndex + 1)];
         })
         console.log(props.questions);
-        
+
     }
 
     const handleChangeInputMode = (questionIndex: number) => props.setQuestions(changeInputMode(props.questions, questionIndex))
 
     return (
         <div className="question-edit-box">
-            {props.questions.map((question: IQuestionFormField, index: number) => {
-                return (!question.isDeleted &&
+            {props.oneQuestionMode ?
+                <>
                     <QuestionEditor
                         key={index}
-                        question={question.question}
+                        question={props.questions[index].question}
                         questionIndex={index}
-                        answers={question.answers}
-                        questionType={question.questionType}
+                        answers={props.questions[index].answers}
+                        questionType={props.questions[index].questionType}
                         editMode={props.editMode}
-                        mathMode={question.mathMode!}
+                        mathMode={props.questions[index].mathMode!}
                         handleChangeQuestion={handleChangeQuestion}
                         handleChangeAnswers={handleChangeAnswers}
                         handleChangeCorrectAnswer={handleChangeCorrectAnswer}
@@ -64,8 +68,32 @@ function QuestionForm(props: Props) {
                         handleCopyQuestion={handleCopyQuestion}
                         handleChangeInputMode={handleChangeInputMode}
                     />
-                )
-            })}
+                    {index + 1 < props.questions.length && <Button value="Next" onClick={() => setIndex(i => i + 1)} />}
+                </>
+                :
+                <>
+                    {props.questions.map((question: IQuestionFormField, index: number) => {
+                        return (!question.isDeleted &&
+                            <QuestionEditor
+                                key={index}
+                                question={question.question}
+                                questionIndex={index}
+                                answers={question.answers}
+                                questionType={question.questionType}
+                                editMode={props.editMode}
+                                mathMode={question.mathMode!}
+                                handleChangeQuestion={handleChangeQuestion}
+                                handleChangeAnswers={handleChangeAnswers}
+                                handleChangeCorrectAnswer={handleChangeCorrectAnswer}
+                                handleDeleteQuestion={handleDeleteQuestion}
+                                handleAddAnswer={handleAddAnswer}
+                                handleDeleteAnswer={handleDeleteAnswer}
+                                handleCopyQuestion={handleCopyQuestion}
+                                handleChangeInputMode={handleChangeInputMode}
+                            />
+                        )
+                    })}
+                </>}
         </div>
     )
 }
