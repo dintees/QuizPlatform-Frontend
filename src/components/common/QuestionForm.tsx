@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { IQuestionFormField } from '../../Types'
+import { IQuestionFormField, IUserAnswersDto } from '../../Types'
 import "../../assets/css/QuestionForm.scss"
 import QuestionEditor from './QuestionEditor'
 import { modifyAnswer, modifyQuestion, changeInputMode, changeCorrectAnswer, deleteQuestion, addEmptyAnswer, deleteAnswer } from '../../utils/testUtils'
@@ -9,7 +9,9 @@ interface Props {
     questions: IQuestionFormField[],
     setQuestions: React.Dispatch<React.SetStateAction<IQuestionFormField[]>>,
     editMode: boolean,
-    oneQuestionMode?: boolean
+    readonly?: boolean,
+    oneQuestionMode?: boolean,
+    correctAnswers?: IUserAnswersDto[]
 }
 
 
@@ -41,8 +43,6 @@ function QuestionForm(props: Props) {
         props.setQuestions((prev: IQuestionFormField[]) => {
             return [...prev.slice(0, questionIndex + 1), clonedQuestion, ...prev.slice(questionIndex + 1)];
         })
-        console.log(props.questions);
-
     }
 
     const handleChangeInputMode = (questionIndex: number) => props.setQuestions(changeInputMode(props.questions, questionIndex))
@@ -82,6 +82,8 @@ function QuestionForm(props: Props) {
                                 questionType={question.questionType}
                                 editMode={props.editMode}
                                 mathMode={question.mathMode!}
+                                readonly={props.readonly}
+                                correctAnswers={props.correctAnswers?.filter(e => e.questionId === question.id)[0]}
                                 handleChangeQuestion={handleChangeQuestion}
                                 handleChangeAnswers={handleChangeAnswers}
                                 handleChangeCorrectAnswer={handleChangeCorrectAnswer}

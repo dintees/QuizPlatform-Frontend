@@ -190,6 +190,10 @@ input:focus {
   color: variables.$color-primary;
 }
 
+.color-success {
+  color: variables.$color-success;
+}
+
 .color-danger {
   color: variables.$color-danger;
 }
@@ -200,6 +204,10 @@ input:focus {
 
 .text-center {
   text-align: center;
+}
+
+.text-sm {
+  font-size: 0.8rem;
 }
 
 .d-flex {

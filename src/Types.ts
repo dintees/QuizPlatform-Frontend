@@ -26,7 +26,8 @@ export interface ITestSessionOptions {
     title: string,
     description: string,
     oneQuestionMode: boolean,
-    isCompleted: boolean
+    isCompleted: boolean,
+    correctAnswers?: IUserAnswersDto[]
 };
 
 export interface ILogin {
@@ -80,6 +81,12 @@ export interface ISolvingTestOptions {
     shuffleQuestions: boolean,
     shuffleAnswers: boolean,
     oneQuestionMode: boolean
+};
+
+export interface IUserAnswersDto {
+    questionId: number,
+    answerIds?: number[],
+    shortAnswerValue?: string
 };
 
 export interface IResult<T> {

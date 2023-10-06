@@ -18,34 +18,34 @@ function SolveTest() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            const result = await getData(`testSession/get/${testId}`, true);
-            console.log(result);
+    const getTestSessionAsync = async () => {
+        setLoading(true)
+        const result = await getData(`testSession/get/${testId}`, true);
+        console.log(result);
 
-            switch (result?.status) {
-                case 200:
-                    setTestSessionOptions(result.data)
-                    setQuestions(result.data.questions)
-                    break;
-                case 401:
-                    toast.error("You do not have permission to solve this test")
-                    navigate("/")
-                    break;
-                case 404:
-                    toast.error(result.data ?? "Unexpected error")
-                    navigate("/")
-                    break;
-                default:
-                    toast.error("Problem with server connection")
-                    break;
-            }
-            setLoading(false)
+        switch (result?.status) {
+            case 200:
+                setTestSessionOptions(result.data)
+                setQuestions(result.data.questions)
+                break;
+            case 401:
+                toast.error("You do not have permission to solve this test")
+                navigate("/")
+                break;
+            case 404:
+                toast.error(result.data ?? "Unexpected error")
+                navigate("/")
+                break;
+            default:
+                toast.error("Problem with server connection")
+                break;
         }
-
-        fetchData();
-    }, [navigate, testId])
+        setLoading(false)
+    }
+    useEffect(() => {
+        getTestSessionAsync();
+        // eslint-disable-next-line
+    }, [])
 
     const handleSaveData = async (finish: boolean = false) => {
         const mappingTable = questions.map((question) => {
@@ -58,6 +58,7 @@ function SolveTest() {
         switch (result?.status) {
             case 200:
                 toast.success(`Successfully ${finish ? "finished" : "saved"} the test`)
+                if (finish) getTestSessionAsync();
                 break;
             default:
                 toast.error(result?.data ?? "Unexpected error")
@@ -75,11 +76,15 @@ function SolveTest() {
 
             <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/history")} />
 
-            {testSessionOptions?.isCompleted ? <h1>Completed!</h1>
+            {testSessionOptions?.isCompleted ?
+                <>
+                    <h1>Completed!</h1>
+                    <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} readonly={true} correctAnswers={testSessionOptions?.correctAnswers} />
+                </>
                 :
                 <>
                     <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} oneQuestionMode={testSessionOptions?.oneQuestionMode} />
-                    <Button type='primary' value="Save" onClick={() => handleSaveData()} />
+                    {!testSessionOptions?.oneQuestionMode && <Button type='primary' value="Save" onClick={() => handleSaveData()} />}
                     <Button type='primary' value="Save and finish" onClick={() => handleSaveData(true)} />
                 </>
             }
