@@ -5,6 +5,7 @@ import Table from '../common/Table';
 import Button from '../common/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../common/Loader';
+import Modal from '../common/Modal';
 import { formatDate } from '../../utils/dateFormatter';
 import { FaClone } from 'react-icons/fa';
 import { BsFillTrashFill } from 'react-icons/bs';
@@ -14,8 +15,10 @@ import { duplicateTest, deleteTest } from '../../utils/testUtils';
 function MyTests() {
 
     const [userId, setUserId] = useState<number>(0);
-    const [userSet, setUserSet] = useState<IUserSetDto[]>([]);
+    const [userTest, setUserTest] = useState<IUserSetDto[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [openModal, setOpenModal] = useState<boolean>(false);
+    const [testIdToDelete, setTestIdToDelete] = useState<number>();
     const navigate = useNavigate();
 
     const handleDuplicateTest = async (testId: number) => {
@@ -24,12 +27,20 @@ function MyTests() {
             navigate(`/test/edit/${result}`)
     }
 
-    const handleDeleteSet = async (testId: number) => {
-        const isDeleted = await deleteTest(testId);
-        if (isDeleted)
-            setUserSet((prev: IUserSetDto[]) => {
-                return prev.filter((e: IUserSetDto) => e.id !== testId)
-            })
+    const handleOpenModal = (testId: number) => {
+        setOpenModal(true);
+        setTestIdToDelete(testId)
+    }
+
+    const handleDeleteTest = async () => {
+        if (!!testIdToDelete) {
+            const isDeleted = await deleteTest(testIdToDelete);
+            if (isDeleted)
+                setUserTest((prev: IUserSetDto[]) => {
+                    return prev.filter((e: IUserSetDto) => e.id !== testIdToDelete)
+                })
+        }
+        setOpenModal(false);
     }
 
     useEffect(() => {
@@ -43,12 +54,12 @@ function MyTests() {
                     i.title = <Link className='a-link' to={`/test/edit/${i.id}`}>{i.title}</Link>
                     // TODO refactor div = 100% width
                     i.actions = <div className='d-flex flex-start'>
-                        <div className='c-pointer' style={{marginRight: ".5rem"}} onClick={() => handleDuplicateTest(i.id)}><FaClone /></div>
-                        <div className='color-danger c-pointer' onClick={() => handleDeleteSet(i.id)}><BsFillTrashFill /></div>
+                        <div className='c-pointer' style={{ marginRight: ".5rem" }} onClick={() => handleDuplicateTest(i.id)}><FaClone /></div>
+                        <div className='color-danger c-pointer' onClick={() => handleOpenModal(i.id)}><BsFillTrashFill /></div>
                     </div>
                 })
 
-                setUserSet(data.data);
+                setUserTest(data.data);
                 setUserId(parseInt(data!.data.length));
             } else {
                 toast.error("Unable to connect to the server.")
@@ -61,6 +72,13 @@ function MyTests() {
 
     return (
         <>
+            <Modal open={openModal} title="Remove test" onClose={() => setOpenModal(false)} buttons={
+                <>
+                    <Button type="danger" value="Delete" onClick={handleDeleteTest} />
+                    <Button value="Close" onClick={() => setOpenModal(false)} />
+                </>
+            }>Are you sure you want to pernamently delete the test?</Modal>
+
             <Loader loading={loading} />
             <div className='content-title'>My Tests</div>
 
@@ -68,7 +86,7 @@ function MyTests() {
 
             <div className="mt-1 mb-1">All tests: <b>{userId}</b></div>
 
-            <Table data={userSet} columns={[
+            <Table data={userTest} columns={[
                 { key: "title", header: "Title" },
                 { key: "tsUpdate", header: "Last modified" },
                 { key: "author", header: "Author" },

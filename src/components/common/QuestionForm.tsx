@@ -36,9 +36,11 @@ function QuestionForm(props: Props) {
 
 
     const handleCopyQuestion = (questionIndex: number) => {
+        console.log(props.questions);
+        
         let clonedQuestion = { ...props.questions[questionIndex] }
         clonedQuestion.id = 0;
-        clonedQuestion.answers = clonedQuestion.answers.map((e) => { return { ...e } })
+        clonedQuestion.answers = clonedQuestion.answers.map((e) => { return { ...e, id: 0 } })
 
         props.setQuestions((prev: IQuestionFormField[]) => {
             return [...prev.slice(0, questionIndex + 1), clonedQuestion, ...prev.slice(questionIndex + 1)];

@@ -27,7 +27,9 @@ export interface ITestSessionOptions {
     description: string,
     oneQuestionMode: boolean,
     isCompleted: boolean,
-    correctAnswers?: IUserAnswersDto[]
+    correctAnswers?: IUserAnswersDto[],
+    score: number,
+    maxScore: number,
 };
 
 export interface ILogin {
@@ -86,7 +88,8 @@ export interface ISolvingTestOptions {
 export interface IUserAnswersDto {
     questionId: number,
     answerIds?: number[],
-    shortAnswerValue?: string
+    shortAnswerValue?: string,
+    isCorrect: boolean,
 };
 
 export interface IResult<T> {

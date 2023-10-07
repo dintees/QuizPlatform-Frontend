@@ -1,0 +1,49 @@
+@use "variables";
+
+.modal-overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    &-container {
+        width: 60%;
+        background: #eee;
+    }
+
+    &-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: variables.$color-primary;
+        color: #eee;
+        padding: .3rem .6rem;
+        font-weight: bold;
+
+        &-close {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+    }
+
+    &-content {
+        padding: .5rem;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid variables.$color-secondary-btn;
+    }
+
+    &-buttons {
+        padding: 0 .5rem;
+
+        * {
+            margin-right: 1rem;
+        }
+    }
+}

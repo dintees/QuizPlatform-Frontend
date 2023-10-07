@@ -31,9 +31,9 @@ interface Props {
 function QuestionEditor(props: Props) {
 
     const getIcon = (questionType: QuestionType) => {
-        if (!!props.correctAnswers) {
-            return <AiFillCheckCircle />
-        }
+        if (!!props.correctAnswers)
+            return props.correctAnswers.isCorrect ? <AiFillCheckCircle className='color-success' /> : <AiFillCloseCircle className='color-danger' />;
+
         switch (questionType) {
             case QuestionType.SingleChoice: return <AiOutlineCheckCircle />
             case QuestionType.MultipleChoice: return <AiOutlineCheckSquare />
