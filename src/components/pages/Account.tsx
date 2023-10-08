@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Form from '../common/Form'
 import { IFormField } from '../../Types'
-import { getData, putData } from '../../AxiosHelper'
+import { getData, postData, putData } from '../../AxiosHelper'
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { signOut } from '../../utils/loginUtils';
+import getMenuItems from '../../utils/getMenuItems';
 
 function Account() {
-
+    const navigate = useNavigate();
     const [accountFormFields, setAccountFormFields] = useState<IFormField[]>([])
     const [passwordFormFields, setPasswordFormFields] = useState<IFormField[]>([
         { name: "Old password", key: "oldPassword", value: "", type: "password" },
@@ -60,13 +63,34 @@ function Account() {
         }
     }
 
+    const handleAccountChangeUserPasswordFormSubmit = async (e: React.FormEvent) => {
+        const passwordData: Record<string, string> = {};
+        passwordFormFields.forEach(field => {
+            passwordData[field.key] = field.value!;
+        });
+        const result = await postData("user/changePassword", passwordData, true);
+        switch (result?.status) {
+            case 200:
+                toast.success("Successfully changed the password. Please sign in again")
+                navigate("/logout")
+                break;
+            case 400:
+                toast.error(result.data);
+                break;
+            default:
+                toast.error("Problem with server connection.");
+                break;
+        }
+
+    }
+
     return (
         <>
             <div className="content-title">Account settings</div>
 
             <Form formFields={accountFormFields} setFormFields={setAccountFormFields} onSubmit={handleAccountFormSubmit} />
 
-            <Form formFields={passwordFormFields} setFormFields={setPasswordFormFields} onSubmit={() => console.log(passwordFormFields)} />
+            <Form formFields={passwordFormFields} setFormFields={setPasswordFormFields} onSubmit={handleAccountChangeUserPasswordFormSubmit} />
         </>
     )
 }

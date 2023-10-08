@@ -75,8 +75,7 @@ function App() {
               <Route path='/test/:mode/:testId?' element={<ProtectedComponent component={<Test />} />} />
               <Route path='/solveTest/:testId' element={<ProtectedComponent component={<SolveTest />} />} />
               <Route path='/history' element={<ProtectedComponent component={<TestHistory />} />} />
-              <Route path='/myflashcards' element={<ProtectedComponent component={<MyFlashcards />} />} />
-
+              <Route path='/flashcards/:mode?/:flashcardId?' element={<ProtectedComponent component={<MyFlashcards />} />} />
 
               <Route path='/account' element={<ProtectedComponent component={<Account />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />

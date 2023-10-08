@@ -122,7 +122,14 @@ export interface IUserSetDto {
     tsUpdate: string;
     author: string | null;
     actions: JSX.Element;
-}
+};
+
+export interface IUserFlashcard {
+    id: number;
+    title: string | JSX.Element | null;
+    tsUpdate: string;
+    actions: JSX.Element;
+};
 
 export interface IUserTestSessionDto {
     id: number;

@@ -12,6 +12,7 @@ import Button from './Button';
 interface Props {
     question: string,
     questionIndex: number,
+    questionNumber: number,
     answers: IAnswerFormField[],
     questionType: QuestionType,
     editMode: boolean,
@@ -44,7 +45,7 @@ function QuestionEditor(props: Props) {
 
     return (
         <div key={props.questionIndex} className="question-edit-tile">
-            <div className='question-edit-icon'>{getIcon(props.questionType)} {props.questionIndex + 1}.</div>
+            <div className='question-edit-icon'>{getIcon(props.questionType)} {props.questionNumber + 1}.</div>
             <div className='question-edit-content'>
                 <TextField value={props.question} disabled={!props.editMode} mathMode={props.mathMode} onChange={(e) => { props.handleChangeQuestion(e, props.questionIndex) }} />
 

@@ -37,7 +37,7 @@ function QuestionForm(props: Props) {
 
     const handleCopyQuestion = (questionIndex: number) => {
         console.log(props.questions);
-        
+
         let clonedQuestion = { ...props.questions[questionIndex] }
         clonedQuestion.id = 0;
         clonedQuestion.answers = clonedQuestion.answers.map((e) => { return { ...e, id: 0 } })
@@ -48,6 +48,7 @@ function QuestionForm(props: Props) {
     }
 
     const handleChangeInputMode = (questionIndex: number) => props.setQuestions(changeInputMode(props.questions, questionIndex))
+    let questionNumber = -1;
 
     return (
         <div className="question-edit-box">
@@ -57,6 +58,7 @@ function QuestionForm(props: Props) {
                         key={index}
                         question={props.questions[index].question}
                         questionIndex={index}
+                        questionNumber={index}
                         answers={props.questions[index].answers}
                         questionType={props.questions[index].questionType}
                         editMode={props.editMode}
@@ -75,11 +77,13 @@ function QuestionForm(props: Props) {
                 :
                 <>
                     {props.questions.map((question: IQuestionFormField, index: number) => {
+                        if (!question.isDeleted) questionNumber++;
                         return (!question.isDeleted &&
                             <QuestionEditor
                                 key={index}
                                 question={question.question}
                                 questionIndex={index}
+                                questionNumber={questionNumber}
                                 answers={question.answers}
                                 questionType={question.questionType}
                                 editMode={props.editMode}
