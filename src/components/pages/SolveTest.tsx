@@ -83,7 +83,7 @@ function SolveTest() {
                 </>
                 :
                 <>
-                    <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} oneQuestionMode={testSessionOptions?.oneQuestionMode} />
+                    <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} oneQuestionMode={testSessionOptions?.oneQuestionMode} testSessionId={testId ? parseInt(testId) : 0} />
                     {!testSessionOptions?.oneQuestionMode && <Button type='primary' value="Save" onClick={() => handleSaveData()} />}
                     <Button type='primary' value="Save and finish" onClick={() => handleSaveData(true)} />
                 </>

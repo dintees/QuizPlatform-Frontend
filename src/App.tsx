@@ -21,7 +21,8 @@ import Account from './components/pages/Account';
 import SolveTest from './components/pages/SolveTest';
 import TestHistory from './components/pages/TestHistory';
 import ForgotPassword from './components/pages/ForgotPassword';
-import MyFlashcards from './components/pages/MyFlashcards';
+import FlashcardsList from './components/pages/FlashcardsList';
+import Flashcards from './components/pages/Flashcards';
 
 
 export const AuthContext = createContext<IAuthContext>({
@@ -75,7 +76,8 @@ function App() {
               <Route path='/test/:mode/:testId?' element={<ProtectedComponent component={<Test />} />} />
               <Route path='/solveTest/:testId' element={<ProtectedComponent component={<SolveTest />} />} />
               <Route path='/history' element={<ProtectedComponent component={<TestHistory />} />} />
-              <Route path='/flashcards/:mode?/:flashcardId?' element={<ProtectedComponent component={<MyFlashcards />} />} />
+              <Route path='/flashcards/' element={<ProtectedComponent component={<FlashcardsList />} />} />
+              <Route path='/flashcards/:mode?/:flashcardId?' element={<ProtectedComponent component={<Flashcards />} />} />
 
               <Route path='/account' element={<ProtectedComponent component={<Account />} />} />
               <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />

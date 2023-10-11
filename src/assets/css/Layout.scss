@@ -4,7 +4,7 @@ nav {
     display: flex;
     padding: 10px;
     border-bottom: 2px solid #aaa;
-    box-shadow: 1px 1px 5px #aaa;
+    box-shadow: variables.$shadow;
     justify-content: space-between;
     flex-direction: row-reverse;
     background: #fff;

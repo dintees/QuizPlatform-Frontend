@@ -89,7 +89,7 @@ export interface IUserAnswersDto {
     questionId: number,
     answerIds?: number[],
     shortAnswerValue?: string,
-    isCorrect: boolean,
+    isCorrect?: boolean,
 };
 
 export interface IResult<T> {
@@ -98,6 +98,24 @@ export interface IResult<T> {
     errorMessage: string
 }
 
+export interface IUserFlashcard {
+    id: number;
+    title: string | JSX.Element | null,
+    tsUpdate: string,
+    actions: JSX.Element
+};
+
+export interface IFlashcard {
+    id: number,
+    firstSide: string,
+    secondSide: string
+};
+
+export interface IFlashcards {
+    flashcards: IFlashcard[],
+    currentIndex: number,
+    maxIndex: number
+};
 
 
 // === DTOs ===
@@ -124,17 +142,10 @@ export interface IUserSetDto {
     actions: JSX.Element;
 };
 
-export interface IUserFlashcard {
-    id: number;
-    title: string | JSX.Element | null;
-    tsUpdate: string;
-    actions: JSX.Element;
-};
-
 export interface IUserTestSessionDto {
     id: number;
     tsInsert: string;
     tsUpdate: string;
     testName: string | JSX.Element | null;
     isCompleted: boolean | string;
-}
+};

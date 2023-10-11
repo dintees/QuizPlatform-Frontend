@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { IQuestionFormField, IUserAnswersDto } from '../../Types'
 import "../../assets/css/QuestionForm.scss"
 import QuestionEditor from './QuestionEditor'
-import { modifyAnswer, modifyQuestion, changeInputMode, changeCorrectAnswer, deleteQuestion, addEmptyAnswer, deleteAnswer } from '../../utils/testUtils'
+import { modifyAnswer, modifyQuestion, changeInputMode, changeCorrectAnswer, deleteQuestion, addEmptyAnswer, deleteAnswer, saveOneUserAnswerToDatabase } from '../../utils/testUtils'
 import Button from './Button'
+import { useParams } from 'react-router-dom'
+import { QuestionType } from '../../Enums'
 
 interface Props {
     questions: IQuestionFormField[],
@@ -11,6 +13,7 @@ interface Props {
     editMode: boolean,
     readonly?: boolean,
     oneQuestionMode?: boolean,
+    testSessionId?: number,
     correctAnswers?: IUserAnswersDto[]
 }
 
@@ -36,8 +39,6 @@ function QuestionForm(props: Props) {
 
 
     const handleCopyQuestion = (questionIndex: number) => {
-        console.log(props.questions);
-
         let clonedQuestion = { ...props.questions[questionIndex] }
         clonedQuestion.id = 0;
         clonedQuestion.answers = clonedQuestion.answers.map((e) => { return { ...e, id: 0 } })
@@ -45,6 +46,25 @@ function QuestionForm(props: Props) {
         props.setQuestions((prev: IQuestionFormField[]) => {
             return [...prev.slice(0, questionIndex + 1), clonedQuestion, ...prev.slice(questionIndex + 1)];
         })
+    }
+
+    const handleNextButtonClick = async () => {
+        if (!!props.testSessionId) {
+            // const mappingTable = questions.map((question) => {
+            //     if (question.questionType === QuestionType.ShortAnswer)
+            //         return { questionId: question.id, shortAnswerValue: question.answers[0].answer }
+            //     return { questionId: question.id, answerIds: question.answers.filter((answer) => answer.correct).map(e => e.id) }
+            // })
+            let mappingObj: IUserAnswersDto = { questionId: 0 };
+
+            if (props.questions[index].questionType == QuestionType.ShortAnswer)
+                mappingObj = { questionId: props.questions[index].id!, shortAnswerValue: props.questions[index].answers[0].answer }
+            else
+                mappingObj = { questionId: props.questions[index].id!, answerIds: props.questions[index].answers.filter((answer) => answer.correct).map(e => e.id!) }
+
+            await saveOneUserAnswerToDatabase(props.testSessionId, mappingObj)
+        }
+        setIndex(i => i + 1)
     }
 
     const handleChangeInputMode = (questionIndex: number) => props.setQuestions(changeInputMode(props.questions, questionIndex))
@@ -72,7 +92,7 @@ function QuestionForm(props: Props) {
                         handleCopyQuestion={handleCopyQuestion}
                         handleChangeInputMode={handleChangeInputMode}
                     />
-                    {index + 1 < props.questions.length && <Button value="Next" onClick={() => setIndex(i => i + 1)} />}
+                    {index + 1 < props.questions.length && <Button value="Next" onClick={handleNextButtonClick} />}
                 </>
                 :
                 <>

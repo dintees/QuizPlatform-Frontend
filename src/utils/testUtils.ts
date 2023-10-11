@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import { deleteData, postData } from "../AxiosHelper";
-import { IQuestionFormField } from "../Types";
+import { IQuestionFormField, IUserAnswersDto } from "../Types";
 import { QuestionType } from "../Enums";
 
 export const duplicateTest = async (testId: number) => {
@@ -111,4 +111,11 @@ export const getNewQuestionObject = (selectedQuestionType: QuestionType) => {
             break;
     }
     return newQuestionObj;
+}
+
+export const saveOneUserAnswerToDatabase = async (testSessionId: number, userAnswerDto: IUserAnswersDto) => {
+    // TODO
+    const result = await postData(`testSession/saveAnswers/${testSessionId}/false`, userAnswerDto, true)
+    console.log(result);
+
 }
