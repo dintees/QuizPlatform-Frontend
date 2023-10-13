@@ -112,7 +112,7 @@ export interface IFlashcard {
 };
 
 export interface IFlashcards {
-    flashcards: IFlashcard[],
+    flashcardItems: IFlashcard[],
     currentIndex: number,
     maxIndex: number
 };

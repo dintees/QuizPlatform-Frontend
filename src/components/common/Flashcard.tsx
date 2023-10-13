@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../../assets/css/Flashcard.scss"
 import { InlineMath } from 'react-katex';
 
 interface Props {
     firstSide: string,
-    secondSide: string,
+    secondSide: string
 }
 
 function Flashcard(props: Props) {
+
+    const [front, setFront] = useState<string>("")
+    const [back, setBack] = useState<string>("")
 
     const renderMathPreview = (text: string) => {
         const replacedText = text.split(/\$(.*?)\$/g).map((part, index) => {
@@ -15,6 +18,11 @@ function Flashcard(props: Props) {
         });
         return <>{replacedText}</>;
     }
+
+    useEffect(() => {
+        setFront(isFlipped ? props.secondSide : props.firstSide)
+        setBack(isFlipped ? props.firstSide : props.secondSide)
+    }, [props])
 
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
@@ -24,8 +32,8 @@ function Flashcard(props: Props) {
     return (
         <div className={`flashcard-container`} onClick={handleClick}>
             <div className={`flashcard-item ${isFlipped ? 'flipped' : ''}`}>
-                <div className="front">{renderMathPreview(props.firstSide)}</div>
-                <div className="back">{renderMathPreview(props.secondSide)}</div>
+                <div className="front">{renderMathPreview(front)}</div>
+                <div className="back">{renderMathPreview(back)}</div>
             </div>
         </div>
     )

@@ -113,9 +113,7 @@ export const getNewQuestionObject = (selectedQuestionType: QuestionType) => {
     return newQuestionObj;
 }
 
-export const saveOneUserAnswerToDatabase = async (testSessionId: number, userAnswerDto: IUserAnswersDto) => {
-    // TODO
-    const result = await postData(`testSession/saveAnswers/${testSessionId}/false`, userAnswerDto, true)
-    console.log(result);
-
+export const saveOneUserAnswerToDatabase = async (testSessionId: number, userAnswerDto: IUserAnswersDto, last: boolean = false) => {
+    const result = await postData(`testSession/saveOneAnswer/${testSessionId}/${last}`, userAnswerDto, true)
+    return result?.status === 200
 }

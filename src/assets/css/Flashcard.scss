@@ -41,3 +41,12 @@
         background: variables.$shadow;
     }
 }
+
+.flashcard-edit {
+    display: grid;
+    gap: 5px;
+    grid-template-columns: 1fr 5fr 5fr 1fr;
+    align-items: center;
+    padding: 1rem;
+    background-color: #ccc;
+}

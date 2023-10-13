@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Table from '../common/Table';
 import Loader from '../common/Loader';
 import { toast } from 'react-toastify';
+import Button from '../common/Button';
 
 function FlashcardsList() {
 
@@ -44,6 +45,8 @@ function FlashcardsList() {
         <>
             <Loader loading={loading} />
             <div className="content-title">Flashcard sets</div>
+
+            <Button value='Add new flashcards' type='success' style={{ fontSize: "1.2rem" }} onClick={() => navigate("/flashcards/edit")} />
 
             <Table data={userFlashcards} columns={[
                 { key: "title", header: "Title" },

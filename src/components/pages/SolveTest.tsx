@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getData, postData } from '../../AxiosHelper';
 import QuestionForm from '../common/QuestionForm';
-import { IQuestionFormField, ITestSessionOptions } from '../../Types';
+import { IQuestionFormField, ITestSessionOptions, IUserAnswersDto } from '../../Types';
 import { toast } from 'react-toastify';
 import Button from '../common/Button';
 import { QuestionType } from '../../Enums';
 import { BsArrowLeftCircleFill } from 'react-icons/bs'
 import Loader from '../common/Loader';
+import { saveOneUserAnswerToDatabase } from '../../utils/testUtils';
 
 function SolveTest() {
     const { testId } = useParams();
@@ -15,6 +16,8 @@ function SolveTest() {
     const [questions, setQuestions] = useState<IQuestionFormField[]>([]);
     const [testSessionOptions, setTestSessionOptions] = useState<ITestSessionOptions>();
     const [loading, setLoading] = useState<boolean>(false);
+    const [currentQuestion, setCurrentQuestion] = useState<IQuestionFormField[]>([]);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     const navigate = useNavigate();
 
@@ -27,6 +30,8 @@ function SolveTest() {
             case 200:
                 setTestSessionOptions(result.data)
                 setQuestions(result.data.questions)
+                if (!result.data.isCompleted && result.data.oneQuestionMode)
+                    setCurrentQuestion([result.data.questions[0]])
                 break;
             case 401:
                 toast.error("You do not have permission to solve this test")
@@ -57,12 +62,32 @@ function SolveTest() {
         const result = await postData(`testSession/saveAnswers/${testId}/${finish}`, mappingTable, true)
         switch (result?.status) {
             case 200:
-                toast.success(`Successfully ${finish ? "finished" : "saved"} the test`)
+                toast.success(`Successfully ${finish ? "completed" : "saved"} the test`)
                 if (finish) getTestSessionAsync();
                 break;
             default:
                 toast.error(result?.data ?? "Unexpected error")
                 break;
+        }
+    }
+
+    const handleNextQuestion = async (finish: boolean = false) => {
+        const current = currentQuestion[0]
+
+        let userAnswersObj: IUserAnswersDto;
+        if (current.questionType === QuestionType.ShortAnswer)
+            userAnswersObj = { questionId: current.id!, shortAnswerValue: current.answers[0].answer }
+        else
+            userAnswersObj = { questionId: current.id!, answerIds: current.answers.filter((answer) => answer.correct).map(e => e.id!) }
+
+        await saveOneUserAnswerToDatabase(parseInt(testId!), userAnswersObj, finish);
+        if (finish) {
+            toast.success(`Successfully ${finish ? "completed" : "saved"} the test`)
+            await getTestSessionAsync();
+        }
+        else {
+            setCurrentQuestion([questions[currentIndex + 1]]);
+            setCurrentIndex(i => i + 1)
         }
     }
 
@@ -83,9 +108,24 @@ function SolveTest() {
                 </>
                 :
                 <>
-                    <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} oneQuestionMode={testSessionOptions?.oneQuestionMode} testSessionId={testId ? parseInt(testId) : 0} />
-                    {!testSessionOptions?.oneQuestionMode && <Button type='primary' value="Save" onClick={() => handleSaveData()} />}
-                    <Button type='primary' value="Save and finish" onClick={() => handleSaveData(true)} />
+                    {testSessionOptions?.oneQuestionMode ?
+                        <>
+                            <h2>{currentIndex} / {questions.length}</h2>
+                            <QuestionForm questions={currentQuestion} setQuestions={setCurrentQuestion} editMode={false} />
+                            {currentIndex + 1 < questions.length ?
+                                <Button type='primary' value="Next" onClick={() => handleNextQuestion()} />
+                                :
+                                <Button type='primary' value="Complete" onClick={() => handleNextQuestion(true)} />
+                            }
+
+                        </>
+                        :
+                        <>
+                            <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} />
+                            <Button type='primary' value="Save" onClick={() => handleSaveData()} />
+                            <Button type='primary' value="Save and complete" onClick={() => handleSaveData(true)} />
+                        </>
+                    }
                 </>
             }
         </>

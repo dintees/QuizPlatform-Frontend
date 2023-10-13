@@ -92,7 +92,7 @@ function Test() {
         const toastId = toast.loading("Saving...");
 
         console.log(questions);
-        
+
 
         const fetchData = async () => {
             const result = await putData(`test/edit/${testId}`, { title: title, description: description, questions: questions, isPublic: isPublic }, true);
@@ -133,7 +133,10 @@ function Test() {
 
     const handleSolveButtonClick = () => {
         const fetchData = async () => {
-            const result = await postData("testSession/create", solvingTestOptions, true);
+            let options = solvingTestOptions;
+            if (solvingTestOptions.testId === 0)
+                options.testId = parseInt(testId!)
+            const result = await postData("testSession/create", options, true);
             switch (result?.status) {
                 case 200:
                     // toast.success("Successfully created test")
