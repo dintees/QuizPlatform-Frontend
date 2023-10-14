@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from 'react-icons/bs';
 
 type ColumnDefinitionType<T, K extends keyof T> = {
     key: K;
@@ -58,9 +59,9 @@ function Table<T, K extends keyof T>({ data, columns }: TableProps<T, K>): JSX.E
                     })}
                 </tbody>
             </table>
-            <div>
-                <button onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
+            <div style={{ textAlign: "right" }}>
+                <button className='btn' onClick={handlePrevPage} disabled={currentPage === 1}><BsArrowLeftCircleFill /></button>
+                <button className='btn' onClick={handleNextPage} disabled={currentPage === totalPages}><BsArrowRightCircleFill /></button>
             </div>
         </>
     )

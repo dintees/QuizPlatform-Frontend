@@ -11,10 +11,11 @@ function Flashcard(props: Props) {
 
     const [front, setFront] = useState<string>("")
     const [back, setBack] = useState<string>("")
+    const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
     const renderMathPreview = (text: string) => {
         const replacedText = text.split(/\$(.*?)\$/g).map((part, index) => {
-            return index % 2 === 0 ? part : <InlineMath key={index} math={part} renderError={(e) => <>{e.name}</>} />
+            return index % 2 === 0 ? <span key={index}>{part}&nbsp;</span> : <InlineMath key={index} math={part} renderError={(e) => <>{e.name}</>} />
         });
         return <>{replacedText}</>;
     }
@@ -22,9 +23,9 @@ function Flashcard(props: Props) {
     useEffect(() => {
         setFront(isFlipped ? props.secondSide : props.firstSide)
         setBack(isFlipped ? props.firstSide : props.secondSide)
+        // eslint-disable-next-line
     }, [props])
 
-    const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
     const handleClick = () => setIsFlipped(prev => !prev);
 

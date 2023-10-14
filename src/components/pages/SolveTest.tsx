@@ -24,7 +24,6 @@ function SolveTest() {
     const getTestSessionAsync = async () => {
         setLoading(true)
         const result = await getData(`testSession/get/${testId}`, true);
-        console.log(result);
 
         switch (result?.status) {
             case 200:

@@ -46,7 +46,7 @@ export const deleteQuestion = (questions: IQuestionFormField[], questionIndex: n
 
 export const addEmptyAnswer = (questions: IQuestionFormField[], questionIndex: number) => {
     const newQuestions = questions.map((question, index) => {
-        if (index === questionIndex) return { ...question, answers: [...question.answers, { answer: "", correct: false }] }
+        if (index === questionIndex) return { ...question, answers: [...question.answers, { answer: "", correct: question.questionType === QuestionType.ShortAnswer }] }
         else return { ...question };
     })
     return newQuestions;
@@ -116,4 +116,12 @@ export const getNewQuestionObject = (selectedQuestionType: QuestionType) => {
 export const saveOneUserAnswerToDatabase = async (testSessionId: number, userAnswerDto: IUserAnswersDto, last: boolean = false) => {
     const result = await postData(`testSession/saveOneAnswer/${testSessionId}/${last}`, userAnswerDto, true)
     return result?.status === 200
+}
+
+export const generateFlashcards = async (testId: number) => {
+    const result = await postData(`flashcard/generateFromTest/${testId}`, {}, true);
+    if (result?.status === 200)
+        return result.data
+    else
+        return -1;
 }

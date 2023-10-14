@@ -8,9 +8,9 @@ import { QuestionType } from '../../Enums'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Loader from '../common/Loader'
-import { BsFillTrashFill, BsArrowLeftCircleFill, BsFillUnlockFill, BsFillLockFill } from 'react-icons/bs'
+import { BsFillTrashFill, BsArrowLeftCircleFill, BsFillUnlockFill, BsFillLockFill, BsFillLightbulbFill } from 'react-icons/bs'
 import { FaClone } from 'react-icons/fa'
-import { duplicateTest, deleteTest, getNewQuestionObject } from '../../utils/testUtils'
+import { duplicateTest, deleteTest, getNewQuestionObject, generateFlashcards } from '../../utils/testUtils'
 import CheckboxField from '../common/CheckboxField'
 
 function Test() {
@@ -45,8 +45,6 @@ function Test() {
             // load question by id
             const fetchData = async () => {
                 const result = await getData(`test/${testId}`, true);
-                console.log(result);
-
 
                 if (result?.status === 200) {
                     setTitle(result.data.title)
@@ -90,13 +88,11 @@ function Test() {
 
     const handleModifyTest = () => {
         const toastId = toast.loading("Saving...");
-
         console.log(questions);
-
+        
 
         const fetchData = async () => {
             const result = await putData(`test/edit/${testId}`, { title: title, description: description, questions: questions, isPublic: isPublic }, true);
-            console.log(result)
 
             if (result?.status === 200) {
                 if (result.data.success === true) {
@@ -131,6 +127,16 @@ function Test() {
             navigate(`/test/edit/${result}`)
     }
 
+    const handleGenerateFlashcards = async (testId: number) => {
+        const result = await generateFlashcards(testId);
+        if (result !== -1) {
+            toast.success("Succesfully created flashcards")
+            navigate(`/flashcards/view/${result}`)
+        } else {
+            toast.error("An error occured")
+        }
+    }
+
     const handleSolveButtonClick = () => {
         const fetchData = async () => {
             let options = solvingTestOptions;
@@ -139,7 +145,6 @@ function Test() {
             const result = await postData("testSession/create", options, true);
             switch (result?.status) {
                 case 200:
-                    // toast.success("Successfully created test")
                     navigate(`/solveTest/${result.data}`)
                     break;
                 case 400:
@@ -164,27 +169,33 @@ function Test() {
             <div className="content-title">{pageTitle}</div>
 
             <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/mytests")} />
-            {editMode && testId && <Button value={<FaClone />} onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />}
-            {editMode && testId && <Button value={isPublic ? <BsFillUnlockFill /> : <BsFillLockFill />} onClick={() => setIsPublic(e => !e)} type='secondary' />}
-            {editMode && testId && <Button value={<BsFillTrashFill />} onClick={() => handleDeleteTest(parseInt(testId))} type='danger' />}
+            {editMode && testId && <>
+                <Button value={<FaClone />} onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />
+                <Button value={<BsFillLightbulbFill />} onClick={() => handleGenerateFlashcards(parseInt(testId))} type='secondary' />
+                <Button value={isPublic ? <BsFillUnlockFill /> : <BsFillLockFill />} onClick={() => setIsPublic(e => !e)} type='secondary' />
+                <Button value={<BsFillTrashFill />} onClick={() => handleDeleteTest(parseInt(testId))} type='danger' />
+            </>
+            }
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />
 
 
             {/* solving section */}
-            <CheckboxField key='shuffleQuestions' name='solvingOption' label="Shuffle questions" checked={solvingTestOptions.shuffleQuestions} onChange={(e) => {
-                setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleQuestions: e.target.checked } })
-            }} />
-            <CheckboxField key='shuffleAnswers' name='solvingOption' label="Shuffle answers" checked={solvingTestOptions.shuffleAnswers} onChange={(e) => {
-                setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleAnswers: e.target.checked } })
-            }} />
+            {editMode && testId && <>
+                <CheckboxField key='shuffleQuestions' name='solvingOption' label="Shuffle questions" checked={solvingTestOptions.shuffleQuestions} onChange={(e) => {
+                    setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleQuestions: e.target.checked } })
+                }} />
+                <CheckboxField key='shuffleAnswers' name='solvingOption' label="Shuffle answers" checked={solvingTestOptions.shuffleAnswers} onChange={(e) => {
+                    setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleAnswers: e.target.checked } })
+                }} />
+                <CheckboxField key='oneQuestionMode' name='solvingOption' label="One question mode" checked={solvingTestOptions.oneQuestionMode} onChange={(e) => {
+                    setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, oneQuestionMode: e.target.checked } })
+                }} />
 
-            <CheckboxField key='oneQuestionMode' name='solvingOption' label="One question mode" checked={solvingTestOptions.oneQuestionMode} onChange={(e) => {
-                setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, oneQuestionMode: e.target.checked } })
-            }} />
-
-            <Button value="Start!" onClick={handleSolveButtonClick} type='primary' />
+                <Button value="Start!" onClick={handleSolveButtonClick} type='primary' />
+            </>
+            }
 
             <QuestionForm questions={questions} setQuestions={setQuestions} editMode={editMode} />
 

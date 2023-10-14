@@ -17,6 +17,7 @@ import Test from './components/pages/Test';
 import { ToastContainer, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./assets/css/App.scss"
+import 'katex/dist/katex.min.css';
 import Account from './components/pages/Account';
 import SolveTest from './components/pages/SolveTest';
 import TestHistory from './components/pages/TestHistory';

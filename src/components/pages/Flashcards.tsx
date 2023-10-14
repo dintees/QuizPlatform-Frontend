@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Button from '../common/Button'
-import { BsArrowLeftCircleFill, BsPencilSquare } from 'react-icons/bs'
+import { BsArrowLeftCircleFill, BsCollectionPlayFill, BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
 import Flashcard from '../common/Flashcard'
 import { IFlashcards } from '../../Types';
 import { getData, postData, putData } from '../../AxiosHelper';
@@ -23,7 +23,6 @@ function Flashcards() {
         const fetchData = async () => {
             setLoading(true);
             const result = await getData(`flashcard/get/${flashcardId}`, true)
-            console.log(result);
 
             switch (result?.status) {
                 case 200:
@@ -41,7 +40,7 @@ function Flashcards() {
             fetchData();
         else
             setFlashcards({ flashcardItems: [{ id: 0, firstSide: "", secondSide: "" }], currentIndex: 0, maxIndex: 0 })
-    }, [])
+    }, [flashcardId])
 
     const handleClickFlashcard = (delta: number) => {
         setFlashcards(prev => { return { ...prev, currentIndex: prev.currentIndex + delta } })
@@ -61,7 +60,7 @@ function Flashcards() {
 
     const handleDeleteFlashcard = (index: number) => {
         const newFlashcards = { ...flashcards };
-        newFlashcards.flashcardItems = newFlashcards.flashcardItems.filter((_, i) => i != index)
+        newFlashcards.flashcardItems = newFlashcards.flashcardItems.filter((_, i) => i !== index)
         setFlashcards(newFlashcards);
     }
 
@@ -91,8 +90,14 @@ function Flashcards() {
             <Loader loading={loading} />
             {mode === "edit" ?
                 <>
-                    <div className="content-title">{!!flashcardId ? <>Flashcards edit</> : <>Create new flashcards</>}</div>
+                    <div className="content-title">{!!flashcardId ? <>Edit flashcards</> : <>Create new flashcards</>}</div>
                     <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/flashcards")} />
+                    {!!flashcardId &&
+                        <>
+                            <Button value={<BsCollectionPlayFill />} type='secondary' onClick={() => navigate(`/flashcards/view/${flashcardId}`)} />
+                            <Button value={<BsFillTrashFill />} onClick={() => handleDeleteFlashcard(parseInt(flashcardId))} type='danger' />
+                        </>
+                    }
 
                     <div className="mb-3">
                         <TextField style={{ marginBottom: "0.5rem" }} value={title} setValue={setTitle} placeholder='Title' />
@@ -111,18 +116,20 @@ function Flashcards() {
                 </>
                 :
                 <>
-                    {flashcards.flashcardItems[flashcards.currentIndex] == undefined ? <>Loading...</> : <>
+                    {flashcards.flashcardItems[flashcards.currentIndex] === undefined ? <>Loading...</> : <>
                         <div className="content-title">{title}</div>
                         <h5>{description}</h5>
 
                         <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/flashcards")} />
                         <Button value={<BsPencilSquare />} type='secondary' onClick={() => navigate(`/flashcards/edit/${flashcardId}`)} />
 
+                        <h3 className='text-center'>{flashcards.currentIndex + 1} / {flashcards.maxIndex + 1}</h3>
+
                         <Flashcard firstSide={flashcards.flashcardItems[flashcards.currentIndex].firstSide} secondSide={flashcards.flashcardItems[flashcards.currentIndex].secondSide} />
 
                         <div className="text-center">
-                            {flashcards.currentIndex > 0 && <Button value='PREV' onClick={() => handleClickFlashcard(-1)} />}
-                            {flashcards.currentIndex < flashcards.maxIndex && <Button value='NEXT' onClick={() => handleClickFlashcard(1)} />}
+                            <Button value='PREV' disabled={flashcards.currentIndex === 0} onClick={() => handleClickFlashcard(-1)} />
+                            <Button value='NEXT' disabled={flashcards.currentIndex >= flashcards.maxIndex} onClick={() => handleClickFlashcard(1)} />
                         </div>
                     </>
                     }

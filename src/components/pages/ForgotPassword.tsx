@@ -50,7 +50,6 @@ function ForgotPassword() {
             }
         } else {
             const result = await postData("user/forgotPassword/changePassword", { email, newPassword, newPasswordConfirmation })
-            console.log(result)
             switch (result?.status) {
                 case 200:
                     toast.success("Password successfully changed! Please sign in")
