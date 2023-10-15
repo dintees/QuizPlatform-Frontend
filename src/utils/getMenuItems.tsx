@@ -1,5 +1,5 @@
 import { IPageHyperlink } from "../Types";
-import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd, AiFillPlayCircle } from 'react-icons/ai'
+import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd, AiFillPlayCircle, AiFillProfile } from 'react-icons/ai'
 import { MdQuiz } from 'react-icons/md'
 import { CgLogOut } from 'react-icons/cg'
 import { FaUserCircle } from 'react-icons/fa'
@@ -12,12 +12,9 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
     switch (role) {
         case Role.Admin:
             pages = [
-                { url: "/", name: "Home", icon: <AiFillHome /> },
-                { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
-                { url: "/flashcards", name: "Flashcards", icon: <PiCardsFill /> },
-                { url: "/history", name: "History", icon: <AiFillPlayCircle />},
-                { url: "/account", name: "Account", icon: <FaUserCircle />},
-                { url: "/settings", name: "Admin", icon: <AiFillSetting /> },
+                { url: "/admin", name: "Admin", icon: <AiFillSetting /> },
+                { url: "/account", name: "Account", icon: <FaUserCircle /> },
+                { url: "/usersessions", name: "Active sessions", icon: <AiFillProfile /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]
             break;
@@ -26,8 +23,9 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
                 { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
                 { url: "/flashcards", name: "Flashcards", icon: <PiCardsFill /> },
-                { url: "/history", name: "History", icon: <AiFillPlayCircle />},
-                { url: "/account", name: "Account", icon: <FaUserCircle />},
+                { url: "/history", name: "History", icon: <AiFillPlayCircle /> },
+                { url: "/account", name: "Account", icon: <FaUserCircle /> },
+                { url: "/usersessions", name: "Active sessions", icon: <AiFillProfile /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]
             break;

@@ -34,7 +34,6 @@ function Home() {
         if (auth.isAuthenticated) {
             const fetchData = async () => {
                 const result = await getData("test/getAllPublic", true);
-                console.log(result)
                 if (result?.status === 200) {
                     result.data.forEach((i: IUserSetDto) => {
                         i.tsUpdate = formatDate(i.tsUpdate)

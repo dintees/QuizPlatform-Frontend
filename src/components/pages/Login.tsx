@@ -7,6 +7,7 @@ import Loader from '../common/Loader';
 import { getToken } from '../../utils/authUtils';
 import { signInAsync } from '../../utils/loginUtils';
 import { AuthContext } from '../../App';
+import { Role } from '../../Enums';
 
 
 function Login() {
@@ -22,7 +23,7 @@ function Login() {
         const loginData = await signInAsync(login);
         if (loginData.isAuthenticated) {
             setAuth(loginData as IAuthInformation);
-            navigate('/')
+            loginData.role == Role.Admin ? navigate("/admin") : navigate("/")
         } else
             setErrorMessage(loginData.errorMessage);
         setLoading(false)
@@ -34,7 +35,7 @@ function Login() {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
-        setLogin(prev => ({...prev, [name]: value}))
+        setLogin(prev => ({ ...prev, [name]: value }))
     }
 
 

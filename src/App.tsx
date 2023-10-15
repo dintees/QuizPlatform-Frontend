@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Layout from './components/common/Layout';
 import { IAuthContext, IAuthInformation } from './Types'
-import Settings from './components/pages/Settings';
+import Admin from './components/pages/Admin';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/pages/Logout';
@@ -24,6 +24,7 @@ import TestHistory from './components/pages/TestHistory';
 import ForgotPassword from './components/pages/ForgotPassword';
 import FlashcardsList from './components/pages/FlashcardsList';
 import Flashcards from './components/pages/Flashcards';
+import UserSessions from './components/pages/UserSessions';
 
 
 export const AuthContext = createContext<IAuthContext>({
@@ -81,7 +82,8 @@ function App() {
               <Route path='/flashcards/:mode?/:flashcardId?' element={<ProtectedComponent component={<Flashcards />} />} />
 
               <Route path='/account' element={<ProtectedComponent component={<Account />} />} />
-              <Route path='/settings' element={<ProtectedComponent component={<Settings />} />} />
+              <Route path='/usersessions' element={<ProtectedComponent component={<UserSessions />} />} />
+              <Route path='/admin' element={<ProtectedComponent component={<Admin />} />} />
 
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />

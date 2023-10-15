@@ -149,3 +149,20 @@ export interface IUserTestSessionDto {
     testName: string | JSX.Element | null;
     isCompleted: boolean | string;
 };
+
+export interface IUserSessionDto {
+    loggedInTime: string,
+    ipAddress: string,
+    browser: string
+};
+
+export interface IUserDto {
+    id: number,
+    firstname: string,
+    lastname: string,
+    username: string,
+    email: string,
+    role: string,
+    token: string,
+    actions: JSX.Element | null,
+};

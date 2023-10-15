@@ -34,35 +34,45 @@ function Table<T, K extends keyof T>({ data, columns }: TableProps<T, K>): JSX.E
 
     return (
         <>
-            <table className='table'>
-                <thead>
-                    <tr>
-                        {columns.map((i, v) => {
-                            return <th key={`table-header-${v}`}>{i.header}</th>
-                        })}
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {currentData.map((row, v1) => {
-                        return (
-                            <tr key={`table-row-${v1}`}>
-                                {columns.map((column, v2) => {
-                                    return (
-                                        <td key={`table-cell-${v2}`}>
-                                            <>{row[column.key]}</>
-                                        </td>
-                                    )
+            {currentData.length === 0 ?
+                <table className='table'>
+                    <thead>
+                        <tr><th>No data</th></tr>
+                    </thead>
+                </table>
+                :
+                <>
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                {columns.map((i, v) => {
+                                    return <th key={`table-header-${v}`}>{i.header}</th>
                                 })}
                             </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            <div style={{ textAlign: "right" }}>
-                <button className='btn' onClick={handlePrevPage} disabled={currentPage === 1}><BsArrowLeftCircleFill /></button>
-                <button className='btn' onClick={handleNextPage} disabled={currentPage === totalPages}><BsArrowRightCircleFill /></button>
-            </div>
+                        </thead>
+
+                        <tbody>
+                            {currentData.map((row, v1) => {
+                                return (
+                                    <tr key={`table-row-${v1}`}>
+                                        {columns.map((column, v2) => {
+                                            return (
+                                                <td key={`table-cell-${v2}`}>
+                                                    <>{row[column.key]}</>
+                                                </td>
+                                            )
+                                        })}
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                    <div style={{ textAlign: "right" }}>
+                        <button className='btn' onClick={handlePrevPage} disabled={currentPage === 1}><BsArrowLeftCircleFill /></button>
+                        <button className='btn' onClick={handleNextPage} disabled={currentPage === totalPages}><BsArrowRightCircleFill /></button>
+                    </div>
+                </>
+            }
         </>
     )
 }

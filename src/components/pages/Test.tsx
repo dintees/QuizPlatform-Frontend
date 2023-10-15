@@ -88,8 +88,6 @@ function Test() {
 
     const handleModifyTest = () => {
         const toastId = toast.loading("Saving...");
-        console.log(questions);
-        
 
         const fetchData = async () => {
             const result = await putData(`test/edit/${testId}`, { title: title, description: description, questions: questions, isPublic: isPublic }, true);
