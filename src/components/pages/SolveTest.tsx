@@ -98,7 +98,7 @@ function SolveTest() {
             <h3>{testSessionOptions?.title}</h3>
             <h6>{testSessionOptions?.description}</h6>
 
-            <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/history")} />
+            <Button value={<BsArrowLeftCircleFill />} tooltip='Go back' type='secondary' onClick={() => navigate(-1)} />
 
             {testSessionOptions?.isCompleted ?
                 <>
@@ -116,7 +116,6 @@ function SolveTest() {
                                 :
                                 <Button type='primary' value="Complete" onClick={() => handleNextQuestion(true)} />
                             }
-
                         </>
                         :
                         <>

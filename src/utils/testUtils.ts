@@ -20,7 +20,7 @@ export const duplicateTest = async (testId: number) => {
 export const deleteTest = async (setId: number) => {
     const result = await deleteData(`test/delete/${setId}`, true);
     if (result?.status === 200) {
-        toast.success("Successfully deleted");
+        toast.success("Successfully deleted test");
         return true;
     } else {
         toast.error(result?.data.errorMessage);

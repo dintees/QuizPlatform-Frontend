@@ -13,7 +13,7 @@ function Home() {
     const navigate = useNavigate();
 
     const handleCreateNewSession = async (testId: number) => {
-        const result = await postData("testSession/create", { testId }, true);
+        const result = await postData("testSession/create", { testId, useDefaultTestOptions: true }, true);
         switch (result?.status) {
             case 200:
                 navigate(`/solveTest/${result.data}`)

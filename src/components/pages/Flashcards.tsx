@@ -3,12 +3,13 @@ import Button from '../common/Button'
 import { BsArrowLeftCircleFill, BsCollectionPlayFill, BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
 import Flashcard from '../common/Flashcard'
 import { IFlashcards } from '../../Types';
-import { getData, postData, putData } from '../../AxiosHelper';
+import { deleteData, getData, postData, putData } from '../../AxiosHelper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../common/Loader';
 import FlashcardBox from '../common/FlashcardBox';
 import TextField from '../common/TextField';
+import Modal from '../common/Modal';
 
 function Flashcards() {
 
@@ -17,6 +18,7 @@ function Flashcards() {
     const [description, setDescription] = useState<string>("");
     const [flashcards, setFlashcards] = useState<IFlashcards>({ flashcardItems: [], currentIndex: 0, maxIndex: 0 });
     const [loading, setLoading] = useState<boolean>(false);
+    const [openModal, setOpenModal] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,6 +31,10 @@ function Flashcards() {
                     setTitle(result.data.title)
                     setDescription(result.data.description)
                     setFlashcards({ flashcardItems: result.data.flashcardItems, currentIndex: 0, maxIndex: result.data.flashcardItems.length - 1 })
+                    break;
+                case 404:
+                    toast.error("Flashcards not found");
+                    navigate("/flashcards")
                     break;
                 default:
                     toast.error("Problem with server connection")
@@ -85,17 +91,33 @@ function Flashcards() {
             toast.error(result?.data ?? "Problem with server connection")
     }
 
+    const handleDeleteFlashcardsSet = async () => {
+        const result = await deleteData(`flashcard/delete/${flashcardId}`, true);
+
+        if (result?.status === 200) {
+            toast.success("Successfully deleted flashcards")
+            navigate("/flashcards")
+        }
+        setOpenModal(false);
+    }
+
     return (
         <>
+            <Modal open={openModal} title="Remove test" onClose={() => setOpenModal(false)} buttons={
+                <>
+                    <Button type="danger" value="Delete" onClick={handleDeleteFlashcardsSet} />
+                    <Button value="Close" onClick={() => setOpenModal(false)} />
+                </>
+            }>Are you sure you want to pernamently delete the flashcards?</Modal>
             <Loader loading={loading} />
             {mode === "edit" ?
                 <>
                     <div className="content-title">{!!flashcardId ? <>Edit flashcards</> : <>Create new flashcards</>}</div>
-                    <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/flashcards")} />
+                    <Button value={<BsArrowLeftCircleFill />} tooltip='Go back' type='secondary' onClick={() => navigate("/flashcards")} />
                     {!!flashcardId &&
                         <>
-                            <Button value={<BsCollectionPlayFill />} type='secondary' onClick={() => navigate(`/flashcards/view/${flashcardId}`)} />
-                            <Button value={<BsFillTrashFill />} onClick={() => handleDeleteFlashcard(parseInt(flashcardId))} type='danger' />
+                            <Button value={<BsCollectionPlayFill />} tooltip='Start learning' type='secondary' onClick={() => navigate(`/flashcards/view/${flashcardId}`)} />
+                            <Button value={<BsFillTrashFill />} tooltip='Delete' onClick={() => setOpenModal(true)} type='danger' />
                         </>
                     }
 
@@ -120,8 +142,8 @@ function Flashcards() {
                         <div className="content-title">{title}</div>
                         <h5>{description}</h5>
 
-                        <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/flashcards")} />
-                        <Button value={<BsPencilSquare />} type='secondary' onClick={() => navigate(`/flashcards/edit/${flashcardId}`)} />
+                        <Button value={<BsArrowLeftCircleFill />} tooltip='Go back' type='secondary' onClick={() => navigate("/flashcards")} />
+                        <Button value={<BsPencilSquare />} tooltip='Edit' type='secondary' onClick={() => navigate(`/flashcards/edit/${flashcardId}`)} />
 
                         <h3 className='text-center'>{flashcards.currentIndex + 1} / {flashcards.maxIndex + 1}</h3>
 

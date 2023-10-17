@@ -12,6 +12,7 @@ import { BsFillTrashFill, BsArrowLeftCircleFill, BsFillUnlockFill, BsFillLockFil
 import { FaClone } from 'react-icons/fa'
 import { duplicateTest, deleteTest, getNewQuestionObject, generateFlashcards } from '../../utils/testUtils'
 import CheckboxField from '../common/CheckboxField'
+import Modal from '../common/Modal'
 
 function Test() {
     const { mode, testId } = useParams();
@@ -23,6 +24,8 @@ function Test() {
     const [solvingTestOptions, setSolvingTestOptions] = useState<ISolvingTestOptions>({ shuffleQuestions: false, shuffleAnswers: false, oneQuestionMode: false, testId: !!testId ? parseInt(testId) : 0 });
     const [pageTitle, setPageTitle] = useState<string>("Create new test");
     const [isPublic, setIsPublic] = useState<boolean>(false);
+    const [openModal, setOpenModal] = useState<boolean>(false);
+    const [testIdToDelete, setTestIdToDelete] = useState<number>();
 
     const navigate = useNavigate();
 
@@ -51,6 +54,9 @@ function Test() {
                     setDescription(result.data.description)
                     setQuestions(result.data.questions)
                     setIsPublic(result.data.isPublic)
+                    setSolvingTestOptions(prev => {
+                        return { ...prev, shuffleQuestions: result.data.shuffleQuestions, shuffleAnswers: result.data.shuffleAnswers, oneQuestionMode: result.data.oneQuestionMode }
+                    })
                 } else if (result?.status === 404) {
                     toast.error("There is no test with the given id")
                     navigate("/mytests")
@@ -67,7 +73,16 @@ function Test() {
     const handleAddTest = () => {
         const toastId = toast.loading("Saving...");
         const fetchData = async () => {
-            const result = await postData("test/createWithQuestions", { title: title, description: description, questions: questions }, true);
+            const dataObj = {
+                title: title,
+                description: description,
+                questions: questions,
+                isPublic: isPublic,
+                shuffleQuestions: solvingTestOptions.shuffleQuestions,
+                shuffleAnswers: solvingTestOptions.shuffleAnswers,
+                oneQuestionMode: solvingTestOptions.oneQuestionMode
+            }
+            const result = await postData("test/createWithQuestions", dataObj, true);
 
             if (result?.status === 200) {
                 const data: IResult<ISetDto> = result.data;
@@ -88,13 +103,21 @@ function Test() {
 
     const handleModifyTest = () => {
         const toastId = toast.loading("Saving...");
-
         const fetchData = async () => {
-            const result = await putData(`test/edit/${testId}`, { title: title, description: description, questions: questions, isPublic: isPublic }, true);
+            const dataObj = {
+                title: title,
+                description: description,
+                questions: questions,
+                isPublic: isPublic,
+                shuffleQuestions: solvingTestOptions.shuffleQuestions,
+                shuffleAnswers: solvingTestOptions.shuffleAnswers,
+                oneQuestionMode: solvingTestOptions.oneQuestionMode
+            }
+            const result = await putData(`test/edit/${testId}`, dataObj, true);
 
             if (result?.status === 200) {
                 if (result.data.success === true) {
-                    // test has been created
+                    // test has been modified 
                     setQuestions(result.data.value.questions)
                     toast.update(toastId, { type: "success", render: "Successfully modified!", isLoading: false, autoClose: 3000, closeOnClick: true })
                 }
@@ -108,8 +131,10 @@ function Test() {
 
     const handleDeleteTest = async (testId: number) => {
         const isDeleted = await deleteTest(testId);
-        if (isDeleted)
+        if (isDeleted) {
+            toast.success("Successfully deleted test")
             navigate("/mytests");
+        }
     }
 
     const handleAddNewQuestion = () => setQuestions((prev: IQuestionFormField[]) => [...prev, getNewQuestionObject(selectedQuestionType)])
@@ -162,16 +187,23 @@ function Test() {
 
     return (
         <>
+            <Modal open={openModal} title="Remove test" onClose={() => setOpenModal(false)} buttons={
+                <>
+                    <Button type="danger" value="Delete" onClick={() => handleDeleteTest(parseInt(testId!))} />
+                    <Button value="Close" onClick={() => setOpenModal(false)} />
+                </>
+            }>Are you sure you want to pernamently delete the test?</Modal>
+
             <Loader loading={loading} />
 
             <div className="content-title">{pageTitle}</div>
 
-            <Button value={<BsArrowLeftCircleFill />} type='secondary' onClick={() => navigate("/mytests")} />
+            <Button value={<BsArrowLeftCircleFill />} tooltip='Go back' type='secondary' onClick={() => navigate("/mytests")} />
             {editMode && testId && <>
-                <Button value={<FaClone />} onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />
-                <Button value={<BsFillLightbulbFill />} onClick={() => handleGenerateFlashcards(parseInt(testId))} type='secondary' />
-                <Button value={isPublic ? <BsFillUnlockFill /> : <BsFillLockFill />} onClick={() => setIsPublic(e => !e)} type='secondary' />
-                <Button value={<BsFillTrashFill />} onClick={() => handleDeleteTest(parseInt(testId))} type='danger' />
+                <Button value={<FaClone />} tooltip="Duplicate test!" onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />
+                <Button value={<BsFillLightbulbFill />} tooltip='Generate flashcards' onClick={() => handleGenerateFlashcards(parseInt(testId))} type='secondary' />
+                <Button value={isPublic ? <BsFillUnlockFill /> : <BsFillLockFill />} tooltip={isPublic ? 'Make private' : 'Make public'} onClick={() => setIsPublic(e => !e)} type='secondary' />
+                <Button value={<BsFillTrashFill />} tooltip='Delete' onClick={() => setOpenModal(true)} type='danger' />
             </>
             }
 
@@ -181,17 +213,17 @@ function Test() {
 
             {/* solving section */}
             {editMode && testId && <>
-                <CheckboxField key='shuffleQuestions' name='solvingOption' label="Shuffle questions" checked={solvingTestOptions.shuffleQuestions} onChange={(e) => {
+                <CheckboxField className='aa' key='shuffleQuestions' name='solvingOption' label="Shuffle questions" checked={solvingTestOptions.shuffleQuestions} onChange={(e) => {
                     setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleQuestions: e.target.checked } })
                 }} />
-                <CheckboxField key='shuffleAnswers' name='solvingOption' label="Shuffle answers" checked={solvingTestOptions.shuffleAnswers} onChange={(e) => {
+                <CheckboxField className='aa' key='shuffleAnswers' name='solvingOption' label="Shuffle answers" checked={solvingTestOptions.shuffleAnswers} onChange={(e) => {
                     setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, shuffleAnswers: e.target.checked } })
                 }} />
-                <CheckboxField key='oneQuestionMode' name='solvingOption' label="One question mode" checked={solvingTestOptions.oneQuestionMode} onChange={(e) => {
+                <CheckboxField className='aa' key='oneQuestionMode' name='solvingOption' label="One question mode" checked={solvingTestOptions.oneQuestionMode} onChange={(e) => {
                     setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, oneQuestionMode: e.target.checked } })
                 }} />
 
-                <Button value="Start!" onClick={handleSolveButtonClick} type='primary' />
+                <Button style={{ display: "block" }} value="Start!" onClick={handleSolveButtonClick} type='primary' />
             </>
             }
 

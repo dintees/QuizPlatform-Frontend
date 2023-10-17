@@ -17,7 +17,7 @@ function Sidebar(props: Props) {
     return (
         <div id="sidebar" className={props.isOpened ? "" : "sidebar-collapsed"}>
             <div id="logo">
-                <div style={{ cursor: "pointer" }} onClick={() => navigate("/")}><MdQuiz />QP</div>
+                <div style={{ cursor: "pointer" }} onClick={() => navigate("/")}>Fiszlet</div>
                 <div className={props.isOpened ? "" : "logo-collapsed"}><AiOutlineLeft onClick={props.handleOpenArrowClick} /></div>
             </div>
             <div id='menu'>
