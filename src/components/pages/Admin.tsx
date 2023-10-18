@@ -40,6 +40,7 @@ function Admin() {
                         r.actions = <div className='d-flex flex-start'>
                             <div className='color-danger c-pointer' onClick={() => handleOpenModal(r.id)}><BsFillTrashFill /></div>
                         </div>
+                        return r;
                     })
                     setUsers(result.data)
                     break;

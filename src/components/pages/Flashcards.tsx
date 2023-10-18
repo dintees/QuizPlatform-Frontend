@@ -46,7 +46,7 @@ function Flashcards() {
             fetchData();
         else
             setFlashcards({ flashcardItems: [{ id: 0, firstSide: "", secondSide: "" }], currentIndex: 0, maxIndex: 0 })
-    }, [flashcardId])
+    }, [flashcardId, navigate])
 
     const handleClickFlashcard = (delta: number) => {
         setFlashcards(prev => { return { ...prev, currentIndex: prev.currentIndex + delta } })

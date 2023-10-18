@@ -25,6 +25,7 @@ import ForgotPassword from './components/pages/ForgotPassword';
 import FlashcardsList from './components/pages/FlashcardsList';
 import Flashcards from './components/pages/Flashcards';
 import UserSessions from './components/pages/UserSessions';
+import Tests from './components/pages/Tests';
 
 
 export const AuthContext = createContext<IAuthContext>({
@@ -74,6 +75,7 @@ function App() {
           <Routes>
             <Route element={<Layout pages={auth.pages} />}>
               <Route path='/' element={<Home />} />
+              <Route path='/tests' element={<ProtectedComponent component={<Tests />} />} />
               <Route path='/mytests' element={<ProtectedComponent component={<MyTests />} />} />
               <Route path='/test/:mode/:testId?' element={<ProtectedComponent component={<Test />} />} />
               <Route path='/solveTest/:testId' element={<ProtectedComponent component={<SolveTest />} />} />

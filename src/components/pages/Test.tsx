@@ -13,6 +13,7 @@ import { FaClone } from 'react-icons/fa'
 import { duplicateTest, deleteTest, getNewQuestionObject, generateFlashcards } from '../../utils/testUtils'
 import CheckboxField from '../common/CheckboxField'
 import Modal from '../common/Modal'
+import { AiFillPlayCircle } from 'react-icons/ai'
 
 function Test() {
     const { mode, testId } = useParams();
@@ -25,7 +26,6 @@ function Test() {
     const [pageTitle, setPageTitle] = useState<string>("Create new test");
     const [isPublic, setIsPublic] = useState<boolean>(false);
     const [openModal, setOpenModal] = useState<boolean>(false);
-    const [testIdToDelete, setTestIdToDelete] = useState<number>();
 
     const navigate = useNavigate();
 
@@ -203,6 +203,7 @@ function Test() {
                 <Button value={<FaClone />} tooltip="Duplicate test!" onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />
                 <Button value={<BsFillLightbulbFill />} tooltip='Generate flashcards' onClick={() => handleGenerateFlashcards(parseInt(testId))} type='secondary' />
                 <Button value={isPublic ? <BsFillUnlockFill /> : <BsFillLockFill />} tooltip={isPublic ? 'Make private' : 'Make public'} onClick={() => setIsPublic(e => !e)} type='secondary' />
+                <Button value={<AiFillPlayCircle />} tooltip='Start solving!' onClick={handleSolveButtonClick} type='success' />
                 <Button value={<BsFillTrashFill />} tooltip='Delete' onClick={() => setOpenModal(true)} type='danger' />
             </>
             }
@@ -222,8 +223,6 @@ function Test() {
                 <CheckboxField className='aa' key='oneQuestionMode' name='solvingOption' label="One question mode" checked={solvingTestOptions.oneQuestionMode} onChange={(e) => {
                     setSolvingTestOptions((prev: ISolvingTestOptions) => { return { ...prev, oneQuestionMode: e.target.checked } })
                 }} />
-
-                <Button style={{ display: "block" }} value="Start!" onClick={handleSolveButtonClick} type='primary' />
             </>
             }
 

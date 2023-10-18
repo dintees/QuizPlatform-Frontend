@@ -1,7 +1,6 @@
 import React from 'react'
 import { IPageHyperlink } from '../../Types'
 import SidebarTile from './SidebarTile'
-import { MdQuiz } from "react-icons/md"
 import { AiOutlineLeft } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
 

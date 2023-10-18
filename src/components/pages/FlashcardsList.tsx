@@ -28,8 +28,8 @@ function FlashcardsList() {
                         i.tsUpdate = formatDate(i.tsUpdate)
                         i.title = <Link className='a-link' to={`/flashcards/view/${i.id}`}>{i.title}</Link>
                         i.actions = <div className='d-flex flex-start'>
-                            <div className='c-pointer' style={{ marginRight: ".5rem" }} onClick={() => navigate(`/flashcards/edit/${i.id}`)}><BsPencilSquare /></div>
-                            <div className='color-danger c-pointer' onClick={() => handleOpenModal(i.id)}><BsFillTrashFill /></div>
+                            <div className='c-pointer tooltip' data-tooltip='Edit' style={{ marginRight: ".5rem" }} onClick={() => navigate(`/flashcards/edit/${i.id}`)}><BsPencilSquare /></div>
+                            <div className='color-danger c-pointer tooltip' data-tooltip='Delete' onClick={() => handleOpenModal(i.id)}><BsFillTrashFill /></div>
                         </div>
                     })
                     setUserFlashcards(result.data)

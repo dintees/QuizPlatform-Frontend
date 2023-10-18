@@ -23,7 +23,7 @@ function Login() {
         const loginData = await signInAsync(login);
         if (loginData.isAuthenticated) {
             setAuth(loginData as IAuthInformation);
-            loginData.role == Role.Admin ? navigate("/admin") : navigate("/")
+            loginData.role === Role.Admin ? navigate("/admin") : navigate("/")
         } else
             setErrorMessage(loginData.errorMessage);
         setLoading(false)

@@ -1,6 +1,6 @@
 import { IPageHyperlink } from "../Types";
 import { AiFillHome, AiFillSetting, AiOutlineUser, AiOutlineUserAdd, AiFillPlayCircle, AiFillProfile } from 'react-icons/ai'
-import { MdQuiz } from 'react-icons/md'
+import { MdQuiz, MdFolderShared } from 'react-icons/md'
 import { CgLogOut } from 'react-icons/cg'
 import { FaUserCircle } from 'react-icons/fa'
 import { PiCardsFill } from 'react-icons/pi'
@@ -21,11 +21,11 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
         case Role.User:
             pages = [
                 { url: "/", name: "Home", icon: <AiFillHome /> },
+                { url: "/tests", name: "Shared tests", icon: <MdFolderShared /> },
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
                 { url: "/flashcards", name: "Flashcards", icon: <PiCardsFill /> },
                 { url: "/history", name: "History", icon: <AiFillPlayCircle /> },
                 { url: "/account", name: "Account", icon: <FaUserCircle /> },
-                { url: "/usersessions", name: "Active sessions", icon: <AiFillProfile /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]
             break;
