@@ -152,8 +152,9 @@ export interface IUserTestSessionDto {
 
 export interface IUserSessionDto {
     loggedInTime: string,
+    username: string,
     ipAddress: string,
-    browser: string
+    browser: string,
 };
 
 export interface IUserDto {

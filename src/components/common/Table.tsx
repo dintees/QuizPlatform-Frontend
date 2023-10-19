@@ -9,13 +9,12 @@ type ColumnDefinitionType<T, K extends keyof T> = {
 type TableProps<T, K extends keyof T> = {
     data: Array<T>;
     columns: Array<ColumnDefinitionType<T, K>>;
+    rowsPerPage?: number;
 }
 
 
-function Table<T, K extends keyof T>({ data, columns }: TableProps<T, K>): JSX.Element {
+function Table<T, K extends keyof T>({ data, columns, rowsPerPage = 10 }: TableProps<T, K>): JSX.Element {
     const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 10;
-
     const totalPages = Math.ceil(data.length / rowsPerPage);
 
     const startIndex = (currentPage - 1) * rowsPerPage;
