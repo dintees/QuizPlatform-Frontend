@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { IUserSessionDto } from '../../Types';
 import TextField from '../common/TextField';
 import Loader from '../common/Loader';
+import { formatDate } from '../../utils/dateFormatter';
 
 function UserSessions() {
     const [userSessions, setUserSessions] = useState<IUserSessionDto[]>([]);
@@ -17,6 +18,10 @@ function UserSessions() {
 
         switch (result?.status) {
             case 200:
+                result.data.map((r: IUserSessionDto) => {
+                    r.loggedInTime = formatDate(r.loggedInTime)
+                    return r;
+                })
                 setUserSessions(result.data)
                 break;
             case 400:

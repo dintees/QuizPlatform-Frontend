@@ -12,6 +12,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
     switch (role) {
         case Role.Admin:
             pages = [
+                { url: "/", name: "Home", icon: <AiFillHome /> },
                 { url: "/admin", name: "Admin", icon: <AiFillSetting /> },
                 { url: "/account", name: "Account", icon: <FaUserCircle /> },
                 { url: "/usersessions", name: "Active sessions", icon: <AiFillProfile /> },

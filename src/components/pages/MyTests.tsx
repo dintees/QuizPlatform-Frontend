@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getData } from '../../AxiosHelper'
+import { getData, postData } from '../../AxiosHelper'
 import { IUserSetDto } from '../../Types';
 import Table from '../common/Table';
 import Button from '../common/Button';
@@ -8,7 +8,7 @@ import Loader from '../common/Loader';
 import Modal from '../common/Modal';
 import { formatDate } from '../../utils/dateFormatter';
 import { FaClone } from 'react-icons/fa';
-import { BsFillTrashFill } from 'react-icons/bs';
+import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { duplicateTest, deleteTest } from '../../utils/testUtils';
 
@@ -43,6 +43,15 @@ function MyTests() {
         setOpenModal(false);
     }
 
+    const handleCreateNewSession = async (testId: number) => {
+        const result = await postData(`testSession/create`, { testId, useDefaultTestOptions: true }, true);
+        console.log(result);
+        if (result?.status === 200)
+            navigate(`/solvetest/${result.data}`)
+        else
+            toast.error("Error occured")
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -51,8 +60,9 @@ function MyTests() {
             if (data && data.status === 200) {
                 data.data.forEach((i: IUserSetDto) => {
                     i.tsUpdate = formatDate(i.tsUpdate)
-                    i.title = <Link className='a-link' to={`/test/edit/${i.id}`}>{i.title}</Link>
+                    i.title = <div className='a-link' onClick={() => handleCreateNewSession(i.id)}>{i.title}</div>
                     i.actions = <div className='d-flex flex-start'>
+                        <div className='c-pointer tooltip' data-tooltip='Edit' style={{ marginRight: ".5rem" }} onClick={() => navigate(`/test/edit/${i.id}`)}><BsPencilSquare /></div>
                         <div className='c-pointer tooltip' data-tooltip='Duplicate' style={{ marginRight: ".5rem" }} onClick={() => handleDuplicateTest(i.id)}><FaClone /></div>
                         <div className='color-danger c-pointer tooltip' data-tooltip='Delete' onClick={() => handleOpenModal(i.id)}><BsFillTrashFill /></div>
                     </div>
