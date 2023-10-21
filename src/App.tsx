@@ -3,13 +3,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Layout from './components/common/Layout';
 import { IAuthContext, IAuthInformation } from './Types'
-import Admin from './components/pages/Admin';
+import UserList from './components/pages/UserList';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/pages/Logout';
 import getMenuItems from './utils/getMenuItems';
 import ProtectedComponent from './components/common/ProtectedComponent';
-import { getDataFromToken } from './utils/authUtils';
+import { getDataFromToken, jwtVerifyAsync } from './utils/authUtils';
 import NotFound from './components/pages/NotFound';
 import { Role } from './Enums';
 import MyTests from './components/pages/MyTests';
@@ -26,6 +26,7 @@ import FlashcardsList from './components/pages/FlashcardsList';
 import Flashcards from './components/pages/Flashcards';
 import UserSessions from './components/pages/UserSessions';
 import Tests from './components/pages/Tests';
+import UserTests from './components/pages/UserTests';
 
 
 export const AuthContext = createContext<IAuthContext>({
@@ -56,13 +57,15 @@ function App() {
   });
 
   useEffect(() => {
-    const data = getDataFromToken();
-
-    if (data) {
-      setAuth((prev: IAuthInformation): IAuthInformation => {
-        return { ...prev, isAuthenticated: true, email: data.email, username: data.username, firstname: data.firstname, lastname: data.lastname, role: data.role, pages: getMenuItems(data.role) }
-      })
+    const fetchData = async () => {
+      const data = getDataFromToken();
+      if (data && await jwtVerifyAsync()) {
+        setAuth((prev: IAuthInformation): IAuthInformation => {
+          return { ...prev, isAuthenticated: true, email: data.email, username: data.username, firstname: data.firstname, lastname: data.lastname, role: data.role, pages: getMenuItems(data.role) }
+        })
+      }
     }
+    fetchData();
   }, []);
 
 
@@ -85,7 +88,8 @@ function App() {
 
               <Route path='/account' element={<ProtectedComponent component={<Account />} />} />
               <Route path='/usersessions' element={<ProtectedComponent component={<UserSessions />} />} />
-              <Route path='/admin' element={<ProtectedComponent component={<Admin />} />} />
+              <Route path='/userlist' element={<ProtectedComponent component={<UserList />} />} />
+              <Route path='/usertests' element={<ProtectedComponent component={<UserTests />} />} />
 
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />

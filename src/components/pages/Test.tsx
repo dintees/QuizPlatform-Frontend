@@ -133,7 +133,7 @@ function Test() {
         const isDeleted = await deleteTest(testId);
         if (isDeleted) {
             toast.success("Successfully deleted test")
-            navigate("/mytests");
+            navigate(-1);
         }
     }
 
@@ -198,7 +198,7 @@ function Test() {
 
             <div className="content-title">{pageTitle}</div>
 
-            <Button value={<BsArrowLeftCircleFill />} tooltip='Go back' type='secondary' onClick={() => navigate("/mytests")} />
+            <Button value={<BsArrowLeftCircleFill />} tooltip='Go back' type='secondary' onClick={() => navigate(-1)} />
             {editMode && testId && <>
                 <Button value={<FaClone />} tooltip="Duplicate test!" onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />
                 <Button value={<BsFillLightbulbFill />} tooltip='Generate flashcards' onClick={() => handleGenerateFlashcards(parseInt(testId))} type='secondary' />

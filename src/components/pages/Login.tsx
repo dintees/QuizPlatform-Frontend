@@ -7,8 +7,6 @@ import Loader from '../common/Loader';
 import { getToken } from '../../utils/authUtils';
 import { signInAsync } from '../../utils/loginUtils';
 import { AuthContext } from '../../App';
-import { Role } from '../../Enums';
-
 
 function Login() {
     const [isLoading, setLoading] = useState<boolean>(false);
@@ -23,7 +21,7 @@ function Login() {
         const loginData = await signInAsync(login);
         if (loginData.isAuthenticated) {
             setAuth(loginData as IAuthInformation);
-            loginData.role === Role.Admin ? navigate("/admin") : navigate("/")
+            navigate("/");
         } else
             setErrorMessage(loginData.errorMessage);
         setLoading(false)

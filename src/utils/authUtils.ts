@@ -1,5 +1,6 @@
 import jwtDecode, { JwtPayload } from "jwt-decode"
 import { Role } from "../Enums";
+import { getData } from "../AxiosHelper";
 
 interface IJwtPayload extends JwtPayload {
     username: string,
@@ -22,6 +23,11 @@ export const removeToken = () => {
 
 export const modifyToken = (token: string) => {
     localStorage.setItem(tokenVariableName, token)
+}
+
+export const jwtVerifyAsync = async () => {
+    const result = await getData("user/jwtVerify", true);
+    return result?.status === 200
 }
 
 export const getDataFromToken = () => {

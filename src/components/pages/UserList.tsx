@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { deleteData, getData } from '../../AxiosHelper';
 import { IUserDto } from '../../Types';
 import { toast } from 'react-toastify';
@@ -7,11 +7,13 @@ import Modal from '../common/Modal';
 import Button from '../common/Button';
 import Loader from '../common/Loader';
 import { BsFillTrashFill } from 'react-icons/bs';
+import { AuthContext } from '../../App';
 
-function Admin() {
+function UserList() {
     const [users, setUsers] = useState<IUserDto[]>([]);
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [userToDelete, setUserToDelete] = useState<number>(0);
+    const { auth } = useContext(AuthContext)
 
     const handleDeleteUser = async () => {
         if (!!userToDelete) {
@@ -37,9 +39,10 @@ function Admin() {
             switch (result?.status) {
                 case 200:
                     result.data.map((r: IUserDto) => {
-                        r.actions = <div className='d-flex flex-start'>
-                            <div className='color-danger c-pointer' onClick={() => handleOpenModal(r.id)}><BsFillTrashFill /></div>
-                        </div>
+                        if (r.email !== auth.email)
+                            r.actions = <div className='d-flex flex-start'>
+                                <div className='color-danger c-pointer' onClick={() => handleOpenModal(r.id)}><BsFillTrashFill /></div>
+                            </div>
                         return r;
                     })
                     setUsers(result.data)
@@ -55,7 +58,7 @@ function Admin() {
         }
 
         fetchData();
-    }, [])
+    }, [auth])
     return (
         <>
             <Modal open={openModal} title="Remove user" onClose={() => setOpenModal(false)} buttons={
@@ -67,9 +70,7 @@ function Admin() {
 
             <Loader loading={false} />
 
-            <div className="content-title">Admin panel</div>
-
-            <h3>User list</h3>
+            <div className="content-title">User registered in platform</div>
 
             <Table data={users} columns={[
                 { key: "id", header: "Id" },
@@ -84,4 +85,4 @@ function Admin() {
     )
 }
 
-export default Admin
+export default UserList

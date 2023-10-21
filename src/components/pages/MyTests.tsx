@@ -3,7 +3,7 @@ import { getData, postData } from '../../AxiosHelper'
 import { IUserSetDto } from '../../Types';
 import Table from '../common/Table';
 import Button from '../common/Button';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Loader from '../common/Loader';
 import Modal from '../common/Modal';
 import { formatDate } from '../../utils/dateFormatter';
@@ -11,6 +11,7 @@ import { FaClone } from 'react-icons/fa';
 import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { duplicateTest, deleteTest } from '../../utils/testUtils';
+import { AiFillPlayCircle } from 'react-icons/ai';
 
 function MyTests() {
 
@@ -61,7 +62,8 @@ function MyTests() {
                 data.data.forEach((i: IUserSetDto) => {
                     i.tsUpdate = formatDate(i.tsUpdate)
                     i.title = <div className='a-link' onClick={() => handleCreateNewSession(i.id)}>{i.title}</div>
-                    i.actions = <div className='d-flex flex-start'>
+                    i.actions = <div className='d-flex flex-start actions-container'>
+                        <div className='color-success c-pointer tooltip' data-tooltip='Start!' style={{ marginRight: ".5rem" }} onClick={() => handleCreateNewSession(i.id)}><AiFillPlayCircle /></div>
                         <div className='c-pointer tooltip' data-tooltip='Edit' style={{ marginRight: ".5rem" }} onClick={() => navigate(`/test/edit/${i.id}`)}><BsPencilSquare /></div>
                         <div className='c-pointer tooltip' data-tooltip='Duplicate' style={{ marginRight: ".5rem" }} onClick={() => handleDuplicateTest(i.id)}><FaClone /></div>
                         <div className='color-danger c-pointer tooltip' data-tooltip='Delete' onClick={() => handleOpenModal(i.id)}><BsFillTrashFill /></div>

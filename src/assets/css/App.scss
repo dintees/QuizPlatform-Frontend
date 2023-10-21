@@ -23,7 +23,6 @@ body,
   color: variables.$color-primary;
   cursor: pointer;
   text-decoration: none;
-  // font-weight: bold;
 
   &:hover {
     text-decoration: underline;
@@ -48,6 +47,12 @@ body,
 
   &:hover .btn-tooltip {
     opacity: 1;
+  }
+}
+
+.actions-container {
+  div {
+    margin-left: .2rem;
   }
 }
 
