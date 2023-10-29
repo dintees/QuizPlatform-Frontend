@@ -13,6 +13,8 @@ function UserList() {
     const [users, setUsers] = useState<IUserDto[]>([]);
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [userToDelete, setUserToDelete] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(false);
+
     const { auth } = useContext(AuthContext)
 
     const handleDeleteUser = async () => {
@@ -35,6 +37,7 @@ function UserList() {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             const result = await getData("user/getAllUsers", true)
             switch (result?.status) {
                 case 200:
@@ -55,6 +58,7 @@ function UserList() {
                     toast.error("Problem with server connection")
                     break;
             }
+            setLoading(false)
         }
 
         fetchData();
@@ -68,7 +72,7 @@ function UserList() {
                 </>
             }>Are you sure you want to pernamently delete the user?</Modal>
 
-            <Loader loading={false} />
+            <Loader loading={loading} />
 
             <div className="content-title">User registered in platform</div>
 

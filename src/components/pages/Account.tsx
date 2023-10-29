@@ -4,8 +4,7 @@ import { IFormField } from '../../Types'
 import { getData, postData, putData } from '../../AxiosHelper'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from '../../utils/loginUtils';
-import getMenuItems from '../../utils/getMenuItems';
+import Loader from '../common/Loader';
 
 function Account() {
     const navigate = useNavigate();
@@ -15,9 +14,12 @@ function Account() {
         { name: "New password", key: "newPassword", value: "", type: "password" },
         { name: "Conform password", key: "newPasswordConfirmation", value: "", type: "password" }
     ])
+    const [loading, setLoading] = useState<boolean>(false);
+
     useEffect(() => {
 
         const fetchData = async () => {
+            setLoading(true)
             const result = await getData("user/getuserprofile", true);
 
             switch (result?.status) {
@@ -38,6 +40,7 @@ function Account() {
                 default:
                     toast.error("Problem with server connection")
             }
+            setLoading(false)
         }
         fetchData();
     }, [])
@@ -81,18 +84,17 @@ function Account() {
                 toast.error("Problem with server connection.");
                 break;
         }
-
     }
 
     return (
         <>
+            <Loader loading={loading} />
+
             <div className="content-title">Account settings</div>
 
             <Form formFields={accountFormFields} setFormFields={setAccountFormFields} onSubmit={handleAccountFormSubmit} />
 
             <Form formFields={passwordFormFields} setFormFields={setPasswordFormFields} onSubmit={handleAccountChangeUserPasswordFormSubmit} />
-
-            
         </>
     )
 }

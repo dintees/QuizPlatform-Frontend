@@ -10,12 +10,15 @@ import Modal from '../common/Modal';
 import Button from '../common/Button';
 import { deleteTest } from '../../utils/testUtils';
 import { BsFillTrashFill } from 'react-icons/bs';
+import Loader from '../common/Loader';
 
 function UserTests() {
     const { auth } = useContext(AuthContext);
     const [userTest, setUserTest] = useState<IUserSetDto[]>([]);
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [testIdToDelete, setTestIdToDelete] = useState<number>();
+    const [loading, setLoading] = useState<boolean>(false);
+
     const navigate = useNavigate();
 
     const handleOpenModal = (testId: number) => {
@@ -37,6 +40,7 @@ function UserTests() {
     useEffect(() => {
         if (auth.isAuthenticated && auth.role === Role.Admin) {
             const fetchData = async () => {
+                setLoading(true);
                 const result = await getData("test/getAllUserTests", true);
 
                 if (result?.status === 200) {
@@ -49,6 +53,7 @@ function UserTests() {
                     })
                     setUserTest(result.data)
                 }
+                setLoading(false);
             }
             fetchData();
         }
@@ -63,6 +68,8 @@ function UserTests() {
                     <Button value="Close" onClick={() => setOpenModal(false)} />
                 </>
             }>Are you sure you want to pernamently delete the test?</Modal>
+
+            <Loader loading={loading} />
 
             <div className='content-title'>All user tests</div>
             <Table data={userTest} columns={[

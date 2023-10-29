@@ -6,10 +6,13 @@ import { formatDate } from '../../utils/dateFormatter';
 import { useNavigate } from 'react-router-dom';
 import Table from '../common/Table';
 import { toast } from 'react-toastify';
+import Loader from '../common/Loader';
 
 function Tests() {
     const { auth } = useContext(AuthContext);
     const [userTest, setUserTest] = useState<IUserSetDto[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
     const navigate = useNavigate();
 
     const handleCreateNewSession = async (testId: number) => {
@@ -33,6 +36,7 @@ function Tests() {
     useEffect(() => {
         if (auth.isAuthenticated) {
             const fetchData = async () => {
+                setLoading(true);
                 const result = await getData("test/getAllPublic", true);
                 if (result?.status === 200) {
                     result.data.forEach((i: IUserSetDto) => {
@@ -41,6 +45,7 @@ function Tests() {
                     })
                     setUserTest(result.data)
                 }
+                setLoading(false);
             }
             fetchData();
         }
@@ -49,6 +54,8 @@ function Tests() {
 
     return (
         <>
+            <Loader loading={loading} />
+            
             <div className='content-title'>Shared tests</div>
             <Table data={userTest} columns={[
                 { key: "title", header: "Title" },
