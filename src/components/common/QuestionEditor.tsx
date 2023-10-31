@@ -19,6 +19,7 @@ interface Props {
     mathMode: boolean,
     readonly?: boolean,
     correctAnswers?: IUserAnswersDto,
+    disableQuestionNumber?: boolean,
     handleChangeQuestion: (e: React.ChangeEvent<HTMLInputElement>, index: number) => void,
     handleChangeAnswers: (e: React.ChangeEvent<HTMLInputElement>, questionIndex: number, answerIndex: number) => void,
     handleChangeCorrectAnswer: (e: React.ChangeEvent<HTMLInputElement>, questionIndex: number, answerIndex: number) => void,
@@ -45,7 +46,7 @@ function QuestionEditor(props: Props) {
 
     return (
         <div key={props.questionIndex} className="question-edit-tile">
-            <div className='question-edit-icon'>{getIcon(props.questionType)} {props.questionNumber + 1}.</div>
+            <div className='question-edit-icon'>{getIcon(props.questionType)} {!props.disableQuestionNumber && (props.questionNumber + 1) + '.'}</div>
             <div className='question-edit-content'>
                 <TextField value={props.question} disabled={!props.editMode} mathMode={props.mathMode} onChange={(e) => { props.handleChangeQuestion(e, props.questionIndex) }} />
 
@@ -75,7 +76,7 @@ function QuestionEditor(props: Props) {
 
                             case QuestionType.ShortAnswer:
                                 renderElement = (<div className='form-control'><TextField key={answerIndex} readonly={props.readonly} value={props.answers[answerIndex].answer} onChange={(e) => props.handleChangeAnswers(e, props.questionIndex, answerIndex)} />
-                                {!!props.correctAnswers?.shortAnswerValue && <div className='text-sm color-success text-bold'>Correct: {props.correctAnswers?.shortAnswerValue}</div>}
+                                    {!!props.correctAnswers?.shortAnswerValue && <div className='text-sm color-success text-bold'>Correct: {props.correctAnswers?.shortAnswerValue}</div>}
                                 </div>)
                                 break;
                         }
@@ -91,9 +92,9 @@ function QuestionEditor(props: Props) {
             </div>
             {props.editMode &&
                 <div className='question-edit-delete'>
-                    <div onClick={() => props.handleDeleteQuestion(props.questionIndex)}><AiFillDelete /></div>
-                    <div className='color-primary' onClick={() => props.handleCopyQuestion(props.questionIndex)}><FaClone /></div>
-                    <div className='color-primary' onClick={() => props.handleChangeInputMode(props.questionIndex)}>{props.mathMode ? <BiMath /> : <BiText />}</div>
+                    <div className='tooltip' data-tooltip='Delete question' onClick={() => props.handleDeleteQuestion(props.questionIndex)}><AiFillDelete /></div>
+                    <div className='color-primary tooltip' data-tooltip='Duplicate question' onClick={() => props.handleCopyQuestion(props.questionIndex)}><FaClone /></div>
+                    <div className='color-primary tooltip' data-tooltip={`${props.mathMode ? 'Math' : 'Text'} mode`} onClick={() => props.handleChangeInputMode(props.questionIndex)}>{props.mathMode ? <BiMath /> : <BiText />}</div>
                 </div>
             }
         </div>

@@ -78,6 +78,7 @@ body,
     bottom: 100%;
     transform: translate(-50%);
     transition: opacity .3s ease-in-out;
+    font-size: 0.8rem;
   }
 
   &::before {
@@ -259,6 +260,10 @@ input:focus {
 
 .color-primary {
   color: variables.$color-primary;
+}
+
+.color-secondary {
+  color: variables.$color-secondary-btn;
 }
 
 .color-success {

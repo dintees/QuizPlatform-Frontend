@@ -184,7 +184,6 @@ function Test() {
         fetchData();
     }
 
-
     return (
         <>
             <Modal open={openModal} title="Remove test" onClose={() => setOpenModal(false)} buttons={
@@ -210,7 +209,6 @@ function Test() {
 
             <TextField placeholder='Title' value={title} setValue={setTitle} readonly={!editMode} />
             <TextField placeholder='Description' value={description} setValue={setDescription} style={{ marginTop: "1rem", marginBottom: "1rem" }} readonly={!editMode} />
-
 
             {/* solving section */}
             <CheckboxField className='d-inline' key='shuffleQuestions' name='solvingOption' label="Shuffle questions" checked={solvingTestOptions.shuffleQuestions} onChange={(e) => {

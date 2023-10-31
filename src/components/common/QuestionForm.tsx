@@ -9,7 +9,8 @@ interface Props {
     setQuestions: React.Dispatch<React.SetStateAction<IQuestionFormField[]>>,
     editMode: boolean,
     readonly?: boolean,
-    correctAnswers?: IUserAnswersDto[]
+    correctAnswers?: IUserAnswersDto[],
+    disableQuestionNumber?: boolean,
 }
 
 
@@ -59,6 +60,7 @@ function QuestionForm(props: Props) {
                         editMode={props.editMode}
                         mathMode={question.mathMode!}
                         readonly={props.readonly}
+                        disableQuestionNumber={props.disableQuestionNumber}
                         correctAnswers={props.correctAnswers?.filter(e => e.questionId === question.id)[0]}
                         handleChangeQuestion={handleChangeQuestion}
                         handleChangeAnswers={handleChangeAnswers}

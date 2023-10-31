@@ -109,8 +109,8 @@ function SolveTest() {
                 <>
                     {testSessionOptions?.oneQuestionMode ?
                         <>
-                            <h2>{currentIndex} / {questions.length}</h2>
-                            <QuestionForm questions={currentQuestion} setQuestions={setCurrentQuestion} editMode={false} />
+                            <h2>{currentIndex + 1} / {questions.length}</h2>
+                            <QuestionForm questions={currentQuestion} setQuestions={setCurrentQuestion} editMode={false} disableQuestionNumber={true} />
                             {currentIndex + 1 < questions.length ?
                                 <Button type='primary' value="Next" onClick={() => handleNextQuestion()} />
                                 :

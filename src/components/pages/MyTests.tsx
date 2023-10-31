@@ -8,7 +8,7 @@ import Loader from '../common/Loader';
 import Modal from '../common/Modal';
 import { formatDate } from '../../utils/dateFormatter';
 import { FaClone } from 'react-icons/fa';
-import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
+import { BsFillLockFill, BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { duplicateTest, deleteTest } from '../../utils/testUtils';
 import { AiFillPlayCircle } from 'react-icons/ai';
@@ -46,7 +46,6 @@ function MyTests() {
 
     const handleCreateNewSession = async (testId: number) => {
         const result = await postData(`testSession/create`, { testId, useDefaultTestOptions: true }, true);
-        console.log(result);
         if (result?.status === 200)
             navigate(`/solvetest/${result.data}`)
         else
@@ -59,9 +58,10 @@ function MyTests() {
             const data = await getData("test", true);
 
             if (data && data.status === 200) {
+
                 data.data.forEach((i: IUserSetDto) => {
                     i.tsUpdate = formatDate(i.tsUpdate)
-                    i.title = <div className='a-link' onClick={() => handleCreateNewSession(i.id)}>{i.title}</div>
+                    i.title = <div className='a-link' onClick={() => handleCreateNewSession(i.id)}>{i.title} {!i.isPublic && <span className='color-secondary tooltip' data-tooltip='Private test' style={{ marginLeft: ".5rem" }}><BsFillLockFill /></span>}</div>
                     i.actions = <div className='d-flex flex-start actions-container'>
                         <div className='color-success c-pointer tooltip' data-tooltip='Start!' style={{ marginRight: ".5rem" }} onClick={() => handleCreateNewSession(i.id)}><AiFillPlayCircle /></div>
                         <div className='c-pointer tooltip' data-tooltip='Edit' style={{ marginRight: ".5rem" }} onClick={() => navigate(`/test/edit/${i.id}`)}><BsPencilSquare /></div>

@@ -139,6 +139,7 @@ export interface IUserSetDto {
     title: string | JSX.Element | null;
     tsUpdate: string;
     author: string | null;
+    isPublic: boolean,
     actions: JSX.Element;
 };
 
