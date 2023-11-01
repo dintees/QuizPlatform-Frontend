@@ -23,6 +23,7 @@ function TestHistory() {
                         i.tsUpdate = formatDate(i.tsUpdate)
                         i.isCompleted = i.isCompleted ? "Completed" : "During solving"
                         i.testName = <Link className='a-link' to={`/solvetest/${i.id}`}>{i.testName}</Link>
+                        i.percentageScore = i.percentageScore === -1 ? " --- " : (i.percentageScore as number).toFixed(2) + "%"
                     })
                     setTestSessions(result.data);
                     break;
@@ -47,6 +48,7 @@ function TestHistory() {
                 { key: "tsInsert", header: "Start time" },
                 { key: "tsUpdate", header: "Modification time" },
                 { key: "isCompleted", header: "Status" },
+                { key: "percentageScore", header: "Score" },
             ]} />
         </>
     )

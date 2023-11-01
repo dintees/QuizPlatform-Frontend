@@ -7,10 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import Table from '../common/Table';
 import { toast } from 'react-toastify';
 import Loader from '../common/Loader';
+import TextField from '../common/TextField';
 
 function Tests() {
     const { auth } = useContext(AuthContext);
     const [userTest, setUserTest] = useState<IUserSetDto[]>([]);
+    const [currentUserTest, setCurrentUserTest] = useState<IUserSetDto[]>([]);
+    const [testFilter, setTestFilter] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
@@ -33,6 +36,16 @@ function Tests() {
         }
     }
 
+    const handleChangeTestFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const filter = e.target.value;
+        const filteredTests = userTest.filter((test: IUserSetDto) => {
+            const title = (test.title as JSX.Element).props.children;
+            return title.toLowerCase().includes(filter.toLowerCase()) || test.author?.toLowerCase().includes(filter.toLowerCase());
+        });
+        setCurrentUserTest(filteredTests);
+        setTestFilter(filter)
+    }
+
     useEffect(() => {
         if (auth.isAuthenticated) {
             const fetchData = async () => {
@@ -44,6 +57,7 @@ function Tests() {
                         i.title = <span onClick={() => handleCreateNewSession(i.id)} className='a-link'>{i.title}</span>
                     })
                     setUserTest(result.data)
+                    setCurrentUserTest(result.data)
                 }
                 setLoading(false);
             }
@@ -55,9 +69,12 @@ function Tests() {
     return (
         <>
             <Loader loading={loading} />
-            
+
             <div className='content-title'>Shared tests</div>
-            <Table data={userTest} columns={[
+
+            <TextField style={{ marginBottom: "1rem", width: "33%" }} value={testFilter} onChange={handleChangeTestFilter} placeholder='Search' />
+
+            <Table data={currentUserTest} columns={[
                 { key: "title", header: "Title" },
                 { key: "tsUpdate", header: "Last modified" },
                 { key: "author", header: "Author" },

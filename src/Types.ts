@@ -144,11 +144,12 @@ export interface IUserSetDto {
 };
 
 export interface IUserTestSessionDto {
-    id: number;
-    tsInsert: string;
-    tsUpdate: string;
-    testName: string | JSX.Element | null;
-    isCompleted: boolean | string;
+    id: number,
+    tsInsert: string,
+    tsUpdate: string,
+    testName: string | JSX.Element | null,
+    percentageScore: number | string,
+    isCompleted: boolean | string,
 };
 
 export interface IUserSessionDto {
