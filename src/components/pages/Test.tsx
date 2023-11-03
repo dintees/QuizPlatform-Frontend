@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Button from '../common/Button'
 import { getData, postData, putData } from '../../AxiosHelper'
 import TextField from '../common/TextField'
-import { IQuestionFormField, IResult, ISetDto, ISolvingTestOptions } from '../../Types'
+import { IQuestionDto, IQuestionFormField, IResult, ISetDto, ISolvingTestOptions } from '../../Types'
 import QuestionForm from '../common/QuestionForm'
 import { QuestionType } from '../../Enums'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -13,7 +13,8 @@ import { FaClone } from 'react-icons/fa'
 import { duplicateTest, deleteTest, getNewQuestionObject, generateFlashcards } from '../../utils/testUtils'
 import CheckboxField from '../common/CheckboxField'
 import Modal from '../common/Modal'
-import { AiFillPlayCircle } from 'react-icons/ai'
+import { AiFillPlayCircle, AiFillSave, AiOutlineImport } from 'react-icons/ai'
+import TestTreeViewer from '../common/TestTreeViewer'
 
 function Test() {
     const { mode, testId } = useParams();
@@ -25,7 +26,12 @@ function Test() {
     const [solvingTestOptions, setSolvingTestOptions] = useState<ISolvingTestOptions>({ shuffleQuestions: false, shuffleAnswers: false, oneQuestionMode: false, testId: !!testId ? parseInt(testId) : 0 });
     const [pageTitle, setPageTitle] = useState<string>("Create new test");
     const [isPublic, setIsPublic] = useState<boolean>(false);
-    const [openModal, setOpenModal] = useState<boolean>(false);
+    const [openConfirmationModal, setOpenConfirmationModal] = useState<boolean>(false);
+
+    // import questions from another tests
+    const [openQuestionImportModal, SetOpenQuestionImportModal] = useState<boolean>(false);
+    const [allUserTestQuestions, setAllUserTestQuestions] = useState<ISetDto[] | null>(null);
+    const [selectedQuestions, setSelectedQuestions] = useState<number[]>([]);
 
     const navigate = useNavigate();
 
@@ -184,14 +190,52 @@ function Test() {
         fetchData();
     }
 
+    const handleImportQuestionButtonClick = async () => {
+        SetOpenQuestionImportModal(true);
+        if (allUserTestQuestions === null) {
+            const result = await getData("test/getAllUserQuestions", true);
+            if (result?.status === 200) {
+                setAllUserTestQuestions(result.data);
+            }
+        }
+    }
+
+    const handleUserSelectedQuestionsToImport = () => {
+        SetOpenQuestionImportModal(false);
+        const matchingQuestions: IQuestionDto[] = [];
+        allUserTestQuestions!.forEach(testObject => {
+            if (testObject.questions)
+                matchingQuestions.push(...testObject.questions.filter(question => selectedQuestions.includes(question.id)));
+        });
+
+        const questionsFormFieldToAdd: IQuestionFormField[] = []
+        matchingQuestions.map(question => {
+            questionsFormFieldToAdd.push({ question: question.question!, answers: question.answers!.map(a => { return { ...a, id: 0 } }), mathMode: question.mathMode, questionType: question.questionType, id: 0 })
+        })
+        setQuestions(prev => [...prev, ...questionsFormFieldToAdd])
+        setSelectedQuestions([]);
+    }
+
     return (
         <>
-            <Modal open={openModal} title="Remove test" onClose={() => setOpenModal(false)} buttons={
+            <Modal open={openConfirmationModal} title="Remove test" onClose={() => setOpenConfirmationModal(false)} buttons={
                 <>
                     <Button type="danger" value="Delete" onClick={() => handleDeleteTest(parseInt(testId!))} />
-                    <Button value="Close" onClick={() => setOpenModal(false)} />
+                    <Button value="Close" onClick={() => setOpenConfirmationModal(false)} />
                 </>
             }>Are you sure you want to pernamently delete the test?</Modal>
+
+            <Modal open={openQuestionImportModal} title="Import questions from another test" onClose={() => SetOpenQuestionImportModal(false)} buttons={
+                <>
+                    <Button type="success" value="Import" onClick={handleUserSelectedQuestionsToImport} />
+                </>
+            }>
+                {allUserTestQuestions === null ?
+                    <h4>Loading...</h4>
+                    :
+                    <TestTreeViewer selectedQuestions={selectedQuestions} setSelectedQuestions={setSelectedQuestions} tests={allUserTestQuestions} />
+                }
+            </Modal>
 
             <Loader loading={loading} />
 
@@ -202,8 +246,9 @@ function Test() {
                 <Button value={<FaClone />} tooltip="Duplicate test!" onClick={() => handleDuplicateTest(parseInt(testId))} type='secondary' />
                 <Button value={<BsFillLightbulbFill />} tooltip='Generate flashcards' onClick={() => handleGenerateFlashcards(parseInt(testId))} type='secondary' />
                 <Button value={isPublic ? <BsFillUnlockFill /> : <BsFillLockFill />} tooltip={isPublic ? 'Make private' : 'Make public'} onClick={() => setIsPublic(e => !e)} type='secondary' />
+                <Button value={<AiFillSave />} tooltip='Save changes!' onClick={handleModifyTest} type='success' />
                 <Button value={<AiFillPlayCircle />} tooltip='Start solving!' onClick={handleSolveButtonClick} type='success' />
-                <Button value={<BsFillTrashFill />} tooltip='Delete' onClick={() => setOpenModal(true)} type='danger' />
+                <Button value={<BsFillTrashFill />} tooltip='Delete' onClick={() => setOpenConfirmationModal(true)} type='danger' />
             </>
             }
 
@@ -233,6 +278,8 @@ function Test() {
                         </select>
 
                         <Button value='Add' type='primary' onClick={handleAddNewQuestion} />
+                        <Button value={<AiOutlineImport />} tooltip='Import question' onClick={handleImportQuestionButtonClick} type='secondary' />
+
                     </div>
 
                     {testId ?

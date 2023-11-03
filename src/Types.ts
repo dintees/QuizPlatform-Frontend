@@ -137,6 +137,7 @@ export interface IQuestionDto {
     id: number;
     question: string | null;
     questionType: QuestionType;
+    mathMode: boolean;
     answers: IAnswerFormField[] | null;
 }
 
@@ -180,3 +181,9 @@ export interface IUserStatisticsDto {
     average: number,
     numberOfSolvedTests: number,
 }
+
+export interface IUserTestsWithQuestionsDto {
+    id: number,
+    title: string,
+    questions: { [key: number]: string; },
+};

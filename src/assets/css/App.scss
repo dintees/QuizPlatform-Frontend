@@ -65,7 +65,28 @@ body,
 }
 
 .chart {
-  width: 48%;
+  width: 46%;
+}
+
+details {
+  summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: variables.$color-primary;
+  }
+
+  label {
+    cursor: pointer;
+    margin-left: 1rem;
+  }
+
+  input {
+    margin-right: 1rem;
+  }
+}
+
+details {
+  margin-left: 1rem;
 }
 
 .tooltip {
