@@ -5,7 +5,6 @@ import { getData, postData, putData } from '../../AxiosHelper'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../common/Loader';
-
 function Account() {
     const navigate = useNavigate();
     const [accountFormFields, setAccountFormFields] = useState<IFormField[]>([])
@@ -15,7 +14,6 @@ function Account() {
         { name: "Conform password", key: "newPasswordConfirmation", value: "", type: "password" }
     ])
     const [loading, setLoading] = useState<boolean>(false);
-
     useEffect(() => {
 
         const fetchData = async () => {

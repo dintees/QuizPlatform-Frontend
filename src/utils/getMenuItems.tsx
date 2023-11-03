@@ -1,5 +1,5 @@
 import { IPageHyperlink } from "../Types";
-import { AiFillHome, AiOutlineUser, AiOutlineUserAdd, AiFillPlayCircle, AiFillProfile } from 'react-icons/ai'
+import { AiFillHome, AiOutlineUser, AiOutlineUserAdd, AiFillPlayCircle, AiFillProfile, AiOutlineLineChart } from 'react-icons/ai'
 import { MdQuiz, MdFolderShared } from 'react-icons/md'
 import { CgLogOut } from 'react-icons/cg'
 import { FaUserCircle, FaUsersCog } from 'react-icons/fa'
@@ -27,6 +27,7 @@ const getMenuItems = (role: Role = Role.NotAuthorized) => {
                 { url: "/mytests", name: "My Tests", icon: <MdQuiz /> },
                 { url: "/flashcards", name: "Flashcards", icon: <PiCardsFill /> },
                 { url: "/history", name: "History", icon: <AiFillPlayCircle /> },
+                { url: "/statistics", name: "Statistics", icon: <AiOutlineLineChart /> },
                 { url: "/account", name: "Account", icon: <FaUserCircle /> },
                 { url: "/logout", name: "Logout", icon: <CgLogOut /> }
             ]

@@ -27,6 +27,8 @@ import Flashcards from './components/pages/Flashcards';
 import UserSessions from './components/pages/UserSessions';
 import Tests from './components/pages/Tests';
 import UserTests from './components/pages/UserTests';
+import Statistics from './components/pages/Statistics';
+import { signOut } from './utils/loginUtils';
 
 
 export const AuthContext = createContext<IAuthContext>({
@@ -63,6 +65,11 @@ function App() {
         setAuth((prev: IAuthInformation): IAuthInformation => {
           return { ...prev, isAuthenticated: true, email: data.email, username: data.username, firstname: data.firstname, lastname: data.lastname, role: data.role, pages: getMenuItems(data.role) }
         })
+      } else {
+        signOut();
+        await setAuth((prev: IAuthInformation) => {
+          return { isAuthenticated: false, username: "", firstname: "", lastname: "", email: "", role: Role.NotAuthorized, token: "", pages: getMenuItems() }
+        })
       }
     }
     fetchData();
@@ -83,6 +90,7 @@ function App() {
               <Route path='/test/:mode/:testId?' element={<ProtectedComponent component={<Test />} />} />
               <Route path='/solveTest/:testId' element={<ProtectedComponent component={<SolveTest />} />} />
               <Route path='/history' element={<ProtectedComponent component={<TestHistory />} />} />
+              <Route path='/statistics' element={<ProtectedComponent component={<Statistics />} />} />
               <Route path='/flashcards/' element={<ProtectedComponent component={<FlashcardsList />} />} />
               <Route path='/flashcards/:mode?/:flashcardId?' element={<ProtectedComponent component={<Flashcards />} />} />
 

@@ -117,6 +117,12 @@ export interface IFlashcards {
     maxIndex: number
 };
 
+export interface IUserStatisticsData {
+    date: string,
+    average: string,
+    numberOfSolvedTests: number
+};
+
 
 // === DTOs ===
 
@@ -169,3 +175,8 @@ export interface IUserDto {
     token: string,
     actions: JSX.Element | null,
 };
+
+export interface IUserStatisticsDto {
+    average: number,
+    numberOfSolvedTests: number,
+}
