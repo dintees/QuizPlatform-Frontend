@@ -15,7 +15,9 @@ function FlashcardBox(props: Props) {
             <div>{props.index + 1}.</div>
             <div><TextField value={props.flashcard.firstSide} onChange={(e) => props.handleChangeFlashcard(props.index, false, e.target.value)} /></div>
             <div><TextField value={props.flashcard.secondSide} onChange={(e) => props.handleChangeFlashcard(props.index, true, e.target.value)} /></div>
-            <div className="color-danger c-pointer text-bold" onClick={() => props.handleDeleteFlashcard(props.index)}>&times;</div>
+            <div>
+                <span className="color-danger c-pointer text-bold" onClick={() => props.handleDeleteFlashcard(props.index)}>&times;</span>
+            </div>
         </div>
     )
 }

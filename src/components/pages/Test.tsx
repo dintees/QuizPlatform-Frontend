@@ -209,8 +209,8 @@ function Test() {
         });
 
         const questionsFormFieldToAdd: IQuestionFormField[] = []
-        matchingQuestions.map(question => {
-            questionsFormFieldToAdd.push({ question: question.question!, answers: question.answers!.map(a => { return { ...a, id: 0 } }), mathMode: question.mathMode, questionType: question.questionType, id: 0 })
+        matchingQuestions.forEach(question => {
+            questionsFormFieldToAdd.push({ question: question.question!, answers: question.answers!.map(e => { return { ...e, id: 0 } }), mathMode: question.mathMode, questionType: question.questionType, id: 0 })
         })
         setQuestions(prev => [...prev, ...questionsFormFieldToAdd])
         setSelectedQuestions([]);

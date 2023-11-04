@@ -1,5 +1,9 @@
 import React, { useState, createContext, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import "./assets/css/App.scss"
+import "./assets/css/Controls.scss"
+import 'katex/dist/katex.min.css';
 import Home from './components/pages/Home';
 import Layout from './components/common/Layout';
 import { IAuthContext, IAuthInformation } from './Types'
@@ -15,9 +19,6 @@ import { Role } from './Enums';
 import MyTests from './components/pages/MyTests';
 import Test from './components/pages/Test';
 import { ToastContainer, Flip } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import "./assets/css/App.scss"
-import 'katex/dist/katex.min.css';
 import Account from './components/pages/Account';
 import SolveTest from './components/pages/SolveTest';
 import TestHistory from './components/pages/TestHistory';
@@ -29,7 +30,6 @@ import Tests from './components/pages/Tests';
 import UserTests from './components/pages/UserTests';
 import Statistics from './components/pages/Statistics';
 import { signOut } from './utils/loginUtils';
-
 
 export const AuthContext = createContext<IAuthContext>({
   auth: {
@@ -46,7 +46,6 @@ export const AuthContext = createContext<IAuthContext>({
 })
 
 function App() {
-
   const [auth, setAuth] = useState<IAuthInformation>({
     isAuthenticated: false,
     email: "",

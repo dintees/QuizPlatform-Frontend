@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { ISetDto, IUserSetDto, IUserTestsWithQuestionsDto } from '../../Types';
+import React from 'react'
+import { ISetDto } from '../../Types';
 
 interface Props {
     tests: ISetDto[],
