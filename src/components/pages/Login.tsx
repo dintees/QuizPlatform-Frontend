@@ -17,6 +17,9 @@ function Login() {
     const { setAuth } = useContext(AuthContext);
 
     const handleLogin = async () => {
+        if (login.email === "" || login.password === "")
+            return setErrorMessage("Empty email or password.");
+        
         setLoading(true)
         const loginData = await signInAsync(login);
         if (loginData.isAuthenticated) {

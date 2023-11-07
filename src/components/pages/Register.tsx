@@ -21,6 +21,15 @@ function Register() {
     const navigate = useNavigate();
 
     const handleRegister = async () => {
+        if (register.email === "" || register.firstname === "" || register.lastname === "" || register.username === "" || register.password === "" || register.passwordConfirmation === "")
+            return setErrorMessage("Not all form fields have been filled.")
+
+        if (register.password.length < 8)
+            return setErrorMessage("Password must be at least 8 characters long.")
+
+        if (register.password !== register.passwordConfirmation)
+            return setErrorMessage("Given passwords are not the same.")
+
         setLoading(true)
         if (!showCodeConfirmationForm) {
             // registration

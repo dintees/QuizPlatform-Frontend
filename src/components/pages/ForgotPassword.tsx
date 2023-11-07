@@ -21,6 +21,9 @@ function ForgotPassword() {
     const navigate = useNavigate();
 
     const handleFormSubmit = async () => {
+        if (email === "")
+            return setErrorMessage("Empty email address.");
+
         setLoading(true)
 
         if (!showCodeConfirmationForm) {
