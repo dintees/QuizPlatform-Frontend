@@ -102,7 +102,7 @@ function SolveTest() {
 
             {testSessionOptions?.isCompleted ?
                 <>
-                    <h2>Score: {testSessionOptions.score} / {testSessionOptions.maxScore} [{(testSessionOptions.score / testSessionOptions.maxScore * 100).toFixed(2)}]%</h2>
+                    <h2>Score: {testSessionOptions.score} / {testSessionOptions.maxScore} [{(testSessionOptions.score / testSessionOptions.maxScore * 100).toFixed(2)}%]</h2>
                     <QuestionForm questions={questions} setQuestions={setQuestions} editMode={false} readonly={true} correctAnswers={testSessionOptions?.correctAnswers} />
                 </>
                 :
