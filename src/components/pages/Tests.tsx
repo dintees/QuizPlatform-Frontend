@@ -8,6 +8,9 @@ import Table from '../common/Table';
 import { toast } from 'react-toastify';
 import Loader from '../common/Loader';
 import TextField from '../common/TextField';
+import { AiFillPlayCircle } from 'react-icons/ai';
+import { generateFlashcards } from '../../utils/testUtils';
+import { BsFillLightbulbFill } from 'react-icons/bs';
 
 function Tests() {
     const { auth } = useContext(AuthContext);
@@ -46,6 +49,16 @@ function Tests() {
         setTestFilter(filter)
     }
 
+    const handleGenerateFlashcards = async (testId: number) => {
+        const result = await generateFlashcards(testId);
+        if (result !== -1) {
+            toast.success("Succesfully created flashcards")
+            navigate(`/flashcards/view/${result}`)
+        } else {
+            toast.error("An error occured")
+        }
+    }
+
     useEffect(() => {
         if (auth.isAuthenticated) {
             const fetchData = async () => {
@@ -55,6 +68,10 @@ function Tests() {
                     result.data.forEach((i: IUserSetDto) => {
                         i.tsUpdate = formatDate(i.tsUpdate)
                         i.title = <span onClick={() => handleCreateNewSession(i.id)} className='a-link'>{i.title}</span>
+                        i.actions = <div className='d-flex flex-start actions-container'>
+                        <div className='color-success c-pointer tooltip' data-tooltip='Start!' style={{ marginRight: ".5rem" }} onClick={() => handleCreateNewSession(i.id)}><AiFillPlayCircle /></div>
+                        <div className='c-pointer tooltip' data-tooltip='Generate flashcards' style={{ marginRight: ".5rem" }} onClick={() => handleGenerateFlashcards(i.id)}><BsFillLightbulbFill /></div>
+                    </div>
                     })
                     setUserTest(result.data)
                     setCurrentUserTest(result.data)
@@ -78,6 +95,7 @@ function Tests() {
                 { key: "title", header: "Title" },
                 { key: "tsUpdate", header: "Last modified" },
                 { key: "author", header: "Author" },
+                { key: "actions", header: "Actions" },
             ]} />
         </>
     )

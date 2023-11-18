@@ -15,7 +15,18 @@ function Flashcard(props: Props) {
 
     const renderMathPreview = (text: string) => {
         const replacedText = text.split(/\$(.*?)\$/g).map((part, index) => {
-            return index % 2 === 0 ? <span key={index}>{part}&nbsp;</span> : <InlineMath key={index} math={part} renderError={(e) => <>{e.name}</>} />
+            const lines = part.split('\n');
+            const linesWithBr = lines.map((line, lineIndex) => (
+                <React.Fragment key={lineIndex}>
+                    {line}
+                    {lineIndex < lines.length - 1 && <br />}
+                </React.Fragment>
+            ));
+            return index % 2 === 0 ? (
+                <span key={index}>{linesWithBr}&nbsp;</span>
+            ) : (
+                <InlineMath key={index} math={part} renderError={(e) => <>{e.name}</>} />
+            );
         });
         return <>{replacedText}</>;
     }
