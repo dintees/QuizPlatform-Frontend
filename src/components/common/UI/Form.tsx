@@ -1,6 +1,6 @@
 import React from 'react'
-import { IFormField } from '../../Types'
-import TextField from './TextField'
+import { IFormField } from '../../../Types'
+import TextField from '../../controls/TextField'
 
 
 interface Props {

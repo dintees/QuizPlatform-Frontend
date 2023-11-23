@@ -5,14 +5,14 @@ import "./assets/css/App.scss"
 import "./assets/css/Controls.scss"
 import 'katex/dist/katex.min.css';
 import Home from './components/pages/Home';
-import Layout from './components/common/Layout';
+import Layout from './components/layout/Layout';
 import { IAuthContext, IAuthInformation } from './Types'
 import UserList from './components/pages/UserList';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/pages/Logout';
 import getMenuItems from './utils/getMenuItems';
-import ProtectedComponent from './components/common/ProtectedComponent';
+import ProtectedComponent from './components/common/UI/ProtectedComponent';
 import { getDataFromToken, jwtVerifyAsync } from './utils/authUtils';
 import NotFound from './components/pages/NotFound';
 import { Role } from './Enums';

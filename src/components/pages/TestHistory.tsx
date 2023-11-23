@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { getData } from '../../AxiosHelper';
+import { getData } from '../../helpers/AxiosHelper';
 import { toast } from 'react-toastify';
-import Table from '../common/Table';
+import Table from '../common/UI/Table';
 import { IUserTestSessionDto } from '../../Types';
 import { formatDate } from '../../utils/dateFormatter';
 import { Link } from 'react-router-dom';
-import Loader from '../common/Loader';
+import Loader from '../layout/Loader';
 
 function TestHistory() {
     const [testSessions, setTestSessions] = useState<IUserTestSessionDto[]>([]);

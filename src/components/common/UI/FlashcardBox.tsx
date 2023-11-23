@@ -1,6 +1,6 @@
 import React from 'react'
-import { IFlashcard } from '../../Types'
-import TextField from './TextField'
+import { IFlashcard } from '../../../Types'
+import TextField from '../../controls/TextField'
 
 interface Props {
     index: number,

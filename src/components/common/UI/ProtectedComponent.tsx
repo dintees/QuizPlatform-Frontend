@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { getDataFromToken } from '../../utils/authUtils';
+import { getDataFromToken } from '../../../utils/authUtils';
 
 interface Props {
     component: JSX.Element,

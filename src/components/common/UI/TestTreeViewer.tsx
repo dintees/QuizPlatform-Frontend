@@ -1,5 +1,5 @@
 import React from 'react'
-import { ISetDto } from '../../Types';
+import { ISetDto } from '../../../Types';
 
 interface Props {
     tests: ISetDto[],

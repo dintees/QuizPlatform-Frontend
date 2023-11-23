@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { getData } from '../../AxiosHelper';
-import Table from '../common/Table';
+import { getData } from '../../helpers/AxiosHelper';
+import Table from '../common/UI/Table';
 import { toast } from 'react-toastify';
 import { IUserSessionDto } from '../../Types';
-import TextField from '../common/TextField';
-import Loader from '../common/Loader';
+import TextField from '../controls/TextField';
+import Loader from '../layout/Loader';
 import { formatDate } from '../../utils/dateFormatter';
 
 function UserSessions() {

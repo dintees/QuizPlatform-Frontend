@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Form from '../common/Form'
+import Form from '../common/UI/Form'
 import { IFormField } from '../../Types'
-import { getData, postData, putData } from '../../AxiosHelper'
+import { getData, postData, putData } from '../../helpers/AxiosHelper'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import Loader from '../common/Loader';
+import Loader from '../layout/Loader';
 function Account() {
     const navigate = useNavigate();
     const [accountFormFields, setAccountFormFields] = useState<IFormField[]>([])

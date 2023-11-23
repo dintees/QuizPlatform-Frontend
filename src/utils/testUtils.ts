@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { deleteData, postData } from "../AxiosHelper";
+import { deleteData, postData } from "../helpers/AxiosHelper";
 import { IQuestionFormField, IUserAnswersDto } from "../Types";
 import { QuestionType } from "../Enums";
 

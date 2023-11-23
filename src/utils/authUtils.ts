@@ -1,6 +1,6 @@
 import jwtDecode, { JwtPayload } from "jwt-decode"
 import { Role } from "../Enums";
-import { getData } from "../AxiosHelper";
+import { getData } from "../helpers/AxiosHelper";
 
 interface IJwtPayload extends JwtPayload {
     username: string,

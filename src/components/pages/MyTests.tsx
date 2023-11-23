@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { getData, postData } from '../../AxiosHelper'
+import { getData, postData } from '../../helpers/AxiosHelper'
 import { IUserSetDto } from '../../Types';
-import Table from '../common/Table';
-import Button from '../common/Button';
+import Table from '../common/UI/Table';
+import Button from '../controls/Button';
 import { useNavigate } from 'react-router-dom';
-import Loader from '../common/Loader';
-import Modal from '../common/Modal';
+import Loader from '../layout/Loader';
+import Modal from '../common/UI/Modal';
 import { formatDate } from '../../utils/dateFormatter';
 import { FaClone } from 'react-icons/fa';
 import { BsFillLockFill, BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';

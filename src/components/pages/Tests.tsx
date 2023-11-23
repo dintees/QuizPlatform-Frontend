@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../App'
-import { getData, postData } from '../../AxiosHelper';
+import { getData, postData } from '../../helpers/AxiosHelper';
 import { IUserSetDto } from '../../Types';
 import { formatDate } from '../../utils/dateFormatter';
 import { useNavigate } from 'react-router-dom';
-import Table from '../common/Table';
+import Table from '../common/UI/Table';
 import { toast } from 'react-toastify';
-import Loader from '../common/Loader';
-import TextField from '../common/TextField';
+import Loader from '../layout/Loader';
+import TextField from '../controls/TextField';
 import { AiFillPlayCircle } from 'react-icons/ai';
 import { generateFlashcards } from '../../utils/testUtils';
 import { BsFillLightbulbFill } from 'react-icons/bs';

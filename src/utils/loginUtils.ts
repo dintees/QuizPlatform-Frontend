@@ -1,4 +1,4 @@
-import { postData } from "../AxiosHelper";
+import { postData } from "../helpers/AxiosHelper";
 import { ILogin, IRegister } from "../Types";
 import { getDataFromToken, getToken, modifyToken, removeToken } from "./authUtils"
 import getMenuItems from "./getMenuItems";

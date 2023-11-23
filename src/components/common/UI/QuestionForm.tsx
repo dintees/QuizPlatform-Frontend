@@ -1,8 +1,8 @@
 import React from 'react'
-import { IQuestionFormField, IUserAnswersDto } from '../../Types'
+import { IQuestionFormField, IUserAnswersDto } from '../../../Types'
 import "../../assets/css/QuestionForm.scss"
 import QuestionEditor from './QuestionEditor'
-import { modifyAnswer, modifyQuestion, changeInputMode, changeCorrectAnswer, deleteQuestion, addEmptyAnswer, deleteAnswer } from '../../utils/testUtils'
+import { modifyAnswer, modifyQuestion, changeInputMode, changeCorrectAnswer, deleteQuestion, addEmptyAnswer, deleteAnswer } from '../../../utils/testUtils'
 
 interface Props {
     questions: IQuestionFormField[],

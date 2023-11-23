@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { deleteData, getData } from '../../AxiosHelper';
+import { deleteData, getData } from '../../helpers/AxiosHelper';
 import { IUserDto } from '../../Types';
 import { toast } from 'react-toastify';
-import Table from '../common/Table';
-import Modal from '../common/Modal';
-import Button from '../common/Button';
-import Loader from '../common/Loader';
+import Table from '../common/UI/Table';
+import Modal from '../common/UI/Modal';
+import Button from '../controls/Button';
+import Loader from '../layout/Loader';
 import { BsFillTrashFill } from 'react-icons/bs';
 import { AuthContext } from '../../App';
 

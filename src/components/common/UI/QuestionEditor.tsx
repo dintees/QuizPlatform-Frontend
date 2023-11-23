@@ -1,13 +1,13 @@
 import React from 'react'
-import { IAnswerFormField, IUserAnswersDto } from '../../Types';
-import { QuestionType } from '../../Enums';
-import TextField from './TextField';
+import { IAnswerFormField, IUserAnswersDto } from '../../../Types';
+import { QuestionType } from '../../../Enums';
+import TextField from '../../controls/TextField';
 import { AiOutlineBorder, AiOutlineCheckCircle, AiOutlineCheckSquare, AiOutlineForm, AiFillDelete, AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { BiMath, BiText } from 'react-icons/bi'
 import { FaClone } from 'react-icons/fa';
-import CheckboxField from './CheckboxField';
-import RadioField from './RadioField';
-import Button from './Button';
+import CheckboxField from '../../controls/CheckboxField';
+import RadioField from '../../controls/RadioField';
+import Button from '../../controls/Button';
 
 interface Props {
     question: string,

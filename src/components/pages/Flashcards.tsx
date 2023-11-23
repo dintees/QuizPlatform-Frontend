@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import Button from '../common/Button'
+import Button from '../controls/Button'
 import { BsArrowLeftCircleFill, BsCollectionPlayFill, BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
-import Flashcard from '../common/Flashcard'
+import Flashcard from '../common/UI/Flashcard'
 import { IFlashcards } from '../../Types';
-import { deleteData, getData, postData, putData } from '../../AxiosHelper';
+import { deleteData, getData, postData, putData } from '../../helpers/AxiosHelper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Loader from '../common/Loader';
-import FlashcardBox from '../common/FlashcardBox';
-import TextField from '../common/TextField';
-import Modal from '../common/Modal';
+import Loader from '../layout/Loader';
+import FlashcardBox from '../common/UI/FlashcardBox';
+import TextField from '../controls/TextField';
+import Modal from '../common/UI/Modal';
 
 function Flashcards() {
 

@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../App'
-import { getData } from '../../AxiosHelper';
+import { getData } from '../../helpers/AxiosHelper';
 import { IUserSetDto } from '../../Types';
 import { formatDate } from '../../utils/dateFormatter';
 import { useNavigate } from 'react-router-dom';
-import Table from '../common/Table';
+import Table from '../common/UI/Table';
 import { Role } from '../../Enums';
-import Modal from '../common/Modal';
-import Button from '../common/Button';
+import Modal from '../common/UI/Modal';
+import Button from '../controls/Button';
 import { deleteTest } from '../../utils/testUtils';
 import { BsFillTrashFill } from 'react-icons/bs';
-import Loader from '../common/Loader';
+import Loader from '../layout/Loader';
 
 function UserTests() {
     const { auth } = useContext(AuthContext);

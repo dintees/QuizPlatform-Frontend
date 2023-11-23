@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getData, postData } from '../../AxiosHelper';
-import QuestionForm from '../common/QuestionForm';
+import { getData, postData } from '../../helpers/AxiosHelper';
+import QuestionForm from '../common/UI/QuestionForm';
 import { IQuestionFormField, ITestSessionOptions, IUserAnswersDto } from '../../Types';
 import { toast } from 'react-toastify';
-import Button from '../common/Button';
+import Button from '../controls/Button';
 import { QuestionType } from '../../Enums';
 import { BsArrowLeftCircleFill } from 'react-icons/bs'
-import Loader from '../common/Loader';
+import Loader from '../layout/Loader';
 import { saveOneUserAnswerToDatabase } from '../../utils/testUtils';
 
 function SolveTest() {

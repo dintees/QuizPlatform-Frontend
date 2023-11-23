@@ -3,7 +3,7 @@ import { IAuthInformation, IRegister } from '../../Types';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
-import Loader from '../common/Loader';
+import Loader from '../layout/Loader';
 import { AuthContext } from '../../App';
 import { getToken } from '../../utils/authUtils';
 import { confirmAccount, registerAsync } from '../../utils/loginUtils';

@@ -3,7 +3,7 @@ import { IAuthInformation, ILogin } from '../../Types';
 import { AiOutlineUser } from 'react-icons/ai';
 import "../../assets/css/Login.scss"
 import { useNavigate } from 'react-router-dom';
-import Loader from '../common/Loader';
+import Loader from '../layout/Loader';
 import { getToken } from '../../utils/authUtils';
 import { signInAsync } from '../../utils/loginUtils';
 import { AuthContext } from '../../App';

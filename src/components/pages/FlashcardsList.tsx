@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { deleteData, getData } from '../../AxiosHelper'
+import { deleteData, getData } from '../../helpers/AxiosHelper'
 import { IUserFlashcard } from '../../Types';
 import { formatDate } from '../../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
-import Table from '../common/Table';
-import Loader from '../common/Loader';
+import Table from '../common/UI/Table';
+import Loader from '../layout/Loader';
 import { toast } from 'react-toastify';
-import Button from '../common/Button';
+import Button from '../controls/Button';
 import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
-import Modal from '../common/Modal';
+import Modal from '../common/UI/Modal';
 
 function FlashcardsList() {
 

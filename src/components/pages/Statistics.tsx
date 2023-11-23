@@ -10,11 +10,11 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { getData } from '../../AxiosHelper';
+import { getData } from '../../helpers/AxiosHelper';
 import { IUserStatisticsData, IUserStatisticsDto } from '../../Types';
-import Table from '../common/Table';
+import Table from '../common/UI/Table';
 import { toast } from 'react-toastify';
-import Loader from '../common/Loader';
+import Loader from '../layout/Loader';
 
 ChartJS.register(
     CategoryScale,

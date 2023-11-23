@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { getToken } from "./utils/authUtils";
+import { getToken } from "../utils/authUtils";
 
 
 export const getData = async (endpoint: string | undefined, authorisationRequired: boolean = false) => {
