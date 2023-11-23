@@ -1,5 +1,5 @@
 import React from 'react'
-import "../../assets/css/Modal.scss"
+import "../../../assets/css/Modal.scss"
 
 interface Props {
     children: React.ReactNode,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import "../../assets/css/Flashcard.scss"
+import "../../../assets/css/Flashcard.scss"
 import { InlineMath } from 'react-katex';
 
 interface Props {
