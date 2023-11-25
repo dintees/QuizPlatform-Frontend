@@ -11,7 +11,7 @@ function Account() {
     const [passwordFormFields, setPasswordFormFields] = useState<IFormField[]>([
         { name: "Old password", key: "oldPassword", value: "", type: "password" },
         { name: "New password", key: "newPassword", value: "", type: "password" },
-        { name: "Conform password", key: "newPasswordConfirmation", value: "", type: "password" }
+        { name: "Confirm password", key: "newPasswordConfirmation", value: "", type: "password" }
     ])
     const [loading, setLoading] = useState<boolean>(false);
     useEffect(() => {

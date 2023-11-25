@@ -15,7 +15,6 @@ import { AiFillPlayCircle } from 'react-icons/ai';
 
 function MyTests() {
 
-    const [userId, setUserId] = useState<number>(0);
     const [userTest, setUserTest] = useState<IUserSetDto[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -71,7 +70,6 @@ function MyTests() {
                 })
 
                 setUserTest(data.data);
-                setUserId(parseInt(data!.data.length));
             } else {
                 toast.error("Unable to connect to the server.")
             }
@@ -94,8 +92,6 @@ function MyTests() {
             <div className='content-title'>My Tests</div>
 
             <Button value='Add new test' type='success' style={{ fontSize: "1.2rem" }} onClick={() => navigate("/test/edit")} />
-
-            <div className="mt-1 mb-1">All tests: <b>{userId}</b></div>
 
             <Table data={userTest} columns={[
                 { key: "title", header: "Title" },
